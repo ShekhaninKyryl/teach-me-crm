@@ -1,4 +1,25 @@
-@import "tailwindcss/preflight";
-@import "tailwindcss/utilities";
-@import "tailwindcss/theme";
+@import "tailwindcss";
 
+
+@theme {
+        --color-primary: #4F9DDE;
+        --color-primary-hover: #3B82D6;
+
+        --color-accent: #4CAF50;
+        --color-accent-hover: #43A047;
+
+        --color-error: #EF4444;
+        --color-error-hover: #DC2626;
+
+        --color-warning: #F59E0B;
+        --color-warning-hover: #D97706;
+
+        --color-white: #FFFFFF;
+        --color-surface: #F4F6F8;
+        --color-background-secondary: #1E2A38;
+        --color-background-secondary-hover: #334155;
+
+        --color-text: #111827;
+        --color-text-secondary: #d5d4d4;
+        --color-border: #E5E7EB;
+}

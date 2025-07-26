@@ -1,8 +1,8 @@
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Input } from 'components/input';
-import { SubmitButton } from 'components/button';
+import { Input } from 'components/common/input';
+import { SubmitButton } from 'components/common/button';
 import { _ } from 'translates';
 import userApi from 'api/user';
 
