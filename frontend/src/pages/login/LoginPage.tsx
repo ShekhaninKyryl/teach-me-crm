@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Input } from 'components/input';
+import { SubmitButton } from 'components/button';
 import { _ } from 'translates';
 
 const loginSchema = yup.object({
@@ -48,13 +49,7 @@ export const LoginPage = () => {
           type={'password'}
           register={register('password')}
         />
-
-        <button
-          type="submit"
-          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 w-full cursor-pointer"
-        >
-          {_('Login')}
-        </button>
+        <SubmitButton title={_('Login')} />
       </form>
     </div>
   );
