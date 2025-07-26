@@ -5,7 +5,7 @@ type LayoutProps = {
 };
 
 const Layout = ({ children }: LayoutProps) => {
-  return <div className="min-h-screen flex flex-col bg-white text-text">{children}</div>;
+  return <div className="min-h-screen flex flex-col bg-background text-text">{children}</div>;
 };
 
 const Header = ({ children }: LayoutProps) => (
@@ -15,7 +15,7 @@ const Header = ({ children }: LayoutProps) => (
 );
 
 const Body = ({ children }: LayoutProps) => (
-  <main className="flex-grow px-4 py-8 md:px-8 bg-white text-text">{children}</main>
+  <main className="flex-grow px-4 py-8 md:px-8 bg-background text-text">{children}</main>
 );
 
 const Footer = ({ children }: LayoutProps) => (
