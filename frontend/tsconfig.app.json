@@ -24,8 +24,16 @@
     "noUncheckedSideEffectImports": true,
     "baseUrl": "src",
     "paths": {
+      "api/*": ["api/*"],
+      "assets/*": ["assets/*"],
       "components/*": ["components/*"],
-      "translates/*": ["translates/*"]
+      "configs/*": ["configs/*"],
+      "hooks/*": ["hooks/*"],
+      "pages/*": ["pages/*"],
+      "stores/*": ["stores/*"],
+      "translates/*": ["translates/*"],
+      "types/*": ["types/*"],
+      "utils/*": ["utils/*"]
     }
   },
   "include": ["src"]

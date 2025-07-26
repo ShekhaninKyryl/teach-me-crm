@@ -10,8 +10,16 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
+      api: resolve(__dirname, 'src/api'),
+      assets: resolve(__dirname, 'src/assets'),
       components: resolve(__dirname, 'src/components'),
+      configs: resolve(__dirname, 'src/configs'),
+      hooks: resolve(__dirname, 'src/hooks'),
+      pages: resolve(__dirname, 'src/pages'),
+      stores: resolve(__dirname, 'src/stores'),
       translates: resolve(__dirname, 'src/translates'),
+      types: resolve(__dirname, 'src/types'),
+      utils: resolve(__dirname, 'src/utils'),
     },
   },
 });

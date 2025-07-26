@@ -4,6 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Input } from 'components/input';
 import { SubmitButton } from 'components/button';
 import { _ } from 'translates';
+import userApi from 'api/user';
 
 const loginSchema = yup.object({
   email: yup.string().email(_('Invalid email')).required(_('Email is required')),
@@ -25,8 +26,10 @@ export const LoginPage = () => {
   });
 
   const onSubmit = (data: LoginFormData) => {
-    console.log('LoginPage', data);
-    //TODO: BE request
+    userApi.login({
+      email: data.email,
+      password: data.password,
+    });
   };
 
   return (
