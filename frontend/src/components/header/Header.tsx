@@ -1,6 +1,7 @@
 import { _ } from 'translates/index';
 import { useLocation } from 'react-router-dom';
 import { ButtonLink } from 'components/common/button';
+import { Logo } from 'components/logo';
 
 const navLinks = [
   { to: 'find-tutor', title: _('Find tutor') },
@@ -16,7 +17,10 @@ export const Header = () => {
 
   return (
     <div className="flex justify-between items-center p-4">
-      <h1 className="text-xl font-bold">{_('Teach-Me')}</h1>
+      <div className="flex items-center space-x-2">
+        <Logo />
+        <h1 className="text-xl font-bold">{_('Teach-Me')}</h1>
+      </div>
       <div className="flex space-x-4">
         {navLinks.map((link) => (
           <ButtonLink
