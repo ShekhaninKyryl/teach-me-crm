@@ -24,6 +24,7 @@
     "noUncheckedSideEffectImports": true,
     "baseUrl": "src",
     "paths": {
+      "app-router": ["app-router"],
       "api/*": ["api/*"],
       "assets/*": ["assets/*"],
       "components/*": ["components/*"],

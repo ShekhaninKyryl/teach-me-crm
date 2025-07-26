@@ -9,7 +9,7 @@ const Layout = ({ children }: LayoutProps) => {
 };
 
 const Header = ({ children }: LayoutProps) => (
-  <header className=" shadow-md py-4 px-6 sticky top-0 z-10 bg-background-secondary text-text-secondary">
+  <header className=" shadow-md py-4 px-6 sticky top-0 z-10 bg-background-secondary text-text">
     {children}
   </header>
 );

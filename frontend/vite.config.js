@@ -11,6 +11,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
+      'app-router': resolve(__dirname, 'src/app-router'),
       api: resolve(__dirname, 'src/api'),
       assets: resolve(__dirname, 'src/assets'),
       components: resolve(__dirname, 'src/components'),

@@ -33,12 +33,12 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen flex items-center justify-center bg-surface">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white shadow-md rounded px-8 pt-6 pb-8 w-96"
+        className="bg-background shadow-md rounded px-8 pt-6 pb-8 w-96"
       >
-        <h2 className="text-2xl mb-6 text-center font-semibold">{_('Login Page')}</h2>
+        <h2 className="text-2xl mb-6 text-center font-semibold text-text">{_('Login Page')}</h2>
 
         <Input
           label={_('Email')}
