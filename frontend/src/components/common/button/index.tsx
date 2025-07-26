@@ -1,14 +1,17 @@
 import { _ } from 'translates/index.ts';
 import { Link, type LinkProps } from 'components/common/link/link';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import type { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 type ButtonProps = {
-  title?: string;
+  title: string;
   type?: 'button' | 'submit' | 'reset';
-  onClick?: () => void;
+  icon?: IconProp;
   disabled?: boolean;
+  onClick?: () => void;
 };
 
-export const Button = ({ title, type, disabled = false, onClick }: ButtonProps) => {
+export const Button = ({ title, type, icon, disabled = false, onClick }: ButtonProps) => {
   return (
     <button
       type={type}
@@ -16,29 +19,25 @@ export const Button = ({ title, type, disabled = false, onClick }: ButtonProps) 
       disabled={disabled}
       onClick={onClick}
     >
+      {icon ? <FontAwesomeIcon icon={icon} className="mr-2" /> : null}
       {title}
     </button>
   );
 };
 
-type ButtonLinkProps = LinkProps & {
-  title: string;
-  className?: string;
-};
-
-export const ButtonLink = ({ title, to, ...props }: ButtonLinkProps) => {
+export const ButtonLink = ({ title, to, ...props }: LinkProps) => {
   return (
     <Link
       to={to}
       className={
         'inline-block px-4 py-2 rounded bg-background-secondary hover:bg-background-secondary-hover transition'
       }
-      {...props}
       title={title}
+      {...props}
     ></Link>
   );
 };
 
-export const SubmitButton = ({ title, disabled = false }: ButtonProps) => {
-  return <Button title={title || _('Submit')} type="submit" disabled={disabled} />;
+export const SubmitButton = ({ title, ...props }: ButtonProps) => {
+  return <Button title={title || _('Submit')} type="submit" {...props} />;
 };

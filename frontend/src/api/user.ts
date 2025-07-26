@@ -50,7 +50,5 @@ const userApi: UserApi = {
   },
 };
 
-console.log(getConfig().isMock);
-
 const api = getConfig().isMock ? userApiMock : userApi;
 export default api;
