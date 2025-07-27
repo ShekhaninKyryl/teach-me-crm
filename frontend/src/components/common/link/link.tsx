@@ -12,8 +12,6 @@ export type LinkProps = {
 };
 
 export const Link = ({ to, icon, isActive, title, className }: LinkProps) => {
-  console.log(icon);
-
   return (
     <RRDLink
       to={to}

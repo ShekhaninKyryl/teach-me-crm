@@ -2,20 +2,32 @@ import { _ } from 'translates/index.ts';
 import { Link, type LinkProps } from 'components/common/link/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { IconProp } from '@fortawesome/fontawesome-svg-core';
+import classNames from 'classnames';
 
 type ButtonProps = {
   title: string;
   type?: 'button' | 'submit' | 'reset';
   icon?: IconProp;
   disabled?: boolean;
+  className?: string;
   onClick?: () => void;
 };
 
-export const Button = ({ title, type, icon, disabled = false, onClick }: ButtonProps) => {
+export const Button = ({
+  title,
+  type,
+  icon,
+  disabled = false,
+  onClick,
+  className,
+}: ButtonProps) => {
   return (
     <button
       type={type}
-      className="bg-primary text-text py-2 px-4 rounded hover:bg-primary-hover w-full cursor-pointer"
+      className={classNames(
+        'bg-primary text-text py-2 px-4 h-10 rounded hover:bg-primary-hover cursor-pointer',
+        className
+      )}
       disabled={disabled}
       onClick={onClick}
     >

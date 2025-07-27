@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Input } from 'components/common/input';
+import { FormInput } from 'components/common/input';
 import { SubmitButton } from 'components/common/button';
 import { _ } from 'translates';
 import userApi from 'api/user';
@@ -40,13 +40,13 @@ export const LoginPage = () => {
       >
         <h2 className="text-2xl mb-6 text-center font-semibold text-text">{_('Login Page')}</h2>
 
-        <Input
+        <FormInput
           label={_('Email')}
           error={errors.email?.message}
           type={'email'}
           register={register('email')}
         />
-        <Input
+        <FormInput
           label={_('Password')}
           error={errors.password?.message}
           type={'password'}
