@@ -1,6 +1,6 @@
 import axios from './axios';
 import type { User } from 'types/user';
-import { getConfig } from 'configs/inedx';
+import { getConfig } from 'configs';
 
 export interface UserApi {
   getUsers(): Promise<User[]>;

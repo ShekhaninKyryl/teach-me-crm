@@ -29,6 +29,7 @@
       "assets/*": ["assets/*"],
       "components/*": ["components/*"],
       "configs/*": ["configs/*"],
+      "constants/*": ["constants/*"],
       "hooks/*": ["hooks/*"],
       "pages/*": ["pages/*"],
       "stores/*": ["stores/*"],

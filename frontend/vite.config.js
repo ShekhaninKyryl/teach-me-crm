@@ -17,6 +17,7 @@ export default defineConfig({
       assets: resolve(__dirname, 'src/assets'),
       components: resolve(__dirname, 'src/components'),
       configs: resolve(__dirname, 'src/configs'),
+      constants: resolve(__dirname, 'src/constants'),
       hooks: resolve(__dirname, 'src/hooks'),
       pages: resolve(__dirname, 'src/pages'),
       stores: resolve(__dirname, 'src/stores'),

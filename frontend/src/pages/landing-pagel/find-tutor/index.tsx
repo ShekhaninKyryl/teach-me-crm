@@ -33,19 +33,7 @@ export const FindTutor = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <Selector
           placeholder={_('Select subject')}
-          options={[
-            { value: 'math', label: _('Math'), icon: 'calculator' },
-            { value: 'english', label: _('English'), icon: 'language' },
-            { value: 'history', label: _('History'), icon: 'history' },
-            { value: 'biology', label: _('Biology'), icon: 'dna' },
-            { value: 'chemistry', label: _('Chemistry'), icon: 'flask' },
-            { value: 'literature', label: _('Literature'), icon: 'book' },
-            { value: 'geography', label: _('Geography'), icon: 'globe' },
-            { value: 'computer-science', label: _('Computer Science'), icon: 'laptop-code' },
-            { value: 'art', label: _('Art'), icon: 'palette' },
-            { value: 'music', label: _('Music'), icon: 'music' },
-            { value: 'physics', label: _('Physics'), icon: 'atom' },
-          ]}
+          options={[]}
           value={'math'}
           onChange={(value) => {
             //TODO: Implement subject selection
@@ -53,10 +41,7 @@ export const FindTutor = () => {
         />
         <Selector
           placeholder={_('Format of classes')}
-          options={[
-            { value: 'online', label: _('Online'), icon: 'laptop' },
-            { value: 'offline', label: _('Offline'), icon: 'map-marker-alt' },
-          ]}
+          options={[]}
           value={'online'}
           onChange={(value) => {
             //TODO: Implement format selection
@@ -64,14 +49,7 @@ export const FindTutor = () => {
         />
         <Selector
           placeholder={_('City')}
-          options={[
-            { value: 'kyiv', label: _('Kyiv') },
-            { value: 'kharkiv', label: _('Kharkiv') },
-            { value: 'odessa', label: _('Odessa') },
-            { value: 'lviv', label: _('Lviv') },
-            { value: 'dnipro', label: _('Dnipro') },
-            { value: 'zaporizhzhia', label: _('Zaporizhzhia') },
-          ]}
+          options={[]}
           value={'kyiv'}
           onChange={(value) => {
             //TODO: Implement city selection
