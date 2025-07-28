@@ -2,6 +2,7 @@ import type { UseFormRegisterReturn } from 'react-hook-form';
 
 type InputProps = {
   label: string;
+  value?: string;
   placeholder?: string;
   type?: string;
   error?: string;
@@ -9,11 +10,20 @@ type InputProps = {
   onChange?: (value: string) => void;
 };
 
-export const Input = ({ label, placeholder, type, error, onChange, className }: InputProps) => {
+export const Input = ({
+  label,
+  value = '',
+  placeholder,
+  type,
+  error,
+  onChange,
+  className,
+}: InputProps) => {
   return (
     <div className={className}>
       <label className="block text-text text-sm">{label}</label>
       <input
+        value={value}
         type={type || 'text'}
         placeholder={placeholder}
         className="shadow border rounded w-full py-2 px-4 h-10 text-text"
