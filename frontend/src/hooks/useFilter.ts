@@ -1,9 +1,12 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import subjectApi from 'api/subject';
 import cityApi from 'api/city';
 import type { Subject } from 'types/subject';
 import type { Format } from 'types/common';
 import type { IconProp } from '@fortawesome/fontawesome-svg-core';
+import type { Filter, FilterType } from 'types/filter';
+import { debounce } from 'utils/throttle-debounce';
+import { FILTER_DEBOUNCE_TIMER } from 'constants/timer';
 
 type FilterState = {
   search?: string;
@@ -12,15 +15,17 @@ type FilterState = {
   city?: string;
 };
 
-type SelectedType = 'subject' | 'format' | 'city' | 'search';
-
 type Selected = {
-  type: SelectedType;
+  type: FilterType;
   value: string;
   icon?: IconProp;
 };
 
-export const useFilter = () => {
+type FilterProps = {
+  onChange: (selected: Filter[]) => void;
+};
+
+export const useFilter = ({ onChange }: FilterProps) => {
   const [isLoading, setLoading] = useState(false);
   const [filter, setFilter] = useState<FilterState>({});
   const [selected, setSelected] = useState<Selected[]>([]);
@@ -39,6 +44,17 @@ export const useFilter = () => {
     );
   }, []);
 
+  const debouncedOnChange = useCallback(
+    debounce((value: Selected[]) => {
+      onChange(value.map(({ type, value }) => ({ type, value })));
+    }, FILTER_DEBOUNCE_TIMER),
+    []
+  );
+
+  useEffect(() => {
+    debouncedOnChange(selected);
+  }, [selected, onChange]);
+
   const filterSubjects = useMemo(() => {
     return subjects.filter((subject) => {
       return !selected
@@ -53,7 +69,7 @@ export const useFilter = () => {
     });
   }, [selected, cities]);
 
-  const addSelected = (type: SelectedType, value: string, icon?: IconProp) => {
+  const addSelected = (type: FilterType, value: string, icon?: IconProp) => {
     setSelected((prev) => {
       const existing = prev.find((s) => s.type === type && s.value === value);
       if (existing) {

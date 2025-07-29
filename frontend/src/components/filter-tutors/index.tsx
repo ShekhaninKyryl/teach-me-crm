@@ -6,10 +6,13 @@ import { useFilter } from 'hooks/useFilter';
 import type { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { Chiclet } from 'components/common/chiclet';
 import { Loading } from 'components/common/loading';
+import type { Filter } from 'types/filter';
 
-type FilterTutorsProps = {};
+type FilterTutorsProps = {
+  onChange: (selected: Filter[]) => void;
+};
 
-export const FilterTutors = ({}: FilterTutorsProps) => {
+export const FilterTutors = ({ onChange }: FilterTutorsProps) => {
   const {
     isLoading,
     filter,
@@ -20,7 +23,7 @@ export const FilterTutors = ({}: FilterTutorsProps) => {
     removeSelected,
     addSelected,
     findSelected,
-  } = useFilter();
+  } = useFilter({ onChange });
 
   const handleSearchChange = (value: string) => {
     setFilter((prev) => ({ ...prev, search: value }));
@@ -60,13 +63,15 @@ export const FilterTutors = ({}: FilterTutorsProps) => {
     );
   }
   return (
-    <div className="mx-auto py-4 px-4 bg-background-secondary">
-      <h2 className="text-xl font-bold text-text mb-2">{_('Filters')}</h2>
+    <div className="relative mx-auto py-4 px-4 bg-background-secondary">
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-bold text-text mb-2">{_('Filters')}</h2>
+      </div>
 
       {/* Selected Filters */}
       <div className="flex flex-wrap gap-2 mb-2">
         {selected.map(({ value, icon }) => (
-          <Chiclet label={value} icon={icon} onClose={() => removeSelected(value)} />
+          <Chiclet key={value} label={value} icon={icon} onClose={() => removeSelected(value)} />
         ))}
       </div>
 

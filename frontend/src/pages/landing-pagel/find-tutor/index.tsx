@@ -7,7 +7,7 @@ export const FindTutor = () => {
       <h1 className="text-3xl font-bold text-text mb-2">{_('Find tutor')}</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8">
         <div className="md:col-span-2">
-          <FilterTutors />
+          <FilterTutors onChange={(value) => console.log('Debounced:', value)} />
         </div>
 
         <div className="md:col-span-2 lg:col-span-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

@@ -1,0 +1,1 @@
+export const FILTER_DEBOUNCE_TIMER = 3000;
