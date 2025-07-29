@@ -53,14 +53,14 @@ export const FilterTutors = ({}: FilterTutorsProps) => {
 
   if (isLoading) {
     return (
-      <div className="mx-auto py-4 px-4 bg-surface">
+      <div className="mx-auto py-4 px-4 bg-background-secondary">
         <h2 className="text-xl font-bold text-text mb-2">{_('Filters')}</h2>
         <Loading />
       </div>
     );
   }
   return (
-    <div className="mx-auto py-4 px-4 bg-surface">
+    <div className="mx-auto py-4 px-4 bg-background-secondary">
       <h2 className="text-xl font-bold text-text mb-2">{_('Filters')}</h2>
 
       {/* Selected Filters */}
@@ -103,7 +103,6 @@ export const FilterTutors = ({}: FilterTutorsProps) => {
         </div>
 
         {/* Subject Selector */}
-        {/*TODO: fix subjects erasing when selected or delete button*/}
         <SelectorInput
           value={filter.subject?.id}
           placeholder={_('Select a subject')}

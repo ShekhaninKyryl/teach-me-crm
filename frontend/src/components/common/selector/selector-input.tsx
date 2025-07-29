@@ -2,6 +2,8 @@
 import { useState } from 'react';
 import { SelectorBase, type Option } from './selectro-base';
 import { X } from 'lucide-react';
+import classNames from 'classnames';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 type SelectorInputProps = {
   options: Option[];
@@ -32,14 +34,20 @@ export const SelectorInput = ({
       value={value}
       filter={inputValue}
       onChange={onChange}
-      renderMain={({ setOpen }) => (
+      renderMain={({ setOpen, open }) => (
         <div className={`relative  ${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}>
           <input
             type="text"
-            value={value}
+            value={inputValue}
             placeholder={placeholder}
             disabled={isDisabled}
-            className={`w-full ${!isDisabled ? '' : 'bg-background-secondary'} border text-text py-2 px-4 rounded ${className}`}
+            className={classNames(
+              !isDisabled
+                ? 'bg-background cursor-pointer'
+                : 'bg-background-secondary cursor-not-allowed',
+              'border text-text py-2 px-4 rounded w-full',
+              className
+            )}
             onFocus={() => setOpen(true)}
             onChange={(e) => setInputValue(e.target.value)}
           />
@@ -53,6 +61,11 @@ export const SelectorInput = ({
                 }}
               />
             )}
+            <FontAwesomeIcon
+              icon="chevron-down"
+              className="w-4 h-4 hover:text-text-secondary"
+              onClick={() => setOpen(!open)}
+            />
           </span>
         </div>
       )}
