@@ -39,7 +39,7 @@ export const SelectorInput = ({
             value={value}
             placeholder={placeholder}
             disabled={isDisabled}
-            className={`w-full ${!isDisabled ? 'bg-background' : 'bg-background-secondary'} border text-text py-2 px-4 rounded ${className}`}
+            className={`w-full ${!isDisabled ? '' : 'bg-background-secondary'} border text-text py-2 px-4 rounded ${className}`}
             onFocus={() => setOpen(true)}
             onChange={(e) => setInputValue(e.target.value)}
           />

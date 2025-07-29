@@ -12,17 +12,17 @@ const subjectApiMock: SubjectApi = {
     return new Promise((resolve) =>
       setTimeout(() => {
         resolve([
-          { id: 'math', label: 'Math', icon: 'calculator' },
-          { id: 'english', label: 'English', icon: 'language' },
-          { id: 'history', label: 'History', icon: 'history' },
-          { id: 'biology', label: 'Biology', icon: 'dna' },
-          { id: 'chemistry', label: 'Chemistry', icon: 'flask' },
-          { id: 'literature', label: 'Literature', icon: 'book' },
-          { id: 'geography', label: 'Geography', icon: 'globe' },
-          { id: 'computer-science', label: 'Computer Science', icon: 'laptop-code' },
-          { id: 'art', label: 'Art', icon: 'palette' },
-          { id: 'music', label: 'Music', icon: 'music' },
-          { id: 'physics', label: 'Physics', icon: 'atom' },
+          { id: 'math', label: 'Math', faIcon: 'calculator' },
+          { id: 'english', label: 'English', faIcon: 'language' },
+          { id: 'history', label: 'History', faIcon: 'history' },
+          { id: 'biology', label: 'Biology', faIcon: 'dna' },
+          { id: 'chemistry', label: 'Chemistry', faIcon: 'flask' },
+          { id: 'literature', label: 'Literature', faIcon: 'book' },
+          { id: 'geography', label: 'Geography', faIcon: 'globe' },
+          { id: 'computer-science', label: 'Computer Science', faIcon: 'laptop-code' },
+          { id: 'art', label: 'Art', faIcon: 'palette' },
+          { id: 'music', label: 'Music', faIcon: 'music' },
+          { id: 'physics', label: 'Physics', faIcon: 'atom' },
         ]);
       }, 1000)
     );

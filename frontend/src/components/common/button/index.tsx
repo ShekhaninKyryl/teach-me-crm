@@ -25,7 +25,10 @@ export const Button = ({
     <button
       type={type}
       className={classNames(
-        'bg-primary text-text py-2 px-4 h-10 rounded hover:bg-primary-hover cursor-pointer',
+        'text-text py-2 px-4 h-10 rounded bg-primary',
+        disabled
+          ? 'bg-primary-disabled cursor-not-allowed'
+          : ' hover:bg-primary-hover cursor-pointer',
         className
       )}
       disabled={disabled}

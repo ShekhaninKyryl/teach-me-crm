@@ -1,27 +1,16 @@
-import { useState } from 'react';
 import { _ } from 'translates/index';
 import { FilterTutors } from 'components/filter-tutors';
 
 export const FindTutor = () => {
-  const [search, setSearch] = useState('');
-
-  const handleSearchChange = (value: string) => {
-    setSearch(value);
-  };
-
-  const handleSearchSubmit = () => {
-    //TODO: Implement search functionality
-  };
-
   return (
     <>
-      <h1 className="text-3xl font-bold text-text mb-6">{_('Find tutor')}</h1>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <div className="col-span-1 md:col-span-1">
+      <h1 className="text-3xl font-bold text-text mb-2">{_('Find tutor')}</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8">
+        <div className="md:col-span-2">
           <FilterTutors />
         </div>
 
-        <div className="grid gap-4 md:col-span-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <div className="md:col-span-2 lg:col-span-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[1, 2, 3, 4, 5, 6, 7].map((id) => (
             <div
               key={id}

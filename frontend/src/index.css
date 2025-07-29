@@ -3,15 +3,19 @@
 @theme inline {
     --color-primary: var(--color-primary);
     --color-primary-hover: var(--color-primary-hover);
+    --color-primary-disabled: var(--color-primary-disabled);
 
     --color-accent: var(--color-accent);
     --color-accent-hover: var(--color-accent-hover);
+    --color-accent-disabled: var(--color-accent-disabled);
 
     --color-error: var(--color-error);
     --color-error-hover: var(--color-error-hover);
+    --color-error-disabled: var(--color-error-disabled);
 
     --color-warning: var(--color-warning);
     --color-warning-hover: var(--color-warning-hover);
+    --color-warning-disabled: var(--color-warning-disabled);
 
     --color-background: var(--color-background);
     --color-surface: var(--color-surface);
@@ -25,72 +29,99 @@
 
     [data-theme="light"] {
     /* ☀️ Світла тема (default) */
-    --color-primary: #4F9DDE;
-    --color-primary-hover: #3B82D6;
+        --color-primary: #4F46E5; /* Насичений індиго */
+        --color-primary-hover: #4338CA; /* Трохи темніше */
+        --color-primary-disabled: #A5B4FC; /* Світлий індиго */
 
-    --color-accent: #4CAF50;
-    --color-accent-hover: #43A047;
+        /* Accent (успіх / акцентні кнопки) */
+        --color-accent: #10B981; /* Emerald 500 */
+        --color-accent-hover: #059669; /* Emerald 600 */
+        --color-accent-disabled: #6EE7B7; /* Emerald 300 */
 
-    --color-error: #EF4444;
-    --color-error-hover: #DC2626;
+        /* Error / Danger */
+        --color-error: #EF4444; /* Red 500 */
+        --color-error-hover: #DC2626; /* Red 600 */
+        --color-error-disabled: #FCA5A5; /* Red 300 */
 
-    --color-warning: #F59E0B;
-    --color-warning-hover: #D97706;
+        /* Warning */
+        --color-warning: #F59E0B; /* Amber 500 */
+        --color-warning-hover: #D97706; /* Amber 600 */
+        --color-warning-disabled: #FCD34D; /* Amber 300 */
 
-    --color-background: #FFFFFF;
-    --color-surface: #F4F6F8;
-    --color-background-secondary: #5b6a83;
-    --color-background-secondary-hover: #334155;
+        /* Backgrounds */
+        --color-background: #FFFFFF; /* Основний фон */
+        --color-surface: #F3F4F6; /* Світлий сірий для карток */
+        --color-background-secondary: #E5E7EB; /* Для панелей */
+        --color-background-secondary-hover: #D1D5DB; /* Hover стан */
 
-    --color-text: #111827;
-    --color-text-secondary: #6B7280;
-    --color-border: #E5E7EB;
+        /* Text & borders */
+        --color-text: #111827; /* Насичений чорний */
+        --color-text-secondary: #6B7280; /* Сірий для підписів */
+        --color-border: #E5E7EB; /* Нейтральна сітка */
     }
 
 [data-theme="dark"] {
         /* 🌙 Темна тема */
-        --color-primary: #3B82F6;
-        --color-primary-hover: #2563EB;
+    --color-primary: #6366F1; /* Світліший індиго для темного фону */
+    --color-primary-hover: #818CF8; /* Трохи яскравіше */
+    --color-primary-disabled: #4F46E5; /* Приглушене індиго */
 
-        --color-accent: #10B981;
-        --color-accent-hover: #059669;
+    /* Accent (успіх / акцентні кнопки) */
+    --color-accent: #34D399; /* Emerald 400 */
+    --color-accent-hover: #10B981; /* Emerald 500 */
+    --color-accent-disabled: #065F46; /* Приглушений темно-зелений */
 
-        --color-error: #F87171;
-        --color-error-hover: #DC2626;
+    /* Error / Danger */
+    --color-error: #F87171; /* Red 400 */
+    --color-error-hover: #EF4444; /* Red 500 */
+    --color-error-disabled: #7F1D1D; /* Темний червоний */
 
-        --color-warning: #FBBF24;
-        --color-warning-hover: #D97706;
+    /* Warning */
+    --color-warning: #FBBF24; /* Amber 400 */
+    --color-warning-hover: #F59E0B; /* Amber 500 */
+    --color-warning-disabled: #78350F; /* Темно-бурштиновий */
 
-        --color-background: #111827;
-        --color-surface: #1F2937;
-        --color-background-secondary: #1b294a;
-        --color-background-secondary-hover: #1E293B;
+    /* Backgrounds */
+    --color-background: #0F172A; /* Темний синьо-чорний (Slate 900) */
+    --color-surface: #1E293B; /* Трохи світліший для карток */
+    --color-background-secondary: #334155; /* Секції / бічні панелі */
+    --color-background-secondary-hover: #475569; /* Hover стан */
 
-        --color-text: #F9FAFB;
-        --color-text-secondary: #9CA3AF;
-        --color-border: #374151;
+    /* Text & borders */
+    --color-text: #F9FAFB; /* Майже білий */
+    --color-text-secondary: #CBD5E1; /* Світлий сірий */
+    --color-border: #475569; /* Тонка сіра лінія */
     }
 
 [data-theme="brand-orange"] {
         /* 🍊 Брендована помаранчева тема */
-        --color-primary: #FF8C00;
-        --color-primary-hover: #cc7000;
+    --color-primary: #F97316; /* Orange 500 */
+    --color-primary-hover: #EA580C; /* Orange 600 */
+    --color-primary-disabled: #FED7AA; /* Orange 200 */
 
-        --color-accent: #FFB347;
-        --color-accent-hover: #FFA500;
+    /* Accent (успіх / акцентні кнопки) */
+    --color-accent: #10B981; /* Emerald 500 */
+    --color-accent-hover: #059669; /* Emerald 600 */
+    --color-accent-disabled: #6EE7B7; /* Emerald 300 */
 
-        --color-error: #FF4D4D;
-        --color-error-hover: #D42C2C;
+    /* Error / Danger */
+    --color-error: #EF4444; /* Red 500 */
+    --color-error-hover: #DC2626; /* Red 600 */
+    --color-error-disabled: #FCA5A5; /* Red 300 */
 
-        --color-warning: #FFD700;
-        --color-warning-hover: #E6C200;
+    /* Warning (тут можна зробити ближче до жовтого, щоб відрізнялось від primary) */
+    --color-warning: #FACC15; /* Yellow 400 */
+    --color-warning-hover: #EAB308; /* Yellow 500 */
+    --color-warning-disabled: #FEF08A; /* Yellow 200 */
 
-        --color-background: #FFFFFF;
-        --color-surface: #FFF4E6;
-        --color-background-secondary: #FFF0D9;
-        --color-background-secondary-hover: #FFE4B5;
+    /* Backgrounds */
+    --color-background: #FFFFFF; /* Основний білий фон */
+    --color-surface: #FFF7ED; /* Світлий помаранчевий відтінок (Orange 50) */
+    --color-background-secondary: #FFEDD5; /* Трохи насиченіший фон (Orange 100) */
+    --color-background-secondary-hover: #FED7AA; /* Hover стан (Orange 200) */
 
-        --color-text: #2B2B2B;
-        --color-text-secondary: #6C6C6C;
-        --color-border: #E0E0E0;
+    /* Text & borders */
+    --color-text: #1C1917; /* Темно-коричневий/чорний (Warm tone) */
+    --color-text-secondary: #78350F; /* Коричнево-оранжевий */
+    --color-border: #FED7AA; /* Світло-помаранчевий */
     }
