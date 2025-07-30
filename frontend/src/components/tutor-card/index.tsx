@@ -1,5 +1,6 @@
 import type { Tutor } from 'types/tutor';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Rating } from 'components/rating/rating';
 
 type TutorCardProps = Tutor & {};
 
@@ -26,7 +27,7 @@ export const TutorCard = ({
         )}
         <div>
           <h2 className="text-xl font-semibold text-text">{name}</h2>
-          <p className="text-text-secondary">Rating: {rating.toFixed(1)}</p>
+          <Rating rating={rating} showPercentage={true} color="primary" />
         </div>
       </div>
       <p className="text-text-secondary">Subjects: {subjects.join(', ')}</p>

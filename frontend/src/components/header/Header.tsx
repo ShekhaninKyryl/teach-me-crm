@@ -16,11 +16,11 @@ export const Header = () => {
 
   return (
     <div className="flex justify-between items-center p-4">
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center">
         <Logo />
         <h1 className="text-xl font-bold">{_('TeachMe')}</h1>
       </div>
-      <div className="flex space-x-4">
+      <div className="flex">
         {navLinks.map(({ title, to, icon }) => (
           <ButtonLink
             key={to}

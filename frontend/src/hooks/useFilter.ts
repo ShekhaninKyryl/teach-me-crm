@@ -52,6 +52,7 @@ export const useFilter = ({ onChange }: FilterProps) => {
   );
 
   useEffect(() => {
+    if (!selected.length) return;
     debouncedOnChange(selected);
   }, [selected, onChange]);
 

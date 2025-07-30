@@ -86,7 +86,7 @@ const tutorApiMock: TutorApi = {
             pricePerHour: 25,
             location: 'Los Angeles',
             bio: 'Dedicated educator with over 10 years of experience.',
-            profilePictureUrl: 'https://example.com/profile2.jpg',
+            profilePictureUrl: undefined,
           },
         ]);
       }, 500)
