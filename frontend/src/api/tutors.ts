@@ -2,6 +2,7 @@ import type { Tutor } from 'types/tutor';
 import axios from 'api/axios';
 import { FORMAT_OPTIONS } from 'constants/format';
 import { getConfig } from 'configs';
+import { tutors as tutorsMock } from 'api/mocks/tutors';
 
 export interface TutorApi {
   getTutors(): Promise<Tutor[]>;
@@ -63,32 +64,7 @@ const tutorApiMock: TutorApi = {
   async searchTutors(): Promise<Tutor[]> {
     return new Promise((resolve) =>
       setTimeout(() => {
-        resolve([
-          {
-            id: '1',
-            name: 'John Doe',
-            email: 'j.doe@test.com',
-            subjects: ['Math', 'Physics'],
-            format: FORMAT_OPTIONS.Online,
-            rating: 4.5,
-            pricePerHour: 20,
-            location: 'New York',
-            bio: 'Experienced tutor with a passion for teaching.',
-            profilePictureUrl: 'https://example.com/profile1.jpg',
-          },
-          {
-            id: '2',
-            name: 'Jane Smith',
-            email: 'j.smith@test.com',
-            subjects: ['English', 'History'],
-            format: FORMAT_OPTIONS.Offline,
-            rating: 4.8,
-            pricePerHour: 25,
-            location: 'Los Angeles',
-            bio: 'Dedicated educator with over 10 years of experience.',
-            profilePictureUrl: undefined,
-          },
-        ]);
+        resolve(tutorsMock);
       }, 500)
     );
   },

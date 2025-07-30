@@ -34,17 +34,17 @@ export const FindTutor = () => {
   return (
     <>
       <h1 className="text-3xl font-bold text-text mb-2">{_('Find tutor')}</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8">
-        <div className="md:col-span-2">
+      <div className="grid grid-cols-1 lg:grid-cols-6 gap-4 mb-8">
+        <div className="lg:col-span-2">
           <FilterTutors onChange={findTutors} />
         </div>
 
         {loading ? (
-          <div className="md:col-span-2 lg:col-span-4 flex items-center justify-center h-32">
+          <div className="mg:col-span-4 flex items-center justify-center h-32">
             <Loading size={16} />
           </div>
         ) : (
-          <div className="md:col-span-2 lg:col-span-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="lg:col-span-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-fr">
             {tutors.map((tutor) => (
               <TutorCard {...tutor} key={tutor.id} />
             ))}

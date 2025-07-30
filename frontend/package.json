@@ -4,8 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
+    "generate:safelist": "node ../scripts/generateSafelist.js",
+    "dev": "npm run generate:safelist && vite",
+    "build": "npm run generate:safelist && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "format": "prettier --write ."
