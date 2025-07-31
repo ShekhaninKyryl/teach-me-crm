@@ -1,12 +1,15 @@
 import { _ } from 'translates/index';
 import { SelectorInput } from 'components/common/selector/selector-input';
 import { Input } from 'components/common/input';
-import { Button } from 'components/common/button';
+import { PrimaryButton } from 'components/common/button';
 import { useFilter } from 'hooks/useFilter';
 import type { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { Chiclet } from 'components/common/chiclet';
 import { Loading } from 'components/common/loading';
-import type { Filter } from 'types/filter';
+import type { Filter, FilterType } from 'types/filter';
+import { FILTER_DEBOUNCE_TIMER } from 'constants/timer';
+import { ProgressBarWithTimer } from 'components/common/progress-bar/progress-bar-with-timer';
+import { useState } from 'react';
 
 type FilterTutorsProps = {
   onChange: (selected: Filter[]) => void;
@@ -24,13 +27,24 @@ export const FilterTutors = ({ onChange }: FilterTutorsProps) => {
     addSelected,
     findSelected,
   } = useFilter({ onChange });
+  const [timerKey, setTimerKey] = useState(0);
+
+  const addSelectedWithTimer = (type: FilterType, value: string, icon?: IconProp) => {
+    addSelected(type, value, icon);
+    setTimerKey((prev) => prev + 1);
+  };
+
+  const removeSelectedWithTimer = (value: string) => {
+    removeSelected(value);
+    setTimerKey((prev) => prev + 1);
+  };
 
   const handleSearchChange = (value: string) => {
     setFilter((prev) => ({ ...prev, search: value }));
   };
   const handleSearchAdd = () => {
     if (filter.search) {
-      addSelected('search', filter.search);
+      addSelectedWithTimer('search', filter.search);
       setFilter((prev) => ({ ...prev, search: '' }));
     }
   };
@@ -38,32 +52,34 @@ export const FilterTutors = ({ onChange }: FilterTutorsProps) => {
     if (value) {
       const subject = subjects.find((s) => s.id === value);
       if (subject) {
-        addSelected('subject', subject.label, subject.faIcon);
+        addSelectedWithTimer('subject', subject.label, subject.faIcon);
       }
     }
   };
   const handleCityChange = (value: string | undefined) => {
     if (value) {
-      addSelected('city', value);
+      addSelectedWithTimer('city', value);
     }
   };
   const handleFormatChange = (format: 'online' | 'offline') => {
-    const existing = selected.find((s) => s.type === 'format' && s.value === format);
-    if (existing) return;
-    addSelected('format', format);
+    const existing = selected.find((s) => s.type === 'format');
+    if (existing) {
+      removeSelectedWithTimer(existing.value);
+    }
+    addSelectedWithTimer('format', format);
     setFilter((prev) => ({ ...prev, format: format }));
   };
 
   if (isLoading) {
     return (
-      <div className="mx-auto py-4 px-4 bg-background-secondary">
+      <div className="mx-auto py-4 px-4 mb-2 bg-background-secondary">
         <h2 className="text-xl font-bold text-text mb-2">{_('Filters')}</h2>
         <Loading />
       </div>
     );
   }
   return (
-    <div className="relative mx-auto py-4 px-4 bg-background-secondary">
+    <div className="relative mx-auto py-4 px-4 mb-2 bg-background-secondary">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-bold text-text mb-2">{_('Filters')}</h2>
       </div>
@@ -71,11 +87,16 @@ export const FilterTutors = ({ onChange }: FilterTutorsProps) => {
       {/* Selected Filters */}
       <div className="flex flex-wrap gap-2 mb-2">
         {selected.map(({ value, icon }) => (
-          <Chiclet key={value} label={value} icon={icon} onClose={() => removeSelected(value)} />
+          <Chiclet
+            key={value}
+            label={value}
+            icon={icon}
+            onClose={() => removeSelectedWithTimer(value)}
+          />
         ))}
       </div>
 
-      <div className="flex gap-2 mb-4 items-end">
+      <div className="flex gap-4 mb-4 items-end">
         <Input
           label={_("Searching by subject, tutor's name or location")}
           type="text"
@@ -84,7 +105,7 @@ export const FilterTutors = ({ onChange }: FilterTutorsProps) => {
           onChange={handleSearchChange}
           value={filter.search || ''}
         />
-        <Button
+        <PrimaryButton
           disabled={filter.search === '' || Boolean(filter.search && findSelected(filter.search))}
           title={_('Search')}
           className="min-w-24"
@@ -94,13 +115,13 @@ export const FilterTutors = ({ onChange }: FilterTutorsProps) => {
 
       <div className="flex flex-col gap-4 mb-8">
         {/* Format of Classes Selector*/}
-        <div className="grid grid-cols-2 gap-2">
-          <Button
+        <div className="grid grid-cols-2 gap-4">
+          <PrimaryButton
             title={_('Online')}
             disabled={Boolean(findSelected('online'))}
             onClick={() => handleFormatChange('online')}
           />
-          <Button
+          <PrimaryButton
             title={_('Offline')}
             disabled={Boolean(findSelected('offline'))}
             onClick={() => handleFormatChange('offline')}
@@ -129,6 +150,17 @@ export const FilterTutors = ({ onChange }: FilterTutorsProps) => {
           onChange={handleCityChange}
         />
       </div>
+
+      {timerKey ? (
+        <div className="absolute bottom-0 left-0 w-full flex">
+          <ProgressBarWithTimer
+            key={timerKey}
+            timer={FILTER_DEBOUNCE_TIMER}
+            color="accent"
+            strokeWidth={4}
+          />
+        </div>
+      ) : null}
     </div>
   );
 };

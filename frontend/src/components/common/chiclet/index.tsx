@@ -12,12 +12,12 @@ type ChicletProps = {
 export const Chiclet: React.FC<ChicletProps> = ({ icon, label, className, onClose }) => {
   return (
     <span
-      className={`flex items-center gap-2 bg-accent-hover px-3 py-1 rounded w-fit ${className}`}
+      className={`bg-accent text-background-secondary flex items-center gap-2  px-3 py-1 rounded w-fit ${className}`}
     >
       {icon && <FontAwesomeIcon icon={icon} />}
-      <span className="text-text">{label}</span>
+      <span className="">{label}</span>
       {onClose && (
-        <button onClick={onClose} className="text-text hover:text-text-secondary cursor-pointer">
+        <button onClick={onClose} className="hover:text-text-secondary cursor-pointer">
           <X className="w-4 h-4" />
         </button>
       )}

@@ -21,7 +21,7 @@ export const CircularBar = ({
     <div className={`inline-block`} style={{ width: size, height: size }}>
       <svg className="block" width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
         <circle
-          className="text-gray-200"
+          className="text-background-secondary"
           strokeWidth={strokeWidth}
           stroke="currentColor"
           fill="none"

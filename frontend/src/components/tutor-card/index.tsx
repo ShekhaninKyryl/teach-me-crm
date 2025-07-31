@@ -10,7 +10,7 @@ export const TutorCard = ({
   subjects,
   format,
   rating,
-  pricePerHour,
+  price,
   location,
   profilePictureUrl,
 }: TutorCardProps) => {
@@ -18,9 +18,7 @@ export const TutorCard = ({
     subjects.length > 0 ? `${_('Subjects')}: ${subjects.join(', ')}` : _('No subjects listed');
   const formatText = format ? `${_('Format')}: ${format}` : _('No format specified');
   const locationText = location ? `${_('Location')}: ${location}` : _('No location specified');
-  const pricePerHourText = pricePerHour
-    ? `${_('Price per hour')}: ${pricePerHour}`
-    : _('No price specified');
+  const pricePerHourText = price ? `${_('Price per hour')}: ${price}` : _('No price specified');
 
   return (
     <div className="bg-surface p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow h-full flex flex-col justify-between">

@@ -5,7 +5,7 @@ export type Tutor = User & {
   subjects: string[];
   format: Format;
   rating: number;
-  pricePerHour: number;
+  price: number;
   location?: string;
   bio?: string;
   profilePictureUrl?: string;

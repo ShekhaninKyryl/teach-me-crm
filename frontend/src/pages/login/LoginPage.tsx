@@ -52,7 +52,7 @@ export const LoginPage = () => {
           type={'password'}
           register={register('password')}
         />
-        <SubmitButton title={_('Login')} />
+        <SubmitButton title={_('Login')} className="w-full" />
       </form>
     </div>
   );
