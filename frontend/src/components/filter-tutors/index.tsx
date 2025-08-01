@@ -1,4 +1,4 @@
-import { _ } from 'translates/index';
+import { _ } from '@/translates';
 import { SelectorInput } from 'components/common/selector/selector-input';
 import { Input } from 'components/common/input';
 import { PrimaryButton } from 'components/common/button';
@@ -10,6 +10,7 @@ import type { Filter, FilterType } from 'types/filter';
 import { FILTER_DEBOUNCE_TIMER } from 'constants/timer';
 import { ProgressBarWithTimer } from 'components/common/progress-bar/progress-bar-with-timer';
 import { useState } from 'react';
+import { RangeSlider } from 'components/common/slider';
 
 type FilterTutorsProps = {
   onChange: (selected: Filter[]) => void;
@@ -149,6 +150,8 @@ export const FilterTutors = ({ onChange }: FilterTutorsProps) => {
           }))}
           onChange={handleCityChange}
         />
+
+        <RangeSlider values={[20, 46]} onChange={(v) => console.log(v)} />
       </div>
 
       {timerKey ? (

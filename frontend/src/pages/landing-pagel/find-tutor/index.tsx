@@ -63,7 +63,7 @@ export const FindTutor = () => {
               <div>
                 <Carousel
                   items={sortedData.map((tutor) => (
-                    <div className="mx-20" key={tutor.id}>
+                    <div className="mx-16" key={tutor.id}>
                       <TutorCardMini {...tutor} />
                     </div>
                   ))}
