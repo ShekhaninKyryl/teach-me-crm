@@ -8,7 +8,7 @@ type SortList = {
 export const useSort = <T>(sortKeys: string[]) => {
   const [sortList, setSortList] = useState<SortList>(
     sortKeys.reduce<SortList>((acc, key) => {
-      acc[key] = 'asc';
+      acc[key] = 'none';
       return acc;
     }, {})
   );

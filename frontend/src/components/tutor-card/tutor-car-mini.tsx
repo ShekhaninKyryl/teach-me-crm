@@ -55,7 +55,7 @@ export const TutorCardMini = ({
           <p className="text-text text-lg">{pricePerHourText}</p>
           <p
             className={classNames(
-              'text-lg font-medium',
+              'text-lg font-medium text-right',
               format === FORMAT_OPTIONS.Online ? 'text-accent' : 'text-warning'
             )}
           >
