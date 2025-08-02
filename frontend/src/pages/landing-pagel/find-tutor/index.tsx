@@ -7,7 +7,9 @@ import { Loading } from 'components/common/loading';
 import { TutorCardMini } from 'components/tutor-card/tutor-car-mini';
 import SortTutors from 'components/sort-tutors';
 import { useSort } from 'hooks/useSort';
-import { Carousel } from 'components/common/carousel';
+import { TopTutors } from 'pages/landing-pagel/find-tutor/top-tutors';
+import { Label } from 'components/ui/label';
+import { _ } from '@/translates';
 
 export const FindTutor = () => {
   const [tutors, setTutors] = useState<Tutor[]>([]);
@@ -63,22 +65,14 @@ export const FindTutor = () => {
             <Loading size={16} />
           </div>
         ) : (
-          <div className="lg:col-span-4 grid grid-cols-1 gap-4">
-            {sortedData.length && (
-              <div>
-                <Carousel
-                  items={sortedData.map((tutor) => (
-                    <div className="mx-16" key={tutor.id}>
-                      <TutorCardMini {...tutor} />
-                    </div>
-                  ))}
-                  showArrows
-                  showDots
-                  autoPlay
-                  stopOnClick
-                />
-              </div>
-            )}
+          <div className="lg:col-span-4 grid grid-cols-1">
+            <TopTutors />
+
+            <Label className="mb-2">
+              <h2 className=" w-full scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0 text-right">
+                {_('Filtered Tutors')}
+              </h2>
+            </Label>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-fr z-1">
               {sortedData.map((tutor) => (
                 <TutorCardMini {...tutor} key={tutor.id} />

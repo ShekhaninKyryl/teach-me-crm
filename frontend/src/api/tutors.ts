@@ -5,13 +5,13 @@ import { getConfig } from '@/configs';
 import { tutors as tutorsMock } from 'api/mocks/tutors';
 
 export interface TutorApi {
-  getTutors(): Promise<Tutor[]>;
+  getTopTutors(): Promise<Tutor[]>;
   getTutorById(id: string): Promise<Tutor>;
   searchTutors(query: string): Promise<Tutor[]>;
 }
 
 const tutorApiMock: TutorApi = {
-  async getTutors(): Promise<Tutor[]> {
+  async getTopTutors(): Promise<Tutor[]> {
     return new Promise((resolve) =>
       setTimeout(() => {
         resolve([
@@ -25,7 +25,7 @@ const tutorApiMock: TutorApi = {
             price: 20,
             location: 'New York',
             bio: 'Experienced tutor with a passion for teaching.',
-            profilePictureUrl: 'https://example.com/profile1.jpg',
+            profilePictureUrl: 'https://i.pravatar.cc/150?img=47',
           },
           {
             id: '2',
@@ -37,7 +37,7 @@ const tutorApiMock: TutorApi = {
             price: 25,
             location: 'Los Angeles',
             bio: 'Dedicated educator with over 10 years of experience.',
-            profilePictureUrl: 'https://example.com/profile2.jpg',
+            profilePictureUrl: 'https://i.pravatar.cc/150?img=49',
           },
         ]);
       }, 1000)
@@ -71,8 +71,8 @@ const tutorApiMock: TutorApi = {
 };
 
 const tutorApi = {
-  async getTutors(): Promise<Tutor[]> {
-    const response = await axios('/api/tutors');
+  async getTopTutors(): Promise<Tutor[]> {
+    const response = await axios('/api/top-tutors');
     return response.data;
   },
   async getTutorById(id: string): Promise<Tutor> {

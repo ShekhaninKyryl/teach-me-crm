@@ -1,2 +1,3 @@
 export const FILTER_DEBOUNCE_TIMER = 3000;
 export const RANGE_THROTTLE_TIMER = 3000;
+export const TOP_TUTOR_SLIDE_TIMER = 4000;
