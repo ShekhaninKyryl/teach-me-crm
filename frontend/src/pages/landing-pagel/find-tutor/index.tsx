@@ -1,11 +1,11 @@
-import { FilterTutors } from 'components/filter-tutors';
+import FilterTutors from 'components/filter-tutors';
 import { useCallback, useEffect, useState } from 'react';
 import type { Filter } from 'types/filter';
 import tutorsApi from 'api/tutors';
 import type { Tutor } from 'types/tutor';
 import { Loading } from 'components/common/loading';
 import { TutorCardMini } from 'components/tutor-card/tutor-car-mini';
-import { SortTutors } from 'components/sort-tutors';
+import SortTutors from 'components/sort-tutors';
 import { useSort } from 'hooks/useSort';
 import { Carousel } from 'components/common/carousel';
 
@@ -38,6 +38,11 @@ export const FindTutor = () => {
       .catch((error) => setError(error));
   };
 
+  const handleSortChange = useCallback(
+    (sortBy: string) => sortData(tutors, sortBy),
+    [tutors, sortList]
+  );
+
   const findTutors = useCallback(handleFindTutors, []);
 
   return (
@@ -48,7 +53,7 @@ export const FindTutor = () => {
             <SortTutors
               ratingSort={sortList.rating}
               priceSort={sortList.price}
-              onSortChange={(sortBy) => sortData(tutors, sortBy)}
+              onSortChange={handleSortChange}
             />
             <FilterTutors onChange={findTutors} />
           </div>

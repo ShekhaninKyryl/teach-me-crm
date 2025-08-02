@@ -5,7 +5,7 @@ import type { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { Loading } from 'components/common/loading';
 import type { Filter } from 'types/filter';
 
-import { type ChangeEvent, useCallback, useEffect, useState } from 'react';
+import React, { type ChangeEvent, useCallback, useEffect, useState } from 'react';
 import {
   Card,
   CardContent,
@@ -22,14 +22,14 @@ import { Badge } from 'components/ui/badge';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { X } from 'lucide-react';
 import { PriceRange } from 'components/price-range';
-import { FILTER_DEBOUNCE_TIMER } from 'constants/timer';
+import { RANGE_THROTTLE_TIMER } from 'constants/timer';
 import { throttle } from 'utils/throttle-debounce';
 
 type FilterTutorsProps = {
   onChange: (selected: Filter[]) => void;
 };
 
-export const FilterTutors = ({ onChange }: FilterTutorsProps) => {
+export const FilterTutorsComponent = ({ onChange }: FilterTutorsProps) => {
   const {
     isLoading,
     subjects,
@@ -64,7 +64,7 @@ export const FilterTutors = ({ onChange }: FilterTutorsProps) => {
       }
 
       addSelected('price', `${range[0]}-${range[1]} ₴`);
-    }, FILTER_DEBOUNCE_TIMER),
+    }, RANGE_THROTTLE_TIMER),
     [findSelected, removeSelected, addSelected]
   );
 
@@ -201,3 +201,7 @@ export const FilterTutors = ({ onChange }: FilterTutorsProps) => {
     </Card>
   );
 };
+
+const FilterTutors = React.memo(FilterTutorsComponent);
+
+export default FilterTutors;

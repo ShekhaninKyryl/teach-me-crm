@@ -1,7 +1,9 @@
-import { _ } from 'translates/index';
-import { TypedButton } from 'components/common/button';
+import { _ } from '@/translates';
 import type { SortDirection } from 'hooks/useSort';
-import { Loading } from 'components/common/loading';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Loader2, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import React from 'react';
 
 type SortTutorsProps = {
   onSortChange?: (sortBy: string) => void;
@@ -10,51 +12,63 @@ type SortTutorsProps = {
   isLoading?: boolean;
 };
 
-export const SortTutors = ({ ratingSort, priceSort, onSortChange, isLoading }: SortTutorsProps) => {
+export const SortTutorsComponent = ({
+  ratingSort,
+  priceSort,
+  onSortChange,
+  isLoading,
+}: SortTutorsProps) => {
   const getSortIcon = (sortDirection: SortDirection) => {
     switch (sortDirection) {
       case 'asc':
-        return 'sort-amount-desc';
+        return <ArrowUp className="w-4 h-4 ml-2" />;
       case 'desc':
-        return 'sort-amount-asc';
+        return <ArrowDown className="w-4 h-4 ml-2" />;
       default:
-        return 'arrows-v';
+        return <ArrowUpDown className="w-4 h-4 ml-2 opacity-50" />;
     }
   };
 
   if (isLoading) {
     return (
-      <div className="mx-auto py-4 px-4 mb-2 bg-background-secondary">
-        <h2 className="text-xl font-bold text-text mb-2">{_('Sort by')}</h2>
-        <Loading />
-      </div>
+      <Card className="mx-auto py-4 px-4 mb-2">
+        <CardHeader className="p-0 mb-2">
+          <CardTitle className="text-xl font-bold">{_('Sort by')}</CardTitle>
+        </CardHeader>
+        <CardContent className="flex justify-center py-4">
+          <Loader2 className="w-6 h-6 animate-spin" />
+        </CardContent>
+      </Card>
     );
   }
 
   return (
-    <div className="relative mx-auto py-4 px-4 mb-2 bg-background-secondary">
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl font-bold text-text mb-2">{_('Sort by')}</h2>
-      </div>
-
-      <div className="flex justify-center gap-2">
-        <TypedButton
-          variant={ratingSort === 'none' ? 'transparent' : 'accent'}
-          icon={getSortIcon(ratingSort)}
-          iconPosition="right"
-          title={_('Rating')}
-          className="w-full"
+    <Card className="mx-auto py-4 px-4 mb-2 gap-2">
+      <CardHeader className="p-0">
+        <CardTitle>{_('Sort by')}</CardTitle>
+      </CardHeader>
+      <CardContent className="flex justify-center gap-2 p-0">
+        <Button
+          variant={ratingSort === 'none' ? 'outline' : 'default'}
+          className={ratingSort === 'none' ? '' : 'flex-1'}
           onClick={() => onSortChange?.('rating')}
-        />
-        <TypedButton
-          variant={priceSort === 'none' ? 'transparent' : 'accent'}
-          icon={getSortIcon(priceSort)}
-          iconPosition="right"
-          title={_('Price')}
-          className="w-full"
+        >
+          {_('Rating')}
+          {getSortIcon(ratingSort)}
+        </Button>
+        <Button
+          variant={priceSort === 'none' ? 'outline' : 'default'}
+          className={priceSort === 'none' ? '' : 'flex-1'}
           onClick={() => onSortChange?.('price')}
-        />
-      </div>
-    </div>
+        >
+          {_('Price')}
+          {getSortIcon(priceSort)}
+        </Button>
+      </CardContent>
+    </Card>
   );
 };
+
+const SortTutors = React.memo(SortTutorsComponent);
+
+export default SortTutors;

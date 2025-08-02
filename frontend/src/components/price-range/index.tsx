@@ -14,7 +14,6 @@ export const PriceRange: React.FC<PriceRangeProps> = ({ value, min, max, step = 
   if (!value.length) return null;
 
   const priceText = _(`Price: {VAL1} - {VAL2} UAH`, { VAL1: value[0], VAL2: value[1] });
-  console.log(priceText);
 
   return (
     <div className="flex flex-col gap-2">

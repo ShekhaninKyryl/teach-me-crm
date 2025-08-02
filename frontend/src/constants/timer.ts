@@ -1,1 +1,2 @@
-export const FILTER_DEBOUNCE_TIMER = 1000;
+export const FILTER_DEBOUNCE_TIMER = 3000;
+export const RANGE_THROTTLE_TIMER = 3000;

@@ -36,7 +36,6 @@ export const Carousel: React.FC<CarouselProps> = ({
       if (index < 0) {
         setCurrentIndex(items.length - 1);
       } else if (index >= items.length) {
-        console.log(items.length);
         setCurrentIndex(0);
       } else {
         setCurrentIndex(index);
