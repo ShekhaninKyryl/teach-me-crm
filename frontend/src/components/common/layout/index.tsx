@@ -9,9 +9,7 @@ const Layout = ({ children }: LayoutProps) => {
 };
 
 const Header = ({ children }: LayoutProps) => (
-  <header className=" shadow-md py-4 px-6 sticky top-0 z-10 bg-background-secondary text-text">
-    {children}
-  </header>
+  <header className="shadow-md py-4 px-6 sticky top-0 z-10 bg-muted text-text">{children}</header>
 );
 
 const Body = ({ children }: LayoutProps) => (
@@ -19,9 +17,7 @@ const Body = ({ children }: LayoutProps) => (
 );
 
 const Footer = ({ children }: LayoutProps) => (
-  <footer className=" text-sm text-center py-6 px-4 bg-background-secondary text-text-secondary">
-    {children}
-  </footer>
+  <footer className="text-sm text-center py-6 px-4 bg-muted text-text">{children}</footer>
 );
 
 Layout.Header = Header;

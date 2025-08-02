@@ -1,7 +1,7 @@
 import type { Tutor } from 'types/tutor';
 import axios from 'api/axios';
 import { FORMAT_OPTIONS } from 'constants/format';
-import { getConfig } from 'configs';
+import { getConfig } from '@/configs';
 import { tutors as tutorsMock } from 'api/mocks/tutors';
 
 export interface TutorApi {
@@ -22,7 +22,7 @@ const tutorApiMock: TutorApi = {
             subjects: ['Math', 'Physics'],
             format: FORMAT_OPTIONS.Online,
             rating: 4.5,
-            pricePerHour: 20,
+            price: 20,
             location: 'New York',
             bio: 'Experienced tutor with a passion for teaching.',
             profilePictureUrl: 'https://example.com/profile1.jpg',
@@ -34,7 +34,7 @@ const tutorApiMock: TutorApi = {
             subjects: ['English', 'History'],
             format: FORMAT_OPTIONS.Offline,
             rating: 4.8,
-            pricePerHour: 25,
+            price: 25,
             location: 'Los Angeles',
             bio: 'Dedicated educator with over 10 years of experience.',
             profilePictureUrl: 'https://example.com/profile2.jpg',
@@ -53,7 +53,7 @@ const tutorApiMock: TutorApi = {
           subjects: ['Math'],
           format: FORMAT_OPTIONS.Online,
           rating: 4.0,
-          pricePerHour: 30,
+          price: 30,
           location: 'Mock City',
           bio: 'Mock tutor bio',
           profilePictureUrl: 'https://example.com/mock-profile.jpg',

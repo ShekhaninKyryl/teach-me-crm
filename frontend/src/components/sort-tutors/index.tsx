@@ -31,7 +31,7 @@ export const SortTutorsComponent = ({
 
   if (isLoading) {
     return (
-      <Card className="mx-auto py-4 px-4 mb-2">
+      <Card className="py-4 px-4 mb-2">
         <CardHeader className="p-0 mb-2">
           <CardTitle className="text-xl font-bold">{_('Sort by')}</CardTitle>
         </CardHeader>
@@ -43,11 +43,11 @@ export const SortTutorsComponent = ({
   }
 
   return (
-    <Card className="mx-auto py-4 px-4 mb-2 gap-2">
-      <CardHeader className="p-0">
+    <Card className="w-full">
+      <CardHeader>
         <CardTitle>{_('Sort by')}</CardTitle>
       </CardHeader>
-      <CardContent className="flex justify-center gap-2 p-0">
+      <CardContent className="flex justify-center gap-2">
         <Button
           variant={ratingSort === 'none' ? 'outline' : 'default'}
           className={ratingSort === 'none' ? '' : 'flex-1'}

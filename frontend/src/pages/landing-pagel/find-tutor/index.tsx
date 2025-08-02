@@ -49,7 +49,7 @@ export const FindTutor = () => {
     <>
       <div className="grid grid-cols-1 lg:grid-cols-6 gap-4 mb-4">
         <div className="lg:col-span-2 z-2">
-          <div className="sticky top-36">
+          <div className="sticky top-28 grid gap-2">
             <SortTutors
               ratingSort={sortList.rating}
               priceSort={sortList.price}

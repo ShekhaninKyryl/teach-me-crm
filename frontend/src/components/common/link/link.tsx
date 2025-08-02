@@ -17,8 +17,8 @@ export const Link = ({ to, icon, isActive, title, className }: LinkProps) => {
       to={to}
       className={classNames(
         `transition-colors duration-200 font-medium px-2 py-1 rounded 
-              hover:underline 
-              ${isActive ? 'text-primary font-semibold underline' : 'text-text'}
+              hover:underline hover:text-chart-2
+              ${isActive ? 'text-chart-2 font-semibold underline' : 'text-text'}
             `,
         className
       )}

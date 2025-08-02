@@ -111,7 +111,7 @@ export const FilterTutorsComponent = ({ onChange }: FilterTutorsProps) => {
     );
   }
   return (
-    <Card className="w-full max-w-sm">
+    <Card className="w-full">
       <CardHeader>
         <CardTitle> {_('Filters')}</CardTitle>
         <CardDescription> {_('Select filters to find the best tutor for you')}</CardDescription>
@@ -131,9 +131,9 @@ export const FilterTutorsComponent = ({ onChange }: FilterTutorsProps) => {
         </div>
       </CardHeader>
       <CardContent>
-        <div className="grid w-full max-w-sm items-center gap-3">
+        <div className="grid w-full items-center gap-3">
           <Label>{_("Searching by subject, tutor's name or location")}</Label>
-          <div className="flex w-full max-w-sm items-center gap-2">
+          <div className="flex w-full items-center gap-2">
             <Input
               type="text"
               placeholder={_('Enter search term...')}
@@ -152,7 +152,7 @@ export const FilterTutorsComponent = ({ onChange }: FilterTutorsProps) => {
             </Button>
           </div>
         </div>
-        <div className="grid w-full max-w-sm items-center gap-3 mt-4">
+        <div className="grid w-full items-center gap-3 mt-4">
           <Label>{_('Select a format')}</Label>
           <div className="flex items-center gap-3">
             <Checkbox
@@ -171,7 +171,7 @@ export const FilterTutorsComponent = ({ onChange }: FilterTutorsProps) => {
             <Label>{_('Offline')}</Label>
           </div>
         </div>
-        <div className="grid w-full max-w-sm items-center gap-3 mt-4">
+        <div className="grid w-full items-center gap-3 mt-4">
           <SelectorInput
             placeholder={_('Select a subject')}
             options={subjects.map((subject) => ({
