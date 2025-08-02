@@ -20,9 +20,9 @@ export const SortTutorsComponent = ({
 }: SortTutorsProps) => {
   const getSortIcon = (sortDirection: SortDirection) => {
     switch (sortDirection) {
-      case 'asc':
-        return <ArrowUp className="w-4 h-4 ml-2" />;
       case 'desc':
+        return <ArrowUp className="w-4 h-4 ml-2" />;
+      case 'asc':
         return <ArrowDown className="w-4 h-4 ml-2" />;
       default:
         return <ArrowUpDown className="w-4 h-4 ml-2 opacity-50" />;

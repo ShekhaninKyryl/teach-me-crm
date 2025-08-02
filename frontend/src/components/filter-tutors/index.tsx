@@ -102,14 +102,6 @@ export const FilterTutorsComponent = ({ onChange }: FilterTutorsProps) => {
   const offlineChecked = Boolean(findSelected({ value: 'offline', filterType: 'format' }));
   const onlineChecked = Boolean(findSelected({ value: 'online', filterType: 'format' }));
 
-  if (isLoading) {
-    return (
-      <div className="mx-auto py-4 px-4 mb-2 bg-background-secondary">
-        <h2 className="text-xl font-bold text-text mb-2">{_('Filters')}</h2>
-        <Loading />
-      </div>
-    );
-  }
   return (
     <Card className="w-full">
       <CardHeader>
@@ -130,74 +122,85 @@ export const FilterTutorsComponent = ({ onChange }: FilterTutorsProps) => {
           ))}
         </div>
       </CardHeader>
-      <CardContent>
-        <div className="grid w-full items-center gap-3">
-          <Label>{_("Searching by subject, tutor's name or location")}</Label>
-          <div className="flex w-full items-center gap-2">
-            <Input
-              type="text"
-              placeholder={_('Enter search term...')}
-              value={search || ''}
-              onChange={handleSearchChange}
-            />
-            <Button
-              variant="outline"
-              disabled={
-                search === '' ||
-                Boolean(search && findSelected({ value: search, filterType: 'search' }))
-              }
-              onClick={handleSearchAdd}
-            >
-              {_('Search')}
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <>
+          <CardContent>
+            <div className="grid w-full items-center gap-3">
+              <Label>{_("Searching by subject, tutor's name or location")}</Label>
+              <div className="flex w-full items-center gap-2">
+                <Input
+                  type="text"
+                  placeholder={_('Enter search term...')}
+                  value={search || ''}
+                  onChange={handleSearchChange}
+                />
+                <Button
+                  variant="outline"
+                  disabled={
+                    search === '' ||
+                    Boolean(search && findSelected({ value: search, filterType: 'search' }))
+                  }
+                  onClick={handleSearchAdd}
+                >
+                  {_('Search')}
+                </Button>
+              </div>
+            </div>
+            <div className="grid w-full items-center gap-3 mt-4">
+              <Label>{_('Select a format')}</Label>
+              <div className="flex items-center gap-3">
+                <Checkbox
+                  title={_('Online')}
+                  checked={onlineChecked}
+                  onClick={() => handleFormatChange('online')}
+                />
+                <Label>{_('Online')}</Label>
+              </div>
+              <div className="flex items-center gap-3">
+                <Checkbox
+                  title={_('Offline')}
+                  checked={offlineChecked}
+                  onClick={() => handleFormatChange('offline')}
+                />
+                <Label>{_('Offline')}</Label>
+              </div>
+            </div>
+            <div className="grid w-full items-center gap-3 mt-4">
+              <SelectorInput
+                placeholder={_('Select a subject')}
+                options={subjects.map((subject) => ({
+                  value: subject.id,
+                  label: subject.label,
+                  icon: (subject.faIcon as IconProp) || (subject.icon as IconProp),
+                }))}
+                onChange={handleSubjectChange}
+              />
+              {/*  /!* City Selector *!/*/}
+              <SelectorInput
+                placeholder={_('Select a city')}
+                options={cities.map((city) => ({
+                  value: city,
+                  label: city,
+                }))}
+                onChange={handleCityChange}
+              />
+              <PriceRange
+                value={priceRange}
+                min={min}
+                max={max}
+                onChange={handleRangePriceChange}
+              />
+            </div>
+          </CardContent>
+          <CardFooter className="flex-col gap-2">
+            <Button disabled={!selected.length} className="w-full" onClick={handleFindTutors}>
+              {_('Apply Filters')}
             </Button>
-          </div>
-        </div>
-        <div className="grid w-full items-center gap-3 mt-4">
-          <Label>{_('Select a format')}</Label>
-          <div className="flex items-center gap-3">
-            <Checkbox
-              title={_('Online')}
-              checked={onlineChecked}
-              onClick={() => handleFormatChange('online')}
-            />
-            <Label>{_('Online')}</Label>
-          </div>
-          <div className="flex items-center gap-3">
-            <Checkbox
-              title={_('Offline')}
-              checked={offlineChecked}
-              onClick={() => handleFormatChange('offline')}
-            />
-            <Label>{_('Offline')}</Label>
-          </div>
-        </div>
-        <div className="grid w-full items-center gap-3 mt-4">
-          <SelectorInput
-            placeholder={_('Select a subject')}
-            options={subjects.map((subject) => ({
-              value: subject.id,
-              label: subject.label,
-              icon: (subject.faIcon as IconProp) || (subject.icon as IconProp),
-            }))}
-            onChange={handleSubjectChange}
-          />
-          {/*  /!* City Selector *!/*/}
-          <SelectorInput
-            placeholder={_('Select a city')}
-            options={cities.map((city) => ({
-              value: city,
-              label: city,
-            }))}
-            onChange={handleCityChange}
-          />
-          <PriceRange value={priceRange} min={min} max={max} onChange={handleRangePriceChange} />
-        </div>
-      </CardContent>
-      <CardFooter className="flex-col gap-2">
-        <Button disabled={!selected.length} className="w-full" onClick={handleFindTutors}>
-          {_('Apply Filters')}
-        </Button>
-      </CardFooter>
+          </CardFooter>
+        </>
+      )}
     </Card>
   );
 };

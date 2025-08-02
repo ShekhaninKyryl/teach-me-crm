@@ -60,26 +60,27 @@ export const FindTutor = () => {
             <FilterTutors onChange={findTutors} />
           </div>
         </div>
-        {loading ? (
-          <div className="lg:col-span-4 flex items-center justify-center h-full">
-            <Loading size={16} />
-          </div>
-        ) : (
-          <div className="lg:col-span-4 grid grid-cols-1">
-            <TopTutors />
-
-            <Label className="mb-2">
-              <h2 className=" w-full scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0 text-right">
-                {_('Filtered Tutors')}
-              </h2>
-            </Label>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-fr z-1">
-              {sortedData.map((tutor) => (
-                <TutorCardMini {...tutor} key={tutor.id} />
-              ))}
+        <div className="lg:col-span-4 grid grid-cols-1">
+          <TopTutors />
+          {loading ? (
+            <div className="lg:col-span-4 flex items-center justify-center h-full">
+              <Loading size={16} />
             </div>
-          </div>
-        )}
+          ) : (
+            <>
+              <Label className="mb-2">
+                <h2 className=" w-full scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0 text-right">
+                  {_('Filtered Tutors')}
+                </h2>
+              </Label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-fr z-1">
+                {sortedData.map((tutor) => (
+                  <TutorCardMini {...tutor} key={tutor.id} />
+                ))}
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </>
   );
