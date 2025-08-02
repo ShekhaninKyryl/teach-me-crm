@@ -1,26 +1,6 @@
 const fs = require("fs");
 
-const colors = [
-  "primary",
-  "primary-hover",
-  "primary-disabled",
-  "accent",
-  "accent-hover",
-  "accent-disabled",
-  "error",
-  "error-hover",
-  "error-disabled",
-  "warning",
-  "warning-hover",
-  "warning-disabled",
-  "background",
-  "surface",
-  "background-secondary",
-  "background-secondary-hover",
-  "text",
-  "text-secondary",
-  "border",
-];
+const colors = [];
 
 const prefixes = ["text", "bg", "border"];
 

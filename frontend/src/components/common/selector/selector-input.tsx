@@ -1,74 +1,96 @@
-// SelectorInput.tsx
-import { useState } from 'react';
-import { SelectorBase, type Option } from './selectro-base';
-import { X } from 'lucide-react';
-import classNames from 'classnames';
+import * as React from 'react';
+import { Check, ChevronsUpDown } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import type { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { _ } from '@/translates';
 
-type SelectorInputProps = {
+interface Option {
+  value: string;
+  label: string;
+  icon?: IconProp;
+}
+
+interface SelectorInputProps {
   options: Option[];
   value?: string;
   placeholder?: string;
-  className?: string;
-  onChange?: (value: string | undefined) => void;
-};
+  onChange?: (val?: string) => void;
+}
 
-export const SelectorInput = ({
-  options,
-  value,
-  placeholder,
-  className,
-  onChange,
-}: SelectorInputProps) => {
-  const [inputValue, setInputValue] = useState('');
-  const handleErase = () => {
-    setInputValue('');
-    onChange?.(undefined);
+export function SelectorInput({ options, value, placeholder, onChange }: SelectorInputProps) {
+  const [open, setOpen] = React.useState(false);
+  const [inputValue, setInputValue] = React.useState('');
+  const [popoverWidth, setPopoverWidth] = React.useState<number | undefined>(undefined);
+
+  const triggerRef = React.useRef<HTMLButtonElement>(null);
+
+  const selectedOption = options.find((opt) => opt.value === value);
+
+  const handleSelect = (currentValue: string) => {
+    const newValue = currentValue === value ? undefined : currentValue;
+    onChange?.(newValue);
+    setOpen(false);
   };
 
-  const isDisabled = !options.length;
+  // Встановлюємо ширину поповеру = ширині тригера
+  React.useEffect(() => {
+    if (triggerRef.current) {
+      setPopoverWidth(triggerRef.current.offsetWidth);
+    }
+  }, [open]); // оновлюємо при відкритті
 
   return (
-    <SelectorBase
-      options={options}
-      value={value}
-      filter={inputValue}
-      onChange={onChange}
-      renderMain={({ setOpen, open }) => (
-        <div className={`relative  ${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}>
-          <input
-            type="text"
-            value={inputValue}
-            placeholder={placeholder}
-            disabled={isDisabled}
-            className={classNames(
-              !isDisabled
-                ? 'bg-background cursor-pointer'
-                : 'bg-background-secondary cursor-not-allowed',
-              'border text-text py-2 px-4 rounded w-full',
-              className
-            )}
-            onFocus={() => setOpen(true)}
-            onChange={(e) => setInputValue(e.target.value)}
-          />
-          <span className="flex gap-1 absolute right-2 top-1/2 transform -translate-y-2">
-            {inputValue && (
-              <X
-                className={`w-4 h-4 ${isDisabled ? '' : 'hover:text-error-hover'}`}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleErase();
-                }}
-              />
-            )}
-            <FontAwesomeIcon
-              icon="chevron-down"
-              className="w-4 h-4 hover:text-text-secondary"
-              onClick={() => setOpen(!open)}
+    <div className="w-full">
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            ref={triggerRef}
+            variant="outline"
+            role="combobox"
+            aria-expanded={open}
+            className="w-full justify-between"
+          >
+            {selectedOption ? selectedOption.label : placeholder}
+            <div className="flex items-center gap-1">
+              <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
+            </div>
+          </Button>
+        </PopoverTrigger>
+
+        <PopoverContent className="p-0" align="start" style={{ width: popoverWidth ?? 'auto' }}>
+          <Command>
+            <CommandInput
+              placeholder={_('Search...')}
+              value={inputValue}
+              onValueChange={setInputValue}
             />
-          </span>
-        </div>
-      )}
-    />
+            <CommandList>
+              <CommandEmpty>{_('Not found')}</CommandEmpty>
+              <CommandGroup>
+                {options
+                  .filter((opt) => opt.label.toLowerCase().includes(inputValue.toLowerCase()))
+                  .map((opt) => (
+                    <CommandItem key={opt.value} onSelect={() => handleSelect(opt.value)}>
+                      {opt.icon && <FontAwesomeIcon icon={opt.icon} className="mr-2" />}
+                      {opt.label}
+                      {value === opt.value && <Check className="ml-auto h-4 w-4" />}
+                    </CommandItem>
+                  ))}
+              </CommandGroup>
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+    </div>
   );
-};
+}

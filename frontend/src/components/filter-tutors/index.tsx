@@ -1,16 +1,29 @@
 import { _ } from '@/translates';
 import { SelectorInput } from 'components/common/selector/selector-input';
-import { Input } from 'components/common/input';
-import { PrimaryButton } from 'components/common/button';
 import { useFilter } from 'hooks/useFilter';
 import type { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { Chiclet } from 'components/common/chiclet';
 import { Loading } from 'components/common/loading';
-import type { Filter, FilterType } from 'types/filter';
+import type { Filter } from 'types/filter';
+
+import { type ChangeEvent, useCallback, useEffect, useState } from 'react';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from 'components/ui/checkbox';
+import { Badge } from 'components/ui/badge';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { X } from 'lucide-react';
+import { PriceRange } from 'components/price-range';
 import { FILTER_DEBOUNCE_TIMER } from 'constants/timer';
-import { ProgressBarWithTimer } from 'components/common/progress-bar/progress-bar-with-timer';
-import { useState } from 'react';
-import { RangeSlider } from 'components/common/slider';
+import { throttle } from 'utils/throttle-debounce';
 
 type FilterTutorsProps = {
   onChange: (selected: Filter[]) => void;
@@ -19,57 +32,75 @@ type FilterTutorsProps = {
 export const FilterTutors = ({ onChange }: FilterTutorsProps) => {
   const {
     isLoading,
-    filter,
-    setFilter,
     subjects,
     cities,
+    minMaxPriceRange: { min, max },
     selected,
     removeSelected,
     addSelected,
     findSelected,
-  } = useFilter({ onChange });
-  const [timerKey, setTimerKey] = useState(0);
+  } = useFilter();
+  const [search, setSearch] = useState<string>('');
+  const [priceRange, setPriceRange] = useState<number[]>(() => [min, max]);
 
-  const addSelectedWithTimer = (type: FilterType, value: string, icon?: IconProp) => {
-    addSelected(type, value, icon);
-    setTimerKey((prev) => prev + 1);
-  };
+  useEffect(() => {
+    setPriceRange([min, max]);
+  }, [min, max]);
 
-  const removeSelectedWithTimer = (value: string) => {
-    removeSelected(value);
-    setTimerKey((prev) => prev + 1);
-  };
-
-  const handleSearchChange = (value: string) => {
-    setFilter((prev) => ({ ...prev, search: value }));
+  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
   };
   const handleSearchAdd = () => {
-    if (filter.search) {
-      addSelectedWithTimer('search', filter.search);
-      setFilter((prev) => ({ ...prev, search: '' }));
-    }
+    if (search.trim() === '') return;
+    addSelected('search', search);
+    setSearch('');
   };
+
+  const handleDebouncedPriceChange = useCallback(
+    throttle((range: number[]) => {
+      const existing = findSelected({ filterType: 'price' });
+      if (existing) {
+        removeSelected(existing.value);
+      }
+
+      addSelected('price', `${range[0]}-${range[1]} ₴`);
+    }, FILTER_DEBOUNCE_TIMER),
+    [findSelected, removeSelected, addSelected]
+  );
+
+  const handleRangePriceChange = (range: number[]) => {
+    setPriceRange(range);
+    handleDebouncedPriceChange(range);
+  };
+
   const handleSubjectChange = (value: string | undefined) => {
     if (value) {
       const subject = subjects.find((s) => s.id === value);
       if (subject) {
-        addSelectedWithTimer('subject', subject.label, subject.faIcon);
+        addSelected('subject', subject.label, subject.faIcon);
       }
     }
   };
   const handleCityChange = (value: string | undefined) => {
     if (value) {
-      addSelectedWithTimer('city', value);
+      addSelected('city', value);
     }
   };
   const handleFormatChange = (format: 'online' | 'offline') => {
-    const existing = selected.find((s) => s.type === 'format');
+    const existing = selected.find((s) => s.type === 'format' && s.value === format);
     if (existing) {
-      removeSelectedWithTimer(existing.value);
+      removeSelected(existing.value);
+      return;
     }
-    addSelectedWithTimer('format', format);
-    setFilter((prev) => ({ ...prev, format: format }));
+    addSelected('format', format);
   };
+
+  const handleFindTutors = () => {
+    onChange(selected);
+  };
+
+  const offlineChecked = Boolean(findSelected({ value: 'offline', filterType: 'format' }));
+  const onlineChecked = Boolean(findSelected({ value: 'online', filterType: 'format' }));
 
   if (isLoading) {
     return (
@@ -80,90 +111,93 @@ export const FilterTutors = ({ onChange }: FilterTutorsProps) => {
     );
   }
   return (
-    <div className="relative mx-auto py-4 px-4 mb-2 bg-background-secondary">
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl font-bold text-text mb-2">{_('Filters')}</h2>
-      </div>
-
-      {/* Selected Filters */}
-      <div className="flex flex-wrap gap-2 mb-2">
-        {selected.map(({ value, icon }) => (
-          <Chiclet
-            key={value}
-            label={value}
-            icon={icon}
-            onClose={() => removeSelectedWithTimer(value)}
-          />
-        ))}
-      </div>
-
-      <div className="flex gap-4 mb-4 items-end">
-        <Input
-          label={_("Searching by subject, tutor's name or location")}
-          type="text"
-          placeholder={_('Enter search term...')}
-          className="w-full"
-          onChange={handleSearchChange}
-          value={filter.search || ''}
-        />
-        <PrimaryButton
-          disabled={filter.search === '' || Boolean(filter.search && findSelected(filter.search))}
-          title={_('Search')}
-          className="min-w-24"
-          onClick={handleSearchAdd}
-        />
-      </div>
-
-      <div className="flex flex-col gap-4 mb-8">
-        {/* Format of Classes Selector*/}
-        <div className="grid grid-cols-2 gap-4">
-          <PrimaryButton
-            title={_('Online')}
-            disabled={Boolean(findSelected('online'))}
-            onClick={() => handleFormatChange('online')}
-          />
-          <PrimaryButton
-            title={_('Offline')}
-            disabled={Boolean(findSelected('offline'))}
-            onClick={() => handleFormatChange('offline')}
-          />
+    <Card className="w-full max-w-sm">
+      <CardHeader>
+        <CardTitle> {_('Filters')}</CardTitle>
+        <CardDescription> {_('Select filters to find the best tutor for you')}</CardDescription>
+        <div className="flex flex-wrap gap-2 mb-2">
+          {selected.map(({ value, icon }) => (
+            <Badge key={value}>
+              {icon && <FontAwesomeIcon icon={icon} className="mr-1" />}
+              {value}
+              <button
+                onClick={() => removeSelected(value)}
+                className="hover:text-secondary cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </Badge>
+          ))}
         </div>
-
-        {/* Subject Selector */}
-        <SelectorInput
-          value={filter.subject?.id}
-          placeholder={_('Select a subject')}
-          options={subjects.map((subject) => ({
-            value: subject.id,
-            label: subject.label,
-            icon: (subject.faIcon as IconProp) || (subject.icon as IconProp),
-          }))}
-          onChange={handleSubjectChange}
-        />
-        {/* City Selector */}
-        <SelectorInput
-          value={filter.city}
-          placeholder={_('Select a city')}
-          options={cities.map((city) => ({
-            value: city,
-            label: city,
-          }))}
-          onChange={handleCityChange}
-        />
-
-        <RangeSlider values={[20, 46]} onChange={(v) => console.log(v)} />
-      </div>
-
-      {timerKey ? (
-        <div className="absolute bottom-0 left-0 w-full flex">
-          <ProgressBarWithTimer
-            key={timerKey}
-            timer={FILTER_DEBOUNCE_TIMER}
-            color="accent"
-            strokeWidth={4}
-          />
+      </CardHeader>
+      <CardContent>
+        <div className="grid w-full max-w-sm items-center gap-3">
+          <Label>{_("Searching by subject, tutor's name or location")}</Label>
+          <div className="flex w-full max-w-sm items-center gap-2">
+            <Input
+              type="text"
+              placeholder={_('Enter search term...')}
+              value={search || ''}
+              onChange={handleSearchChange}
+            />
+            <Button
+              variant="outline"
+              disabled={
+                search === '' ||
+                Boolean(search && findSelected({ value: search, filterType: 'search' }))
+              }
+              onClick={handleSearchAdd}
+            >
+              {_('Search')}
+            </Button>
+          </div>
         </div>
-      ) : null}
-    </div>
+        <div className="grid w-full max-w-sm items-center gap-3 mt-4">
+          <Label>{_('Select a format')}</Label>
+          <div className="flex items-center gap-3">
+            <Checkbox
+              title={_('Online')}
+              checked={onlineChecked}
+              onClick={() => handleFormatChange('online')}
+            />
+            <Label>{_('Online')}</Label>
+          </div>
+          <div className="flex items-center gap-3">
+            <Checkbox
+              title={_('Offline')}
+              checked={offlineChecked}
+              onClick={() => handleFormatChange('offline')}
+            />
+            <Label>{_('Offline')}</Label>
+          </div>
+        </div>
+        <div className="grid w-full max-w-sm items-center gap-3 mt-4">
+          <SelectorInput
+            placeholder={_('Select a subject')}
+            options={subjects.map((subject) => ({
+              value: subject.id,
+              label: subject.label,
+              icon: (subject.faIcon as IconProp) || (subject.icon as IconProp),
+            }))}
+            onChange={handleSubjectChange}
+          />
+          {/*  /!* City Selector *!/*/}
+          <SelectorInput
+            placeholder={_('Select a city')}
+            options={cities.map((city) => ({
+              value: city,
+              label: city,
+            }))}
+            onChange={handleCityChange}
+          />
+          <PriceRange value={priceRange} min={min} max={max} onChange={handleRangePriceChange} />
+        </div>
+      </CardContent>
+      <CardFooter className="flex-col gap-2">
+        <Button disabled={!selected.length} className="w-full" onClick={handleFindTutors}>
+          {_('Apply Filters')}
+        </Button>
+      </CardFooter>
+    </Card>
   );
 };

@@ -227,9 +227,7 @@ export const ButtonLink = ({ title, to, ...props }: LinkProps) => {
   return (
     <Link
       to={to}
-      className={
-        'inline-block px-4 py-2 rounded bg-background-secondary hover:bg-background-secondary-hover transition'
-      }
+      className={'inline-block px-4 py-2 rounded transition'}
       title={title}
       {...props}
     ></Link>

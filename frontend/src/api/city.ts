@@ -1,12 +1,12 @@
 import axios from 'api/axios';
-import { getConfig } from 'configs/index';
+import { getConfig } from '@/configs';
 
 export interface CityApi {
   getCities(): Promise<string[]>;
   getCityByValue(city: string): Promise<string>;
 }
 
-const cityApiMock = {
+const cityApiMock: CityApi = {
   async getCities(): Promise<string[]> {
     return new Promise((resolve) =>
       setTimeout(() => {

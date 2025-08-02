@@ -1,19 +1,10 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import subjectApi from 'api/subject';
 import cityApi from 'api/city';
+import priceApi from 'api/price';
 import type { Subject } from 'types/subject';
-import type { Format } from 'types/common';
 import type { IconProp } from '@fortawesome/fontawesome-svg-core';
-import type { Filter, FilterType } from 'types/filter';
-import { debounce } from 'utils/throttle-debounce';
-import { FILTER_DEBOUNCE_TIMER } from 'constants/timer';
-
-type FilterState = {
-  search?: string;
-  subject?: Subject;
-  format?: Format;
-  city?: string;
-};
+import type { FilterType } from 'types/filter';
 
 type Selected = {
   type: FilterType;
@@ -21,40 +12,26 @@ type Selected = {
   icon?: IconProp;
 };
 
-type FilterProps = {
-  onChange: (selected: Filter[]) => void;
-};
-
-export const useFilter = ({ onChange }: FilterProps) => {
-  const [isLoading, setLoading] = useState(false);
-  const [filter, setFilter] = useState<FilterState>({});
+export const useFilter = () => {
   const [selected, setSelected] = useState<Selected[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [cities, setCities] = useState<string[]>([]);
+  const [minMaxPriceRange, setMinMaxPriceRange] = useState<number[]>([]);
 
   useEffect(() => {
-    setLoading(true);
-    Promise.all([subjectApi.getSubjects(), cityApi.getCities()]).then(
-      ([subjectsRes, citiesRes]) => {
+    setIsLoading(true);
+    Promise.all([subjectApi.getSubjects(), cityApi.getCities(), priceApi.getPriceRange()])
+      .then(([subjectsRes, citiesRes, priceRes]) => {
         setSubjects(subjectsRes);
         setCities(citiesRes);
-        setLoading(false);
-      }
-    );
+        setMinMaxPriceRange(priceRes);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, []);
-
-  const debouncedOnChange = useCallback(
-    debounce((value: Selected[]) => {
-      onChange(value.map(({ type, value }) => ({ type, value })));
-    }, FILTER_DEBOUNCE_TIMER),
-    []
-  );
-
-  useEffect(() => {
-    if (!selected.length) return;
-    debouncedOnChange(selected);
-  }, [selected, onChange]);
 
   const filterSubjects = useMemo(() => {
     return subjects.filter((subject) => {
@@ -84,15 +61,29 @@ export const useFilter = ({ onChange }: FilterProps) => {
     setSelected((prev) => prev.filter((s) => s.value !== value));
   };
 
-  const findSelected = (value: string) => selected.find((s) => s.value === value);
+  const findSelected = ({ value, filterType }: { value?: string; filterType?: FilterType }) =>
+    selected.find((s) => {
+      if (value && filterType) {
+        return s.value === value && s.type === filterType;
+      }
+      if (value) {
+        return s.value === value;
+      }
+      if (filterType) {
+        return s.type === filterType;
+      }
+      return false;
+    });
 
   return {
     isLoading,
-    filter,
     cities: filterCities,
     subjects: filterSubjects,
+    minMaxPriceRange: {
+      min: minMaxPriceRange[0],
+      max: minMaxPriceRange[1],
+    },
     selected,
-    setFilter,
     addSelected,
     removeSelected,
     findSelected,

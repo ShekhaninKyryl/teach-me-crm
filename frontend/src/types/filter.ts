@@ -1,4 +1,4 @@
-export type FilterType = 'subject' | 'format' | 'city' | 'search';
+export type FilterType = 'subject' | 'format' | 'city' | 'search' | 'price' | 'available';
 
 export type Filter = {
   value: string;
