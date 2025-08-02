@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
@@ -6,11 +6,11 @@ import type { Tutor } from 'types/tutor';
 import { FORMAT_OPTIONS } from 'constants/format';
 import { _ } from '@/translates';
 import { Rating } from 'components/rating/rating';
-import { Label } from 'components/ui/label';
-import { Badge } from 'components/ui/badge';
-import { iconMapper } from 'utils/icon-mapper';
+import { Separator } from 'components/ui/separator';
 
-type TutorCardProps = Tutor;
+type TutorCardProps = Tutor & {
+  top?: boolean;
+};
 
 export const TutorCardMini = ({
   name,
@@ -20,14 +20,20 @@ export const TutorCardMini = ({
   price,
   location,
   profilePictureUrl,
+  top = false,
 }: TutorCardProps) => {
   const locationText = format === FORMAT_OPTIONS.Online ? _('Online') : `${location}`;
   const pricePerHourText = price ? `${price} ${_('₴ per hour')}` : _('No price specified');
 
   return (
-    <Card className="bg-accent hover:shadow-lg transition-shadow cursor-pointer flex flex-col justify-between h-full">
+    <Card
+      className={classNames(
+        'hover:shadow-lg  transition-shadow cursor-pointer flex flex-col justify-between h-full gap-0 py-4',
+        top && 'shadow-chart-2'
+      )}
+    >
       <CardHeader className="flex flex-row gap-2">
-        <Avatar className="w-16 h-16">
+        <Avatar className="w-16 h-16 rounded-lg">
           {profilePictureUrl ? (
             <AvatarImage
               src={profilePictureUrl}
@@ -35,7 +41,7 @@ export const TutorCardMini = ({
               className="object-cover"
             />
           ) : (
-            <AvatarFallback className="bg-background-secondary flex items-center justify-center">
+            <AvatarFallback className="bg-background-secondary rounded-lg flex items-center justify-center">
               <FontAwesomeIcon
                 icon={['fas', 'user-circle']}
                 className="text-text"
@@ -45,25 +51,25 @@ export const TutorCardMini = ({
           )}
         </Avatar>
         <div>
-          <CardTitle className="text-xl font-semibold text-text">{name}</CardTitle>
+          <CardTitle className="text-xl font-bold text-text">{name}</CardTitle>
           <Rating rating={rating} color="chart-5" />
         </div>
       </CardHeader>
 
       <CardContent className="flex flex-col justify-between gap-2 grow">
-        <div className="flex gap-1 flex-wrap">
-          <Label>{_('Subjects')}:</Label>
-          {subjects.map((subject) => (
-            <Badge key={subject}>
-              {iconMapper[subject] && (
-                <FontAwesomeIcon icon={iconMapper[subject]} className="mr-1" />
-              )}
-              {subject}
-            </Badge>
+        <div className="flex flex-wrap">
+          <p className="text-muted-foreground mr-1">{_('Subjects')}:</p>
+          {subjects.map((subject, index) => (
+            <>
+              <p className="font-bold">{subject}</p>
+              {index !== subjects.length - 1 && <p className="font-bold mr-1">{','}</p>}
+            </>
           ))}
         </div>
-
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center font-bold">
+        <Separator className="mb-2 font-bold" />
+      </CardContent>
+      <CardFooter>
+        <div className="flex justify-between w-full font-bold ">
           <p className="text-text">{pricePerHourText}</p>
           <p
             className={classNames(
@@ -74,7 +80,7 @@ export const TutorCardMini = ({
             {locationText}
           </p>
         </div>
-      </CardContent>
+      </CardFooter>
     </Card>
   );
 };

@@ -46,7 +46,7 @@ export const TopTutors: React.FC<TopTutorsProps> = ({}) => {
         <CarouselContent className="py-4">
           {tutors.map((tutor: Tutor) => (
             <CarouselItem className="md:basis-1/2 lg:basis-1/3">
-              <TutorCardMini {...tutor} />
+              <TutorCardMini {...tutor} top />
             </CarouselItem>
           ))}
         </CarouselContent>

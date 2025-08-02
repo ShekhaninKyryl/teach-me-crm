@@ -17,7 +17,7 @@ export const Rating = ({ rating, color = 'accent', size = 20, showPercentage }: 
       <span key={i} className="relative inline-block" style={{ width: size, height: size }}>
         <FontAwesomeIcon
           icon={solidStar}
-          className="text-text-secondary"
+          className={`text-${color} opacity-40`}
           style={{ width: size, height: size }}
         />
         <span
@@ -37,7 +37,7 @@ export const Rating = ({ rating, color = 'accent', size = 20, showPercentage }: 
   return (
     <div className="flex items-center">
       <span className="flex">{stars}</span>
-      <span className="ml-2 text-text text-lg">{rating.toFixed(1)}</span>
+      <span className="ml-2 font-bold text-text text-lg">{rating.toFixed(1)}</span>
       {showPercentage && <span className="ml-1 text-secondary">({(rating * 20).toFixed(0)}%)</span>}
     </div>
   );
