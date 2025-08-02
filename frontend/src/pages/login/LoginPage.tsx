@@ -3,7 +3,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormInput } from 'components/common/input';
 import { SubmitButton } from 'components/common/button';
-import { _ } from 'translates';
+import { _ } from '@/translates';
 import userApi from 'api/user';
 
 const loginSchema = yup.object({
