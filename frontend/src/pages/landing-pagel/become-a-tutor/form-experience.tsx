@@ -1,4 +1,3 @@
-import { Input } from 'components/ui/input';
 import { Button } from 'components/ui/button';
 import { _ } from '@/translates';
 import { useForm } from 'react-hook-form';
@@ -13,20 +12,55 @@ import {
   FormMessage,
 } from 'components/ui/form';
 import * as yup from 'yup';
-import type { FC } from 'react';
+import { type FC, useEffect, useMemo, useState } from 'react';
 import { FORMAT_OPTIONS } from 'constants/format';
+import type { Format } from 'types/common';
+import { Checkbox } from 'components/ui/checkbox';
+import { Label } from 'components/ui/label';
+import { Textarea } from 'components/ui/textarea';
+import { Input } from 'components/ui/input';
+import type { Subject } from 'types/subject';
+import { SelectorInput } from 'components/common/selector/selector-input';
+import type { IconProp } from '@fortawesome/fontawesome-svg-core';
+import subjectApi from 'api/subject';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { X } from 'lucide-react';
+import { Badge } from 'components/ui/badge';
+import { Loading } from 'components/common/loading';
+import { Tooltip, TooltipContent, TooltipTrigger } from 'components/ui/tooltip';
 
 const schema = yup
   .object({
-    bio: yup.string().required(),
-    format: yup.mixed<'online' | 'offline'>().oneOf(['online', 'offline']).required(),
+    bio: yup.string().default(''),
+
+    format: yup
+      .array()
+      .of(
+        yup
+          .mixed<Format>()
+          .oneOf(Object.values(FORMAT_OPTIONS) as Format[], 'Format must be Online or Offline')
+      )
+      .min(1, 'Select at least one format') // щоб масив не був пустий
+      .required('Format is required')
+      .default([]),
+
+    location: yup
+      .string()
+      .when('format', {
+        is: (formats: Format[]) => formats?.includes(FORMAT_OPTIONS.Offline),
+        then: (schema) => schema.required(_('Location is required for offline format')),
+        otherwise: (schema) => schema.optional(),
+      })
+      .default(''),
+
     subjects: yup
       .array()
       .of(yup.string().required())
       .min(1, _('Select at least one subject'))
-      .required(),
-    location: yup.string().required(),
-    price: yup.number().required().min(0),
+      .required()
+      .default([]),
+
+    price: yup.number().required().min(0).default(0),
   })
   .required();
 
@@ -34,19 +68,33 @@ export type TutorExperienceFormData = yup.InferType<typeof schema>;
 
 type FormExperienceProps = {
   onSubmit: (form: TutorExperienceFormData) => void;
+  onBack: () => void;
 };
 
-const FormExperience: FC<FormExperienceProps> = ({ onSubmit }) => {
+const FormExperience: FC<FormExperienceProps> = ({ onSubmit, onBack }) => {
+  const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [isSubjectsLoading, setSubjectsLoading] = useState(false);
   const form = useForm<TutorExperienceFormData>({
     resolver: yupResolver(schema),
-    defaultValues: {
-      bio: '',
-      format: FORMAT_OPTIONS.Online,
-      subjects: [],
-      location: '',
-      price: 0,
-    },
+    defaultValues: schema.getDefault() as TutorExperienceFormData,
   });
+
+  useEffect(() => {
+    setSubjectsLoading(true);
+    subjectApi
+      .getSubjects()
+      .then((res) => setSubjects(res))
+      .finally(() => setSubjectsLoading(false));
+  }, []);
+  const selectedSubjects = form.watch('subjects');
+  const filteredSubjects = useMemo(
+    () => subjects.filter((s) => !selectedSubjects.includes(s.id)),
+    [selectedSubjects, subjects]
+  );
+
+  const selectedFormats = form.watch('format');
+
+  const isOfflineSelected = selectedFormats.includes(FORMAT_OPTIONS.Offline);
 
   const handleSubmit = (data: TutorExperienceFormData) => {
     onSubmit(data);
@@ -54,7 +102,7 @@ const FormExperience: FC<FormExperienceProps> = ({ onSubmit }) => {
 
   return (
     <section className="w-full max-w-lg bg-surface rounded-xl shadow-lg p-6 my-12">
-      <h2 className="text-2xl font-semibold mb-4 text-center">{_('Create Your Tutor Account')}</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-center">{_('Share you experience')}</h2>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
@@ -65,7 +113,7 @@ const FormExperience: FC<FormExperienceProps> = ({ onSubmit }) => {
               <FormItem>
                 <FormLabel>{_('Biography')}</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Textarea {...field} />
                 </FormControl>
                 <FormMessage />
                 <FormDescription>
@@ -77,9 +125,151 @@ const FormExperience: FC<FormExperienceProps> = ({ onSubmit }) => {
             )}
           />
 
-          <Button type="submit" className="mt-2 w-full">
-            {_("Let's go to contacts and availability")}
-          </Button>
+          <FormField
+            control={form.control}
+            name="format"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{_('Format')}</FormLabel>
+                <div className="flex gap-4 mt-2">
+                  {Object.values(FORMAT_OPTIONS).map((option) => (
+                    <label key={option} className="flex items-center gap-2">
+                      <Checkbox
+                        title={option}
+                        checked={field.value?.includes(option)}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            field.onChange([...(field.value || []), option]);
+                          } else {
+                            field.onChange(field.value?.filter((v?: Format) => v !== option) || []);
+                          }
+                        }}
+                      />
+                      <Label>{option}</Label>
+                    </label>
+                  ))}
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {isOfflineSelected && (
+            <FormField
+              control={form.control}
+              name="location"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{_('Location')}</FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder={_('Enter your location')} />
+                  </FormControl>
+                  <FormDescription>{_('Provide your city')}</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
+
+          <FormField
+            control={form.control}
+            name="subjects"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{_('Subjects')}</FormLabel>
+                <div className="flex flex-wrap gap-2">
+                  {field.value?.map((val) => {
+                    const subj = subjects.find((o) => o.id === val);
+                    return (
+                      <Badge key={subj?.id}>
+                        {subj?.faIcon && <FontAwesomeIcon icon={subj.faIcon} className="mr-1" />}
+                        {subj?.label}
+                        <button
+                          type="button"
+                          onClick={() =>
+                            field.onChange(field.value.filter((fValue) => fValue !== val))
+                          }
+                          className="hover:text-secondary cursor-pointer"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </Badge>
+                    );
+                  })}
+                </div>
+
+                <FormControl>
+                  {isSubjectsLoading ? (
+                    <Loading />
+                  ) : (
+                    <div className="flex gap-2">
+                      <SelectorInput
+                        options={filteredSubjects.map((subject) => ({
+                          value: subject.id,
+                          label: subject.label,
+                          icon: (subject.faIcon as IconProp) || (subject.icon as IconProp),
+                        }))}
+                        placeholder={_('Select subject')}
+                        value={undefined}
+                        onChange={(val) => {
+                          if (!val) return;
+                          if (!field.value.includes(val)) {
+                            field.onChange([...field.value, val]);
+                          }
+                        }}
+                      />
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button type="button" variant="outline">
+                            {_('Create you own subject')}
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>{_('in development')}</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </div>
+                  )}
+                </FormControl>
+
+                <FormMessage />
+                <FormDescription>{_('You can select multiple subjects')}</FormDescription>
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="price"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{_('Price per hour')}</FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    min={0}
+                    step={1}
+                    {...field}
+                    value={field.value ?? ''}
+                    onChange={(e) => field.onChange(Number(e.target.value))}
+                  />
+                </FormControl>
+                <FormDescription>{_('Enter your hourly rate in UAH')}</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <div className="flex gap-2">
+            <Button type="button" onClick={onBack} variant="outline" className="flex-1">
+              <FontAwesomeIcon icon="arrow-left" />
+              {_('Verify previous form')}
+            </Button>
+            <Button type="submit" className="flex-1">
+              {_("Let's go to contacts and availability")}
+              <FontAwesomeIcon icon="arrow-right" />
+            </Button>
+          </div>
         </form>
       </Form>
     </section>

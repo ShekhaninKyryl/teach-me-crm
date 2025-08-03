@@ -14,6 +14,7 @@ import {
 } from 'components/ui/form';
 import * as yup from 'yup';
 import type { FC } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const schema = yup.object().shape({
   name: yup.string().required(_('Full Name is required')),
@@ -79,9 +80,12 @@ const FormStart: FC<FormStartProps> = ({ onSubmit }) => {
             )}
           />
 
-          <Button type="submit" className="mt-2 w-full">
-            {_('Tell about your experience')}
-          </Button>
+          <div className="flex gap-2">
+            <Button type="submit" className="flex-1">
+              {_('Tell about your experience')}
+              <FontAwesomeIcon icon="arrow-right" />
+            </Button>
+          </div>
         </form>
       </Form>
     </section>
