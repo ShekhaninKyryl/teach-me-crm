@@ -41,7 +41,7 @@ const FormStart: FC<FormStartProps> = ({ onSubmit }) => {
   };
 
   return (
-    <section className="w-full max-w-lg bg-surface rounded-xl shadow-lg p-6 my-12">
+    <section className="w-full max-w-lg bg-surface rounded-xl shadow-2xl p-6 my-12">
       <h2 className="text-2xl font-semibold mb-4 text-center">{_('Create Your Tutor Account')}</h2>
 
       <Form {...form}>

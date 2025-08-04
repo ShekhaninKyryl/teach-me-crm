@@ -9,4 +9,5 @@ export type Tutor = User & {
   location?: string;
   bio?: string;
   profilePictureUrl?: string;
+  availability?: string[];
 };

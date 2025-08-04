@@ -6,6 +6,7 @@ import FormExperience, {
   type TutorExperienceFormData,
 } from 'pages/landing-pagel/become-a-tutor/form-experience';
 import { type CarouselApi } from '@/components/ui/carousel';
+import SidebarWithHandle from 'components/sidebar-with-handle';
 
 type TutorFormData = Partial<TutorStartFormData | TutorExperienceFormData>;
 
@@ -25,29 +26,29 @@ const BecomeATutor: FC = ({}) => {
   console.log(tutorData);
 
   return (
-    <div className="flex-1 flex flex-col">
+    <div className="flex-1 flex flex-col gap-2">
       <HowItWorks />
 
-      <div className="my-20">
-        <Carousel
-          opts={{
-            align: 'center',
-            loop: false,
-            watchDrag: false,
-          }}
-          setApi={setApi}
-          className="w-full"
-        >
-          <CarouselContent>
-            <CarouselItem className="flex justify-center items-center">
-              <FormStart onSubmit={handleSubmit} />
-            </CarouselItem>
-            <CarouselItem className="flex justify-center items-center">
-              <FormExperience onSubmit={handleSubmit} onBack={handleGoBack} />
-            </CarouselItem>
-          </CarouselContent>
-        </Carousel>
-      </div>
+      <Carousel
+        opts={{
+          align: 'center',
+          loop: false,
+          watchDrag: false,
+        }}
+        setApi={setApi}
+        className="w-full"
+      >
+        <CarouselContent>
+          <CarouselItem className="flex justify-center items-center">
+            <FormStart onSubmit={handleSubmit} />
+          </CarouselItem>
+          <CarouselItem className="flex justify-center items-center">
+            <FormExperience onSubmit={handleSubmit} onBack={handleGoBack} />
+          </CarouselItem>
+        </CarouselContent>
+      </Carousel>
+
+      <SidebarWithHandle />
     </div>
   );
 };
