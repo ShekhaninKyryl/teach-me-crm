@@ -51,7 +51,10 @@ const FormStart: FC<FormStartProps> = ({ onSubmit }) => {
             name={'name'}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{_('Full Name')}</FormLabel>
+                <FormLabel className="gap-0">
+                  {_('Full Name')}
+                  <span>*</span>
+                </FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -66,7 +69,10 @@ const FormStart: FC<FormStartProps> = ({ onSubmit }) => {
             name={'email'}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{_('Email')}</FormLabel>
+                <FormLabel className="gap-0">
+                  {_('Email')}
+                  <span>*</span>
+                </FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>

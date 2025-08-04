@@ -108,29 +108,13 @@ const FormExperience: FC<FormExperienceProps> = ({ onSubmit, onBack }) => {
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
           <FormField
             control={form.control}
-            name={'bio'}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{_('Biography')}</FormLabel>
-                <FormControl>
-                  <Textarea {...field} />
-                </FormControl>
-                <FormMessage />
-                <FormDescription>
-                  {_(
-                    'Describe your experience, also describe here details of you work, applicable methods and any other information what can help a student makes a correct chosen'
-                  )}
-                </FormDescription>
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
             name="format"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{_('Format')}</FormLabel>
+                <FormLabel className="gap-0">
+                  {_('Format')}
+                  <span>*</span>
+                </FormLabel>
                 <div className="flex gap-4 mt-2">
                   {Object.values(FORMAT_OPTIONS).map((option) => (
                     <label key={option} className="flex items-center gap-2">
@@ -160,7 +144,10 @@ const FormExperience: FC<FormExperienceProps> = ({ onSubmit, onBack }) => {
               name="location"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{_('Location')}</FormLabel>
+                  <FormLabel className="gap-0">
+                    {_('Location')}
+                    <span>*</span>
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} placeholder={_('Enter your location')} />
                   </FormControl>
@@ -176,7 +163,10 @@ const FormExperience: FC<FormExperienceProps> = ({ onSubmit, onBack }) => {
             name="subjects"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{_('Subjects')}</FormLabel>
+                <FormLabel className="gap-0">
+                  {_('Subjects')}
+                  <span>*</span>
+                </FormLabel>
                 <div className="flex flex-wrap gap-2">
                   {field.value?.map((val) => {
                     const subj = subjects.find((o) => o.id === val);
@@ -243,7 +233,10 @@ const FormExperience: FC<FormExperienceProps> = ({ onSubmit, onBack }) => {
             name="price"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{_('Price per hour')}</FormLabel>
+                <FormLabel className="gap-0">
+                  {_('Price per hour')}
+                  <span>*</span>
+                </FormLabel>
                 <FormControl>
                   <Input
                     type="number"
@@ -260,13 +253,32 @@ const FormExperience: FC<FormExperienceProps> = ({ onSubmit, onBack }) => {
             )}
           />
 
+          <FormField
+            control={form.control}
+            name={'bio'}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{_('Biography')}</FormLabel>
+                <FormControl>
+                  <Textarea {...field} />
+                </FormControl>
+                <FormMessage />
+                <FormDescription>
+                  {_(
+                    'Describe your experience, also describe here details of you work, applicable methods and any other information what can help a student makes a correct chosen'
+                  )}
+                </FormDescription>
+              </FormItem>
+            )}
+          />
+
           <div className="flex gap-2">
             <Button type="button" onClick={onBack} variant="outline" className="flex-1">
               <FontAwesomeIcon icon="arrow-left" />
               {_('Verify previous form')}
             </Button>
             <Button type="submit" className="flex-1">
-              {_("Let's go to contacts and availability")}
+              {_("Let's go to contact information")}
               <FontAwesomeIcon icon="arrow-right" />
             </Button>
           </div>

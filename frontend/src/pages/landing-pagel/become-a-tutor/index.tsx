@@ -7,8 +7,11 @@ import FormExperience, {
 } from 'pages/landing-pagel/become-a-tutor/form-experience';
 import { type CarouselApi } from '@/components/ui/carousel';
 import SidebarWithHandle from 'components/sidebar-with-handle';
+import FormContacts, {
+  type TutorContactsFormData,
+} from 'pages/landing-pagel/become-a-tutor/form-contacts';
 
-type TutorFormData = Partial<TutorStartFormData | TutorExperienceFormData>;
+type TutorFormData = Partial<TutorStartFormData | TutorExperienceFormData | TutorContactsFormData>;
 
 const BecomeATutor: FC = ({}) => {
   const [api, setApi] = useState<CarouselApi>();
@@ -23,20 +26,19 @@ const BecomeATutor: FC = ({}) => {
     if (api) api.scrollPrev();
   };
 
-  console.log(tutorData);
-
   return (
     <div className="flex-1 flex flex-col gap-2">
       <HowItWorks />
 
       <Carousel
+        className="w-full"
         opts={{
           align: 'center',
           loop: false,
           watchDrag: false,
         }}
+        scrollByKeyboard={false}
         setApi={setApi}
-        className="w-full"
       >
         <CarouselContent>
           <CarouselItem className="flex justify-center items-center">
@@ -44,6 +46,9 @@ const BecomeATutor: FC = ({}) => {
           </CarouselItem>
           <CarouselItem className="flex justify-center items-center">
             <FormExperience onSubmit={handleSubmit} onBack={handleGoBack} />
+          </CarouselItem>
+          <CarouselItem className="flex justify-center items-center">
+            <FormContacts onSubmit={handleSubmit} onBack={handleGoBack} />
           </CarouselItem>
         </CarouselContent>
       </Carousel>
