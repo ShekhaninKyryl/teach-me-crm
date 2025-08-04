@@ -1,4 +1,4 @@
-import { type FC, useState } from 'react';
+import { type FC, useEffect, useState } from 'react';
 import { HowItWorks } from 'pages/landing-pagel/become-a-tutor/hot-it-works';
 import FormStart, { type TutorStartFormData } from 'pages/landing-pagel/become-a-tutor/form-start';
 import { Carousel, CarouselContent, CarouselItem } from 'components/ui/carousel';
@@ -9,12 +9,19 @@ import { type CarouselApi } from '@/components/ui/carousel';
 import FormContacts, {
   type TutorContactsFormData,
 } from 'pages/landing-pagel/become-a-tutor/form-contacts';
+import AvailabilityTable from 'components/availability-table';
 
 type TutorFormData = Partial<TutorStartFormData | TutorExperienceFormData | TutorContactsFormData>;
 
 const BecomeATutor: FC = ({}) => {
   const [api, setApi] = useState<CarouselApi>();
   const [tutorData, setTutorData] = useState<TutorFormData>({});
+
+  useEffect(() => {
+    if (!api) return;
+
+    api.scrollTo(3);
+  }, [api]);
 
   const handleSubmit = (data: TutorFormData) => {
     if (api) api.scrollNext();
@@ -48,6 +55,9 @@ const BecomeATutor: FC = ({}) => {
           </CarouselItem>
           <CarouselItem className="flex justify-center items-center">
             <FormContacts onSubmit={handleSubmit} onBack={handleGoBack} />
+          </CarouselItem>
+          <CarouselItem className="flex justify-center items-center">
+            <AvailabilityTable step="30m" format="week" onChange={(value) => console.log(value)} />
           </CarouselItem>
         </CarouselContent>
       </Carousel>
