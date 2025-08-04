@@ -80,11 +80,15 @@ const FormContacts: FC<FormStartProps> = ({ onSubmit, onBack }) => {
                   {_('Viber')}
                 </FormLabel>
                 <FormControl>
-                  <div className="flex items-center gap-2">
+                  <div className="relative flex items-center gap-2">
                     <Input {...field} placeholder="Phone or group invite" />
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <FontAwesomeIcon icon="paste" onClick={() => field.onChange(phoneNumber)} />
+                        <FontAwesomeIcon
+                          className="absolute right-2"
+                          icon="paste"
+                          onClick={() => field.onChange(phoneNumber)}
+                        />
                       </TooltipTrigger>
                       <TooltipContent>
                         <p>{_('Copy/Past Phone number')}</p>
@@ -107,11 +111,15 @@ const FormContacts: FC<FormStartProps> = ({ onSubmit, onBack }) => {
                   {_('Telegram')}
                 </FormLabel>
                 <FormControl>
-                  <div className="flex items-center gap-2">
+                  <div className="relative flex items-center gap-2">
                     <Input {...field} placeholder="Phone or group invite" />
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <FontAwesomeIcon icon="paste" onClick={() => field.onChange(phoneNumber)} />
+                        <FontAwesomeIcon
+                          className="absolute right-2"
+                          icon="paste"
+                          onClick={() => field.onChange(phoneNumber)}
+                        />
                       </TooltipTrigger>
                       <TooltipContent>
                         <p>{_('Copy/Past Phone number')}</p>
@@ -134,11 +142,15 @@ const FormContacts: FC<FormStartProps> = ({ onSubmit, onBack }) => {
                   {_('WhatsApp')}
                 </FormLabel>
                 <FormControl>
-                  <div className="flex items-center gap-2">
+                  <div className="relative flex items-center gap-2">
                     <Input {...field} placeholder="Phone or group invite" />
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <FontAwesomeIcon icon="paste" onClick={() => field.onChange(phoneNumber)} />
+                        <FontAwesomeIcon
+                          className="absolute right-2"
+                          icon="paste"
+                          onClick={() => field.onChange(phoneNumber)}
+                        />
                       </TooltipTrigger>
                       <TooltipContent>
                         <p>{_('Copy/Past Phone number')}</p>

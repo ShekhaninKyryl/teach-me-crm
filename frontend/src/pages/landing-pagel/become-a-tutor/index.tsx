@@ -6,7 +6,6 @@ import FormExperience, {
   type TutorExperienceFormData,
 } from 'pages/landing-pagel/become-a-tutor/form-experience';
 import { type CarouselApi } from '@/components/ui/carousel';
-import SidebarWithHandle from 'components/sidebar-with-handle';
 import FormContacts, {
   type TutorContactsFormData,
 } from 'pages/landing-pagel/become-a-tutor/form-contacts';
@@ -52,8 +51,6 @@ const BecomeATutor: FC = ({}) => {
           </CarouselItem>
         </CarouselContent>
       </Carousel>
-
-      <SidebarWithHandle />
     </div>
   );
 };

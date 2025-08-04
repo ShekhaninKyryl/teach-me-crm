@@ -18,20 +18,21 @@ export const HowItWorks = () => {
               delay: TOP_TUTOR_SLIDE_TIMER,
             }),
           ]}
+          scrollByKeyboard
         >
           <CarouselContent>
             <CarouselItem>
-              <div className=" rounded-xl flex flex-col items-center justify-center h-48 bg-primary text-accent text-xl">
+              <div className=" rounded-xl flex flex-col items-center justify-center h-100 bg-primary text-accent text-xl">
                 Easily find students and grow your income
               </div>
             </CarouselItem>
             <CarouselItem>
-              <div className=" rounded-xl flex flex-col items-center justify-center h-48 bg-primary text-accent text-xl">
+              <div className=" rounded-xl flex flex-col items-center justify-center h-100 bg-primary text-accent text-xl">
                 Manage your schedule in one place
               </div>
             </CarouselItem>
             <CarouselItem>
-              <div className=" rounded-xl flex flex-col items-center justify-center h-48 bg-primary text-accent text-xl">
+              <div className=" rounded-xl flex flex-col items-center justify-center h-100 bg-primary text-accent text-xl">
                 Secure payments and fast withdrawals
               </div>
             </CarouselItem>
