@@ -57,7 +57,7 @@ const BecomeATutor: FC = ({}) => {
             <FormContacts onSubmit={handleSubmit} onBack={handleGoBack} />
           </CarouselItem>
           <CarouselItem className="flex justify-center items-center">
-            <AvailabilityTable step="30m" format="week" onChange={(value) => console.log(value)} />
+            <AvailabilityTable step="1h" value={[]} onChange={(value) => console.log(value)} />
           </CarouselItem>
         </CarouselContent>
       </Carousel>
