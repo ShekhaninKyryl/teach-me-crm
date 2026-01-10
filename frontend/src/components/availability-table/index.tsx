@@ -1,6 +1,5 @@
 import { useState, type FC } from 'react';
 import { _ } from '@/translates';
-import type { AvailabilityList } from './types';
 import {
   changeAvailability,
   changeDayAvailability,
@@ -9,6 +8,9 @@ import {
   isSelected,
 } from 'components/availability-table/functions';
 import { TimeSlot } from 'components/availability-table/time-slot';
+import { DAY_OF_WEEK } from 'constants/days-of-week';
+import { debounce } from 'utils/throttle-debounce';
+import type { AvailabilityList } from './types';
 
 type AvailabilityTableProps = {
   step: '1h' | '30m';
@@ -24,15 +26,20 @@ const AvailabilityTable: FC<AvailabilityTableProps> = ({
   const [localValue, setLocalValue] = useState<AvailabilityList>(value);
   const stepMinute = step === '1h' ? 60 : 30;
 
+  const handleValueChange = (newValue: AvailabilityList) => {
+    setLocalValue(newValue);
+    debounce(() => onChange(newValue), 300)();
+  };
+
   const onSlotClick = (day: string, time: string) => {
     const newAvailability = changeAvailability(day, time, localValue, stepMinute);
-    setLocalValue(newAvailability);
+    handleValueChange(newAvailability);
   };
 
   const onDayHeaderClick = (day: string) => {
     const newAvailability = changeDayAvailability(day, localValue, stepMinute);
 
-    setLocalValue(newAvailability);
+    handleValueChange(newAvailability);
   };
 
   const getTimeColumn = () => {
@@ -44,7 +51,7 @@ const AvailabilityTable: FC<AvailabilityTableProps> = ({
           const time = getTime(i, stepMinute);
           return (
             <div className="h-5 border-b bg-surface relative">
-              <div className="text-xs absolute -top-4 right-1">{time}</div>
+              <div className="text-xs absolute right-1">{time}</div>
             </div>
           );
         })}
@@ -83,15 +90,11 @@ const AvailabilityTable: FC<AvailabilityTableProps> = ({
   };
 
   return (
-    <div className="border rounded-lg overflow-hidden min-w-xl grid grid-cols-8">
-      {getTimeColumn()}
-      {getDayColumn('Mon')}
-      {getDayColumn('Tue')}
-      {getDayColumn('Wed')}
-      {getDayColumn('Thu')}
-      {getDayColumn('Fri')}
-      {getDayColumn('Sat')}
-      {getDayColumn('Sun')}
+    <div className="overflow-x-auto">
+      <div className="border rounded-lg overflow-hidden min-w-xl grid grid-cols-8">
+        {getTimeColumn()}
+        {DAY_OF_WEEK['en'].map((day) => getDayColumn(day))}
+      </div>
     </div>
   );
 };

@@ -9,9 +9,13 @@ import { type CarouselApi } from '@/components/ui/carousel';
 import FormContacts, {
   type TutorContactsFormData,
 } from 'pages/landing-pagel/become-a-tutor/form-contacts';
-import AvailabilityTable from 'components/availability-table';
+import FormAvailability, {
+  type TutorAvailabilityFormData,
+} from 'pages/landing-pagel/become-a-tutor/form-availability';
 
-type TutorFormData = Partial<TutorStartFormData | TutorExperienceFormData | TutorContactsFormData>;
+type TutorFormData = Partial<
+  TutorStartFormData | TutorExperienceFormData | TutorContactsFormData | TutorAvailabilityFormData
+>;
 
 const BecomeATutor: FC = ({}) => {
   const [api, setApi] = useState<CarouselApi>();
@@ -57,7 +61,7 @@ const BecomeATutor: FC = ({}) => {
             <FormContacts onSubmit={handleSubmit} onBack={handleGoBack} />
           </CarouselItem>
           <CarouselItem className="flex justify-center items-center">
-            <AvailabilityTable step="1h" value={[]} onChange={(value) => console.log(value)} />
+            <FormAvailability onSubmit={handleSubmit} onBack={handleGoBack} />
           </CarouselItem>
         </CarouselContent>
       </Carousel>
