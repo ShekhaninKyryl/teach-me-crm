@@ -34,21 +34,10 @@ export const TutorCardMini = ({
     >
       <CardHeader className="flex flex-row gap-2">
         <Avatar className="w-16 h-16 rounded-lg">
-          {profilePictureUrl ? (
-            <AvatarImage
-              src={profilePictureUrl}
-              alt={`${name}'s profile`}
-              className="object-cover"
-            />
-          ) : (
-            <AvatarFallback className="bg-background-secondary rounded-lg flex items-center justify-center">
-              <FontAwesomeIcon
-                icon={['fas', 'user-circle']}
-                className="text-text"
-                style={{ width: '4rem', height: '4rem' }}
-              />
-            </AvatarFallback>
-          )}
+          <AvatarImage src={profilePictureUrl} alt={`${name}'s profile`} className="object-cover" />
+          <AvatarFallback className="bg-background-secondary rounded-lg flex items-center justify-center">
+            <FontAwesomeIcon icon={['fas', 'user']} style={{ width: '4rem', height: '4rem' }} />
+          </AvatarFallback>
         </Avatar>
         <div>
           <CardTitle className="text-xl font-bold text-text">{name}</CardTitle>

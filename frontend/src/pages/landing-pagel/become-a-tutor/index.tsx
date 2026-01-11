@@ -12,9 +12,14 @@ import FormContacts, {
 import FormAvailability, {
   type TutorAvailabilityFormData,
 } from 'pages/landing-pagel/become-a-tutor/form-availability';
+import FormAvatar, { type TutorAvatarData } from 'pages/landing-pagel/become-a-tutor/form-avatar';
 
 type TutorFormData = Partial<
-  TutorStartFormData | TutorExperienceFormData | TutorContactsFormData | TutorAvailabilityFormData
+  | TutorStartFormData
+  | TutorExperienceFormData
+  | TutorContactsFormData
+  | TutorAvailabilityFormData
+  | TutorAvatarData
 >;
 
 const BecomeATutor: FC = ({}) => {
@@ -62,6 +67,9 @@ const BecomeATutor: FC = ({}) => {
           </CarouselItem>
           <CarouselItem className="flex justify-center items-center">
             <FormAvailability onSubmit={handleSubmit} onBack={handleGoBack} />
+          </CarouselItem>
+          <CarouselItem className="flex justify-center items-center">
+            <FormAvatar onSubmit={handleSubmit} onBack={handleGoBack} />
           </CarouselItem>
         </CarouselContent>
       </Carousel>
