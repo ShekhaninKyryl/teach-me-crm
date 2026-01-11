@@ -1,7 +1,7 @@
 import type { Tutor } from 'types/tutor';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Rating } from 'components/rating/rating';
-import { _ } from 'translates/index';
+import { _ } from '@/translates';
 
 type TutorCardProps = Tutor & {};
 
@@ -12,7 +12,7 @@ export const TutorCard = ({
   rating,
   price,
   location,
-  profilePictureUrl,
+  avatar,
 }: TutorCardProps) => {
   const subjectsText =
     subjects.length > 0 ? `${_('Subjects')}: ${subjects.join(', ')}` : _('No subjects listed');
@@ -23,9 +23,9 @@ export const TutorCard = ({
   return (
     <div className="bg-surface p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow h-full flex flex-col justify-between">
       <div className="flex items-center mb-4">
-        {profilePictureUrl ? (
+        {avatar ? (
           <img
-            src={profilePictureUrl}
+            src={avatar}
             alt={`${name}'s profile`}
             className="w-16 h-16 rounded-full mr-4 object-cover"
           />

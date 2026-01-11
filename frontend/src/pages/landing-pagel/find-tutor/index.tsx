@@ -4,7 +4,7 @@ import type { Filter } from 'types/filter';
 import tutorsApi from 'api/tutors';
 import type { Tutor } from 'types/tutor';
 import { Loading } from 'components/common/loading';
-import { TutorCardMini } from 'components/tutor-card/tutor-car-mini';
+import { TutorCardMini } from 'components/tutor-card/tutor-card-mini';
 import SortTutors from 'components/sort-tutors';
 import { useSort } from 'hooks/useSort';
 import { TopTutors } from 'pages/landing-pagel/find-tutor/top-tutors';

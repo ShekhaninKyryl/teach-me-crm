@@ -39,6 +39,7 @@ const schema = yup
         yup
           .mixed<Format>()
           .oneOf(Object.values(FORMAT_OPTIONS) as Format[], 'Format must be Online or Offline')
+          .required()
       )
       .min(1, 'Select at least one format') // щоб масив не був пустий
       .required('Format is required')
@@ -243,7 +244,7 @@ const FormExperience: FC<FormExperienceProps> = ({ onSubmit, onBack }) => {
                     min={0}
                     step={1}
                     {...field}
-                    value={field.value ?? ''}
+                    value={field.value}
                     onChange={(e) => field.onChange(Number(e.target.value))}
                   />
                 </FormControl>

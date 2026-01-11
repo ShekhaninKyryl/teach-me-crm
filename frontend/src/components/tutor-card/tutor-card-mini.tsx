@@ -19,10 +19,10 @@ export const TutorCardMini = ({
   rating,
   price,
   location,
-  profilePictureUrl,
+  avatar,
   top = false,
 }: TutorCardProps) => {
-  const locationText = format === FORMAT_OPTIONS.Online ? _('Online') : `${location}`;
+  const locationText = format.includes(FORMAT_OPTIONS.Online) ? _('Online') : `${location}`;
   const pricePerHourText = price ? `${price} ${_('₴ per hour')}` : _('No price specified');
 
   return (
@@ -34,7 +34,7 @@ export const TutorCardMini = ({
     >
       <CardHeader className="flex flex-row gap-2">
         <Avatar className="w-16 h-16 rounded-lg">
-          <AvatarImage src={profilePictureUrl} alt={`${name}'s profile`} className="object-cover" />
+          <AvatarImage src={avatar} alt={`${name}'s profile`} className="object-cover" />
           <AvatarFallback className="bg-background-secondary rounded-lg flex items-center justify-center">
             <FontAwesomeIcon icon={['fas', 'user']} style={{ width: '4rem', height: '4rem' }} />
           </AvatarFallback>
@@ -49,10 +49,12 @@ export const TutorCardMini = ({
         <div className="flex flex-wrap">
           <p className="text-muted-foreground mr-1">{_('Subjects')}:</p>
           {subjects.map((subject, index) => (
-            <>
-              <p className="font-bold">{subject}</p>
+            <div key={subject} className="flex">
+              <p key={subject} className="font-bold">
+                {subject}
+              </p>
               {index !== subjects.length - 1 && <p className="font-bold mr-1">{','}</p>}
-            </>
+            </div>
           ))}
         </div>
         <Separator className="mb-2 font-bold" />
@@ -63,7 +65,7 @@ export const TutorCardMini = ({
           <p
             className={classNames(
               'text-right',
-              format === FORMAT_OPTIONS.Online ? 'text-chart-2' : 'text-chart-5'
+              format.includes(FORMAT_OPTIONS.Online) ? 'text-chart-2' : 'text-chart-5'
             )}
           >
             {locationText}

@@ -33,10 +33,17 @@ const FormAvatar: FC<FormStartProps> = ({ onSubmit, onBack }) => {
     if (file && file.type.startsWith('image/')) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImageSrc(reader.result as string);
+        const stringImage = reader.result as string;
+        setImageSrc(stringImage);
+        form.setValue('avatar', stringImage);
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleClearImage = () => {
+    setImageSrc(undefined);
+    form.setValue('avatar', '');
   };
 
   const triggerFileUpload = () => {
@@ -65,7 +72,7 @@ const FormAvatar: FC<FormStartProps> = ({ onSubmit, onBack }) => {
               <FontAwesomeIcon
                 icon="trash"
                 className="absolute cursor-pointer bottom-0 right-0 hover:text-destructive"
-                onClick={() => setImageSrc(undefined)}
+                onClick={handleClearImage}
               />
             ) : null}
             <Avatar className="w-32 h-32 mx-auto cursor-pointer" onClick={triggerFileUpload}>

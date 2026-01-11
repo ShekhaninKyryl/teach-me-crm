@@ -1,4 +1,4 @@
-import { type FC, useEffect, useState } from 'react';
+import { type FC, useState } from 'react';
 import { HowItWorks } from 'pages/landing-pagel/become-a-tutor/hot-it-works';
 import FormStart, { type TutorStartFormData } from 'pages/landing-pagel/become-a-tutor/form-start';
 import { Carousel, CarouselContent, CarouselItem } from 'components/ui/carousel';
@@ -13,24 +13,20 @@ import FormAvailability, {
   type TutorAvailabilityFormData,
 } from 'pages/landing-pagel/become-a-tutor/form-availability';
 import FormAvatar, { type TutorAvatarData } from 'pages/landing-pagel/become-a-tutor/form-avatar';
+import TutorPreview from 'pages/landing-pagel/become-a-tutor/tutor-preview';
+import tutorsApi from 'api/tutors';
 
-type TutorFormData = Partial<
-  | TutorStartFormData
-  | TutorExperienceFormData
-  | TutorContactsFormData
-  | TutorAvailabilityFormData
-  | TutorAvatarData
+export type TutorFormData = Partial<
+  TutorStartFormData &
+    TutorExperienceFormData &
+    TutorContactsFormData &
+    TutorAvailabilityFormData &
+    TutorAvatarData
 >;
 
 const BecomeATutor: FC = ({}) => {
   const [api, setApi] = useState<CarouselApi>();
   const [tutorData, setTutorData] = useState<TutorFormData>({});
-
-  useEffect(() => {
-    if (!api) return;
-
-    api.scrollTo(3);
-  }, [api]);
 
   const handleSubmit = (data: TutorFormData) => {
     if (api) api.scrollNext();
@@ -39,6 +35,13 @@ const BecomeATutor: FC = ({}) => {
 
   const handleGoBack = () => {
     if (api) api.scrollPrev();
+  };
+
+  const handleCreateAccount = () => {
+    // Here you would typically handle the final submission of the tutor data,
+    // such as sending it to your backend API.
+    console.log('Creating tutor account with data:', tutorData);
+    tutorsApi.createTutorProfile(tutorData);
   };
 
   return (
@@ -70,6 +73,9 @@ const BecomeATutor: FC = ({}) => {
           </CarouselItem>
           <CarouselItem className="flex justify-center items-center">
             <FormAvatar onSubmit={handleSubmit} onBack={handleGoBack} />
+          </CarouselItem>
+          <CarouselItem className="flex justify-center items-center">
+            <TutorPreview value={tutorData} onSubmit={handleCreateAccount} onBack={handleGoBack} />
           </CarouselItem>
         </CarouselContent>
       </Carousel>

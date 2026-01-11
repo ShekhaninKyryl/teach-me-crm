@@ -8,6 +8,7 @@ export interface TutorApi {
   getTopTutors(): Promise<Tutor[]>;
   getTutorById(id: string): Promise<Tutor>;
   searchTutors(query: string): Promise<Tutor[]>;
+  createTutorProfile(tutor: Partial<Tutor>): Promise<Tutor>;
 }
 
 const tutorApiMock: TutorApi = {
@@ -20,24 +21,24 @@ const tutorApiMock: TutorApi = {
             name: 'John Doe',
             email: 'j.doe@test.com',
             subjects: ['Math', 'Physics'],
-            format: FORMAT_OPTIONS.Online,
+            format: [FORMAT_OPTIONS.Online],
             rating: 4.5,
             price: 20,
             location: 'New York',
             bio: 'Experienced tutor with a passion for teaching.',
-            profilePictureUrl: 'https://i.pravatar.cc/150?img=47',
+            avatar: 'https://i.pravatar.cc/150?img=47',
           },
           {
             id: '2',
             name: 'Jane Smith',
             email: 'j.smith@test.com',
             subjects: ['English', 'History'],
-            format: FORMAT_OPTIONS.Offline,
+            format: [FORMAT_OPTIONS.Offline],
             rating: 4.8,
             price: 25,
             location: 'Los Angeles',
             bio: 'Dedicated educator with over 10 years of experience.',
-            profilePictureUrl: 'https://i.pravatar.cc/150?img=49',
+            avatar: 'https://i.pravatar.cc/150?img=49',
           },
         ]);
       }, 1000)
@@ -51,12 +52,12 @@ const tutorApiMock: TutorApi = {
           name: 'Mock Tutor',
           email: 'm.tutor@test.com',
           subjects: ['Math'],
-          format: FORMAT_OPTIONS.Online,
+          format: [FORMAT_OPTIONS.Online],
           rating: 4.0,
           price: 30,
           location: 'Mock City',
           bio: 'Mock tutor bio',
-          profilePictureUrl: 'https://example.com/mock-profile.jpg',
+          avatar: 'https://example.com/mock-profile.jpg',
         });
       }, 500)
     );
@@ -65,6 +66,24 @@ const tutorApiMock: TutorApi = {
     return new Promise((resolve) =>
       setTimeout(() => {
         resolve(tutorsMock);
+      }, 500)
+    );
+  },
+  async createTutorProfile(tutor: Partial<Tutor>): Promise<Tutor> {
+    return new Promise((resolve) =>
+      setTimeout(() => {
+        resolve({
+          id: 'new-id',
+          name: tutor.name || 'New Tutor',
+          email: tutor.email || '',
+          subjects: tutor.subjects || [],
+          format: tutor.format || [],
+          rating: tutor.rating || 0,
+          price: tutor.price || 0,
+          location: tutor.location,
+          bio: tutor.bio || '',
+          avatar: tutor.avatar || '',
+        });
       }, 500)
     );
   },
@@ -83,6 +102,10 @@ const tutorApi = {
     const response = await axios(`/api/tutors/search`, {
       params: { query },
     });
+    return response.data;
+  },
+  async createTutorProfile(tutor: Partial<Tutor>): Promise<Tutor> {
+    const response = await axios.post('/api/tutors', tutor);
     return response.data;
   },
 };

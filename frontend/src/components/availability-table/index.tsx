@@ -50,7 +50,7 @@ const AvailabilityTable: FC<AvailabilityTableProps> = ({
         {Array.from({ length: slots }).map((_, i) => {
           const time = getTime(i, stepMinute);
           return (
-            <div className="h-5 border-b bg-surface relative">
+            <div key={time} className="h-5 border-b bg-surface relative">
               <div className="text-xs absolute right-1">{time}</div>
             </div>
           );

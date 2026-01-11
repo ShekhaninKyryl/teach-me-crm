@@ -4,7 +4,7 @@ import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carouse
 import tutorsApi from 'api/tutors';
 import { useEffect, useState } from 'react';
 import type { Tutor } from 'types/tutor';
-import { TutorCardMini } from 'components/tutor-card/tutor-car-mini';
+import { TutorCardMini } from 'components/tutor-card/tutor-card-mini';
 import { TOP_TUTOR_SLIDE_TIMER } from 'constants/timer';
 import { Label } from 'components/ui/label';
 import { _ } from '@/translates';
@@ -37,6 +37,7 @@ export const TopTutors: React.FC<TopTutorsProps> = ({}) => {
       </Label>
       <Carousel
         className="w-full"
+        scrollByKeyboard={false}
         plugins={[
           Autoplay({
             delay: TOP_TUTOR_SLIDE_TIMER,
@@ -45,7 +46,7 @@ export const TopTutors: React.FC<TopTutorsProps> = ({}) => {
       >
         <CarouselContent className="py-4">
           {tutors.map((tutor: Tutor) => (
-            <CarouselItem className="md:basis-1/2 lg:basis-1/3">
+            <CarouselItem key={tutor.id} className="md:basis-1/2 lg:basis-1/3">
               <TutorCardMini {...tutor} top />
             </CarouselItem>
           ))}
