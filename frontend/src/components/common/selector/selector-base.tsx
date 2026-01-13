@@ -1,9 +1,8 @@
-// SelectorBase.tsx
 import { useState, useRef, useEffect } from 'react';
 import classNames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { _ } from 'translates';
+import { _ } from '@/translates';
 
 export type Option = {
   value: string;

@@ -27,6 +27,7 @@ const tutorApiMock: TutorApi = {
             location: 'New York',
             bio: 'Experienced tutor with a passion for teaching.',
             avatar: 'https://i.pravatar.cc/150?img=47',
+            availability: [],
           },
           {
             id: '2',
@@ -39,6 +40,7 @@ const tutorApiMock: TutorApi = {
             location: 'Los Angeles',
             bio: 'Dedicated educator with over 10 years of experience.',
             avatar: 'https://i.pravatar.cc/150?img=49',
+            availability: [],
           },
         ]);
       }, 1000)
@@ -58,6 +60,7 @@ const tutorApiMock: TutorApi = {
           location: 'Mock City',
           bio: 'Mock tutor bio',
           avatar: 'https://example.com/mock-profile.jpg',
+          availability: [],
         });
       }, 500)
     );
@@ -83,6 +86,7 @@ const tutorApiMock: TutorApi = {
           location: tutor.location,
           bio: tutor.bio || '',
           avatar: tutor.avatar || '',
+          availability: [],
         });
       }, 500)
     );

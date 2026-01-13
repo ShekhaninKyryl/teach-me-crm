@@ -1,5 +1,5 @@
 import { ChevronDown, X } from 'lucide-react';
-import { SelectorBase, type Option } from 'components/common/selector/selectro-base';
+import { SelectorBase, type Option } from 'components/common/selector/selector-base';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 type SelectorProps = {
