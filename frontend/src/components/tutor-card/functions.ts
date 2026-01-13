@@ -6,8 +6,7 @@ export const isValidTutorProfile = (profile: Partial<Tutor>): boolean => {
     Boolean(profile.name) &&
     Array.isArray(profile.subjects) &&
     profile.subjects.length > 0 &&
-    Boolean(profile.format) &&
-    Boolean(profile.price)
+    Boolean(profile.format)
   );
 };
 
@@ -21,5 +20,11 @@ export const getTutorData = (tutor: Partial<Tutor>) => {
     price: tutor.price || 0,
     location: tutor.location,
     avatar: tutor.avatar || '',
+    bio: tutor.bio || '',
+    availability: tutor.availability || [],
+    phone: tutor.phone || '',
+    viber: tutor.viber || '',
+    telegram: tutor.telegram || '',
+    whatsapp: tutor.whatsapp || '',
   };
 };

@@ -11,12 +11,14 @@ import { _ } from '@/translates';
 
 interface DialogProps {
   triggerTitle?: string;
+  dialogTitle?: string;
   description?: string;
   children: ReactNode;
 }
 
 export const Dialog: FC<DialogProps> = ({
   triggerTitle = 'Open dialog',
+  dialogTitle,
   description,
   children,
 }) => {
@@ -28,7 +30,7 @@ export const Dialog: FC<DialogProps> = ({
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-4xl lg:max-w-5xl">
-        <DialogTitle>{_('Set up your own availability')}</DialogTitle>
+        <DialogTitle>{dialogTitle}</DialogTitle>
         {description ? <DialogDescription>{_(description)}</DialogDescription> : null}
         {children}
       </DialogContent>

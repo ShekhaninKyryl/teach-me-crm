@@ -4,12 +4,12 @@ import type { Filter } from 'types/filter';
 import tutorsApi from 'api/tutors';
 import type { Tutor } from 'types/tutor';
 import { Loading } from 'components/common/loading';
-import { TutorCardMini } from 'components/tutor-card/tutor-card-mini';
 import SortTutors from 'components/sort-tutors';
 import { useSort } from 'hooks/useSort';
 import { TopTutors } from 'pages/landing-pagel/find-tutor/top-tutors';
 import { Label } from 'components/ui/label';
 import { _ } from '@/translates';
+import TutorCardDialog from 'components/tutor-card/tutor-card-dialog';
 
 export const FindTutor = () => {
   const [tutors, setTutors] = useState<Tutor[]>([]);
@@ -75,7 +75,7 @@ export const FindTutor = () => {
               </Label>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-fr z-1">
                 {sortedData.map((tutor) => (
-                  <TutorCardMini {...tutor} key={tutor.id} />
+                  <TutorCardDialog tutor={tutor} key={tutor.id} />
                 ))}
               </div>
             </>

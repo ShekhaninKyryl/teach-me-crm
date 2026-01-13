@@ -1,4 +1,4 @@
-import { useState, type FC } from 'react';
+import { useState, type FC, useMemo } from 'react';
 import { _ } from '@/translates';
 import {
   changeAvailability,
@@ -15,7 +15,7 @@ import type { AvailabilityList } from './types';
 type AvailabilityTableProps = {
   step: '1h' | '30m';
   value: AvailabilityList;
-  onChange: (availability: AvailabilityList) => void;
+  onChange?: (availability: AvailabilityList) => void;
 };
 
 const AvailabilityTable: FC<AvailabilityTableProps> = ({
@@ -26,10 +26,15 @@ const AvailabilityTable: FC<AvailabilityTableProps> = ({
   const [localValue, setLocalValue] = useState<AvailabilityList>(value);
   const stepMinute = step === '1h' ? 60 : 30;
 
-  const handleValueChange = (newValue: AvailabilityList) => {
-    setLocalValue(newValue);
-    debounce(() => onChange(newValue), 300)();
-  };
+  const readOnly = !onChange;
+  const handleValueChange = useMemo(() => {
+    if (!onChange) return () => {};
+    return (newValue: AvailabilityList) => {
+      setLocalValue(newValue);
+      if (!onChange) return;
+      debounce(() => onChange(newValue), 300)();
+    };
+  }, [onChange]);
 
   const onSlotClick = (day: string, time: string) => {
     const newAvailability = changeAvailability(day, time, localValue, stepMinute);
@@ -65,8 +70,8 @@ const AvailabilityTable: FC<AvailabilityTableProps> = ({
     return (
       <div className="border-l">
         <div
-          className="h-8 text-center font-semibold border-b bg-surface py-2 hover:cursor-pointer hover:bg-secondary"
-          onClick={() => onDayHeaderClick(day)}
+          className={`h-8 text-center font-semibold border-b bg-surface py-2 ${!readOnly ? 'hover:cursor-pointer hover:bg-secondary' : ''}`}
+          onClick={!readOnly ? () => onDayHeaderClick(day) : undefined}
         >
           {_(day)}
         </div>
@@ -81,6 +86,7 @@ const AvailabilityTable: FC<AvailabilityTableProps> = ({
               stepMinute={stepMinute}
               selected={selected}
               label={getTimeLabel(day, time, localValue)}
+              disabled={readOnly}
               onClick={onSlotClick}
             />
           );

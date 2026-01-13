@@ -2,8 +2,23 @@ import type { Tutor } from 'types/tutor';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Rating } from 'components/rating/rating';
 import { _ } from '@/translates';
+import { FORMAT_OPTIONS } from 'constants/format';
+import { CardContent, CardFooter, CardHeader, CardTitle } from 'components/ui/card';
+import classNames from 'classnames';
+import { Avatar, AvatarFallback, AvatarImage } from 'components/ui/avatar';
+import { Separator } from 'components/ui/separator';
+import { DataList } from '@radix-ui/themes';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from 'components/ui/dialog';
+import AvailabilityTable from '../availability-table';
+import { Tooltip, TooltipContent, TooltipTrigger } from 'components/ui/tooltip';
 
-type TutorCardProps = Tutor & {};
+type TutorCardProps = Tutor;
 
 export const TutorCard = ({
   name,
@@ -13,40 +28,157 @@ export const TutorCard = ({
   price,
   location,
   avatar,
+  bio,
+  phone,
+  viber,
+  telegram,
+  whatsapp,
+  availability,
 }: TutorCardProps) => {
-  const subjectsText =
-    subjects.length > 0 ? `${_('Subjects')}: ${subjects.join(', ')}` : _('No subjects listed');
-  const formatText = format ? `${_('Format')}: ${format}` : _('No format specified');
-  const locationText = location ? `${_('Location')}: ${location}` : _('No location specified');
-  const pricePerHourText = price ? `${_('Price per hour')}: ${price}` : _('No price specified');
+  const pricePerHourText = price ? `${price} ${_('₴ per hour')}` : _('No price specified or Free');
 
   return (
-    <div className="bg-surface p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow h-full flex flex-col justify-between">
-      <div className="flex items-center mb-4">
-        {avatar ? (
-          <img
-            src={avatar}
-            alt={`${name}'s profile`}
-            className="w-16 h-16 rounded-full mr-4 object-cover"
-          />
-        ) : (
-          <FontAwesomeIcon
-            icon={['fas', 'user-circle']}
-            className="text-text mr-4"
-            style={{ width: '4rem', height: '4rem' }}
-          />
-        )}
-        <div className="relative">
-          <h2 className="text-xl font-semibold text-text">{name}</h2>
-          <Rating rating={rating} color="primary" />
+    <div>
+      <CardHeader className="flex flex-row gap-2">
+        <Avatar className="w-24 h-24 rounded-lg">
+          <AvatarImage src={avatar} alt={`${name}'s profile`} className="object-cover" />
+          <AvatarFallback className="bg-background-secondary rounded-lg flex items-center justify-center">
+            <FontAwesomeIcon icon={['fas', 'user']} style={{ width: '4rem', height: '4rem' }} />
+          </AvatarFallback>
+        </Avatar>
+        <div>
+          <CardTitle className="text-xl font-bold text-text">{name}</CardTitle>
+          <Rating rating={rating} color="chart-5" />
         </div>
-      </div>
-      <div>
-        <p className="text-text text-lg font-bold">{pricePerHourText}</p>
-        <p className="text-text text-lg">{subjectsText}</p>
-        <p className="text-text text-lg">{formatText}</p>
-        {location && <p className="text-text text-lg">{locationText}</p>}
-      </div>
+      </CardHeader>
+
+      <CardContent className="flex flex-col justify-between gap-2 grow">
+        <DataList.Root>
+          <DataList.Item>
+            <DataList.Label minWidth="106px">{_('Subjects')}:</DataList.Label>
+            <DataList.Value>
+              {subjects.map((subject, index) => (
+                <span key={subject} className="font-bold">
+                  {subject}
+                  {index !== subjects.length - 1 && <span className="font-bold mr-1">{','}</span>}
+                </span>
+              ))}
+            </DataList.Value>
+          </DataList.Item>
+          <DataList.Item>
+            <DataList.Label minWidth="106px">{_('Format')}:</DataList.Label>
+            <DataList.Value>
+              {format.map((value, index) => (
+                <span key={value} className="font-bold">
+                  <span
+                    className={classNames(
+                      value.includes(FORMAT_OPTIONS.Online) ? 'text-chart-2' : 'text-chart-5'
+                    )}
+                  >
+                    {value.includes(FORMAT_OPTIONS.Online) ? _('Online') : `${location}`}
+                  </span>
+                  {index !== format.length - 1 && <span className="font-bold mr-1">{','}</span>}
+                </span>
+              ))}
+            </DataList.Value>
+          </DataList.Item>
+          {bio && (
+            <DataList.Item>
+              <DataList.Label minWidth="106px">{_('Biography')}:</DataList.Label>
+              <DataList.Value>
+                <p className="text-justify whitespace-break-spaces leading-5">{bio}</p>
+              </DataList.Value>
+            </DataList.Item>
+          )}
+        </DataList.Root>
+        <DataList.Root>
+          <DataList.Item>
+            <DataList.Label minWidth="106px">{_('Phone')}:</DataList.Label>
+            <DataList.Value>
+              <p className="font-bold">{phone || _('Not provided')}</p>
+            </DataList.Value>
+          </DataList.Item>
+          {telegram && (
+            <DataList.Item>
+              <DataList.Label minWidth="106px">{_('Telegram')}:</DataList.Label>
+              <DataList.Value>
+                <a
+                  href={`https://t.me/${telegram}`}
+                  target="_blank"
+                  className="transition-colors duration-200 font-bold rounded
+              hover:underline hover:text-chart-2"
+                >
+                  {telegram}
+                </a>
+              </DataList.Value>
+            </DataList.Item>
+          )}
+          {viber && (
+            <DataList.Item>
+              <DataList.Label minWidth="106px">{_('Viber')}:</DataList.Label>
+              <DataList.Value>
+                <a
+                  target="_blank"
+                  className="transition-colors duration-200 font-bold rounded
+              hover:underline hover:text-chart-2"
+                >
+                  {viber}
+                </a>
+              </DataList.Value>
+            </DataList.Item>
+          )}
+          {whatsapp && (
+            <DataList.Item>
+              <DataList.Label minWidth="106px">{_('WhatsApp')}:</DataList.Label>
+              <DataList.Value>
+                <a
+                  target="_blank"
+                  className="transition-colors duration-200 font-bold rounded
+              hover:underline hover:text-chart-2"
+                >
+                  {whatsapp}
+                </a>
+              </DataList.Value>
+            </DataList.Item>
+          )}
+        </DataList.Root>
+        <Separator className="mb-2 font-bold" />
+      </CardContent>
+      <CardFooter>
+        <div className="flex justify-between w-full font-bold ">
+          <p className="text-text">{pricePerHourText}</p>
+          <div className="gap-2 flex items-center">
+            <Dialog>
+              <DialogTrigger>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <FontAwesomeIcon
+                      icon="calendar"
+                      className="hover:text-chart-2 cursor-pointer"
+                    />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{_('See availability')}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-4xl lg:max-w-5xl">
+                <DialogTitle>{_(`{NAME} Availability`, { NAME: name })}</DialogTitle>
+                <DialogDescription />
+                <AvailabilityTable step="1h" value={availability} />
+              </DialogContent>
+            </Dialog>
+            <Tooltip>
+              <TooltipTrigger>
+                <FontAwesomeIcon icon="comment" className="hover:text-chart-2 cursor-pointer" />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{_('Send a message')}</p>
+              </TooltipContent>
+            </Tooltip>
+          </div>
+        </div>
+      </CardFooter>
     </div>
   );
 };

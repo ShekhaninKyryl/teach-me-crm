@@ -4,11 +4,11 @@ import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carouse
 import tutorsApi from 'api/tutors';
 import { useEffect, useState } from 'react';
 import type { Tutor } from 'types/tutor';
-import { TutorCardMini } from 'components/tutor-card/tutor-card-mini';
 import { TOP_TUTOR_SLIDE_TIMER } from 'constants/timer';
 import { Label } from 'components/ui/label';
 import { _ } from '@/translates';
 import { Loading } from 'components/common/loading';
+import TutorCardDialog from 'components/tutor-card/tutor-card-dialog';
 
 export type TopTutorsProps = {};
 
@@ -47,7 +47,7 @@ export const TopTutors: React.FC<TopTutorsProps> = ({}) => {
         <CarouselContent className="py-4">
           {tutors.map((tutor: Tutor) => (
             <CarouselItem key={tutor.id} className="md:basis-1/2 lg:basis-1/3">
-              <TutorCardMini {...tutor} top />
+              <TutorCardDialog tutor={tutor} top={true} />
             </CarouselItem>
           ))}
         </CarouselContent>

@@ -56,7 +56,7 @@ const FormAvatar: FC<FormStartProps> = ({ onSubmit, onBack }) => {
 
   return (
     <section className="w-full max-w-lg bg-surface rounded-xl shadow-2xl p-6 my-12">
-      <h2 className="text-2xl font-semibold mb-4 text-center">{_('Upload you image')}</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-center">{_('Upload your image')}</h2>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">

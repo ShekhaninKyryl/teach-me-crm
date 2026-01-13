@@ -2,9 +2,9 @@ import type { TutorFormData } from 'pages/landing-pagel/become-a-tutor/index';
 import { _ } from '@/translates';
 import { Button } from 'components/ui/button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { TutorCardMini } from 'components/tutor-card/tutor-card-mini';
 import { getTutorData, isValidTutorProfile } from 'components/tutor-card/functions';
 import type { FC } from 'react';
+import TutorCardDialog from '@/components/tutor-card/tutor-card-dialog';
 
 type TutorPreviewProps = {
   value: TutorFormData;
@@ -18,7 +18,7 @@ const TutorPreview: FC<TutorPreviewProps> = ({ value, onBack, onSubmit }) => {
       <h2 className="text-2xl font-semibold mb-4 text-center">{_('Preview your profile')}</h2>
       <div className="space-y-6">
         {isValidTutorProfile(value) ? (
-          <TutorCardMini {...getTutorData(value)} id={'new-tutor'} rating={5} />
+          <TutorCardDialog tutor={{ ...getTutorData(value), id: 'new', rating: 5 }} />
         ) : null}
 
         <div className="flex gap-2">

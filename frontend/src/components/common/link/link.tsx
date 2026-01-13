@@ -16,7 +16,7 @@ export const Link = ({ to, icon, isActive, title, className }: LinkProps) => {
     <RRDLink
       to={to}
       className={classNames(
-        `transition-colors duration-200 font-medium px-2 py-1 rounded 
+        `transition-colors duration-200 font-medium rounded 
               hover:underline hover:text-chart-2
               ${isActive ? 'text-chart-2 font-semibold underline' : 'text-text'}
             `,

@@ -143,10 +143,11 @@ const FormAvailability: FC<FormExperienceProps> = ({ onSubmit, onBack }) => {
                 </FormControl>
                 <FormControl>
                   <Dialog
-                    triggerTitle={'Set up your own availability'}
-                    description={
+                    triggerTitle={_('Set up your own availability')}
+                    dialogTitle={_('Set up your own availability')}
+                    description={_(
                       'Please use the availability table below to set up your own availability by selecting time slots that work best for you.'
-                    }
+                    )}
                   >
                     <AvailabilityTable step="1h" value={availability} onChange={field.onChange} />
                   </Dialog>

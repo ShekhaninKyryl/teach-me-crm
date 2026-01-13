@@ -72,28 +72,16 @@ const FormContacts: FC<FormStartProps> = ({ onSubmit, onBack }) => {
 
           <FormField
             control={form.control}
-            name="viber"
+            name="telegram"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  <FontAwesomeIcon icon={faViber} />
-                  {_('Viber')}
+                  <FontAwesomeIcon icon={faTelegram} />
+                  {_('Telegram')}
                 </FormLabel>
                 <FormControl>
                   <div className="relative flex items-center gap-2">
-                    <Input {...field} placeholder="Phone or group invite" />
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <FontAwesomeIcon
-                          className="absolute right-2"
-                          icon="paste"
-                          onClick={() => field.onChange(phoneNumber)}
-                        />
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>{_('Copy/Past Phone number')}</p>
-                      </TooltipContent>
-                    </Tooltip>
+                    <Input {...field} placeholder="Link to your account" />
                   </div>
                 </FormControl>
                 <FormMessage />
@@ -103,12 +91,12 @@ const FormContacts: FC<FormStartProps> = ({ onSubmit, onBack }) => {
 
           <FormField
             control={form.control}
-            name="telegram"
+            name="viber"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  <FontAwesomeIcon icon={faTelegram} />
-                  {_('Telegram')}
+                  <FontAwesomeIcon icon={faViber} />
+                  {_('Viber')}
                 </FormLabel>
                 <FormControl>
                   <div className="relative flex items-center gap-2">

@@ -20,10 +20,10 @@ export const TutorCardMini = ({
   price,
   location,
   avatar,
-  top = false,
+  top,
 }: TutorCardProps) => {
   const locationText = format.includes(FORMAT_OPTIONS.Online) ? _('Online') : `${location}`;
-  const pricePerHourText = price ? `${price} ${_('₴ per hour')}` : _('No price specified');
+  const pricePerHourText = price ? `${price} ${_('₴ per hour')}` : _('No price specified or Free');
 
   return (
     <Card
@@ -40,7 +40,7 @@ export const TutorCardMini = ({
           </AvatarFallback>
         </Avatar>
         <div>
-          <CardTitle className="text-xl font-bold text-text">{name}</CardTitle>
+          <CardTitle className="text-xl text-left font-bold text-text">{name}</CardTitle>
           <Rating rating={rating} color="chart-5" />
         </div>
       </CardHeader>
