@@ -17,8 +17,8 @@ import type { FC } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const schema = yup.object().shape({
-  name: yup.string().required(_('Full Name is required')),
-  email: yup.string().email(_('Invalid email')).required(_('Email is required')),
+  name: yup.string().required('Full Name is required'),
+  email: yup.string().email('Invalid email').required('Email is required'),
 });
 
 export type TutorStartFormData = yup.InferType<typeof schema>;

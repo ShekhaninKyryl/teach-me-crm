@@ -38,18 +38,18 @@ const schema = yup
       .of(
         yup
           .mixed<Format>()
-          .oneOf(Object.values(FORMAT_OPTIONS) as Format[], _('Format must be Online or Offline'))
+          .oneOf(Object.values(FORMAT_OPTIONS) as Format[], 'Format must be Online or Offline')
           .required()
       )
-      .min(1, _('Select at least one format')) // щоб масив не був пустий
-      .required(_('Format is required'))
+      .min(1, 'Select at least one format') // щоб масив не був пустий
+      .required('Format is required')
       .default([]),
 
     location: yup
       .string()
       .when('format', {
         is: (formats: Format[]) => formats?.includes(FORMAT_OPTIONS.Offline),
-        then: (schema) => schema.required(_('Location is required for offline format')),
+        then: (schema) => schema.required('Location is required for offline format'),
         otherwise: (schema) => schema.optional(),
       })
       .default(''),
@@ -57,7 +57,7 @@ const schema = yup
     subjects: yup
       .array()
       .of(yup.string().required())
-      .min(1, _('Select at least one subject'))
+      .min(1, 'Select at least one subject')
       .required()
       .default([]),
 
