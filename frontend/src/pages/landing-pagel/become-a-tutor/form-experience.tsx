@@ -38,11 +38,11 @@ const schema = yup
       .of(
         yup
           .mixed<Format>()
-          .oneOf(Object.values(FORMAT_OPTIONS) as Format[], 'Format must be Online or Offline')
+          .oneOf(Object.values(FORMAT_OPTIONS) as Format[], _('Format must be Online or Offline'))
           .required()
       )
-      .min(1, 'Select at least one format') // щоб масив не був пустий
-      .required('Format is required')
+      .min(1, _('Select at least one format')) // щоб масив не був пустий
+      .required(_('Format is required'))
       .default([]),
 
     location: yup
@@ -130,7 +130,7 @@ const FormExperience: FC<FormExperienceProps> = ({ onSubmit, onBack }) => {
                           }
                         }}
                       />
-                      <Label>{option}</Label>
+                      <Label>{_(option)}</Label>
                     </label>
                   ))}
                 </div>

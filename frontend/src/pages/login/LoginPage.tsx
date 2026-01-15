@@ -39,7 +39,6 @@ export const LoginPage = () => {
         className="bg-background shadow-md rounded px-8 pt-6 pb-8 w-96"
       >
         <h2 className="text-2xl mb-6 text-center font-semibold text-text">{_('Login Page')}</h2>
-
         <FormInput
           label={_('Email')}
           error={errors.email?.message}

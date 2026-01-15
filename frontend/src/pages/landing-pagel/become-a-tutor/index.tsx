@@ -37,12 +37,9 @@ const BecomeATutor: FC = ({}) => {
     if (api) api.scrollPrev();
   };
 
-  console.log('Tutor Data:', tutorData);
-
   const handleCreateAccount = () => {
     // Here you would typically handle the final submission of the tutor data,
     // such as sending it to your backend API.
-    console.log('Creating tutor account with data:', tutorData);
     tutorsApi.createTutorProfile(tutorData);
   };
 

@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Loader2, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import React from 'react';
+import classNames from 'classnames';
 
 type SortTutorsProps = {
   onSortChange?: (sortBy: string) => void;
@@ -47,10 +48,10 @@ export const SortTutorsComponent = ({
       <CardHeader>
         <CardTitle>{_('Sort by')}</CardTitle>
       </CardHeader>
-      <CardContent className="flex justify-center gap-2">
+      <CardContent className="flex justify-center">
         <Button
           variant={ratingSort === 'none' ? 'outline' : 'default'}
-          className={ratingSort === 'none' ? '' : 'flex-1'}
+          className={classNames('rounded-r-none', ratingSort === 'none' ? '' : 'flex-1')}
           onClick={() => onSortChange?.('rating')}
         >
           {_('Rating')}
@@ -58,7 +59,7 @@ export const SortTutorsComponent = ({
         </Button>
         <Button
           variant={priceSort === 'none' ? 'outline' : 'default'}
-          className={priceSort === 'none' ? '' : 'flex-1'}
+          className={classNames('rounded-l-none', priceSort === 'none' ? '' : 'flex-1')}
           onClick={() => onSortChange?.('price')}
         >
           {_('Price')}

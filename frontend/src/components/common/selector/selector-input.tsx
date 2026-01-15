@@ -70,7 +70,7 @@ export function SelectorInput({ options, value, placeholder, onChange }: Selecto
         <PopoverContent className="p-0" align="start" style={{ width: popoverWidth ?? 'auto' }}>
           <Command>
             <CommandInput
-              placeholder={_('Search...')}
+              placeholder={_('Search')}
               value={inputValue}
               onValueChange={setInputValue}
             />

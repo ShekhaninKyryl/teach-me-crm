@@ -73,7 +73,7 @@ const FormAvailability: FC<FormExperienceProps> = ({ onSubmit, onBack }) => {
 
   return (
     <section className="w-full max-w-lg bg-surface rounded-xl shadow-2xl p-6 my-12">
-      <h2 className="text-2xl font-semibold mb-4 text-center">{_('Set up you availability')}</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-center">{_('Availability')}</h2>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
@@ -144,7 +144,7 @@ const FormAvailability: FC<FormExperienceProps> = ({ onSubmit, onBack }) => {
                 <FormControl>
                   <Dialog
                     triggerTitle={_('Set up your own availability')}
-                    dialogTitle={_('Set up your own availability')}
+                    dialogTitle={_('Availability')}
                     description={_(
                       'Please use the availability table below to set up your own availability by selecting time slots that work best for you.'
                     )}

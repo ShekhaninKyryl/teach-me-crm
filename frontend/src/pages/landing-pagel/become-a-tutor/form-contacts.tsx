@@ -81,7 +81,7 @@ const FormContacts: FC<FormStartProps> = ({ onSubmit, onBack }) => {
                 </FormLabel>
                 <FormControl>
                   <div className="relative flex items-center gap-2">
-                    <Input {...field} placeholder="Link to your account" />
+                    <Input {...field} placeholder={_('Link to your account')} />
                   </div>
                 </FormControl>
                 <FormMessage />
@@ -100,7 +100,7 @@ const FormContacts: FC<FormStartProps> = ({ onSubmit, onBack }) => {
                 </FormLabel>
                 <FormControl>
                   <div className="relative flex items-center gap-2">
-                    <Input {...field} placeholder="Phone or group invite" />
+                    <Input {...field} placeholder={_('Phone or group invite')} />
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <FontAwesomeIcon
@@ -131,7 +131,7 @@ const FormContacts: FC<FormStartProps> = ({ onSubmit, onBack }) => {
                 </FormLabel>
                 <FormControl>
                   <div className="relative flex items-center gap-2">
-                    <Input {...field} placeholder="Phone or group invite" />
+                    <Input {...field} placeholder={_('Phone or group invite')} />
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <FontAwesomeIcon

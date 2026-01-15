@@ -1,6 +1,7 @@
 import { Slider } from 'components/ui/slider';
 import { _ } from '@/translates';
 import { Label } from 'components/ui/label';
+import type { FC } from 'react';
 
 type PriceRangeProps = {
   value: number[];
@@ -10,10 +11,10 @@ type PriceRangeProps = {
   onChange: (range: number[]) => void;
 };
 
-export const PriceRange: React.FC<PriceRangeProps> = ({ value, min, max, step = 1, onChange }) => {
+export const PriceRange: FC<PriceRangeProps> = ({ value, min, max, step = 1, onChange }) => {
   if (!value.length) return null;
 
-  const priceText = _(`Price: {VAL1} - {VAL2} UAH`, { VAL1: value[0], VAL2: value[1] });
+  const priceText = _('Price: {VAL1} - {VAL2} UAH', { VAL1: value[0], VAL2: value[1] });
 
   return (
     <div className="flex flex-col gap-2">
