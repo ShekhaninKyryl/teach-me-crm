@@ -98,5 +98,11 @@
   "Link to your account": "",
   "Phone or group invite": "",
   "Please use the availability table below to set up your own availability by selecting time slots that work best for you.": "",
-  "{NAME} Availability": ""
+  "{NAME} Availability": "",
+  "Workspace": "",
+  "Logout": "",
+  "Password must be at least 8 characters": "",
+  "Passwords must match": "",
+  "Confirm Password": "",
+  "Password confirmation is required": ""
 }

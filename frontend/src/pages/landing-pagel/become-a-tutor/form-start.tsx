@@ -19,6 +19,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 const schema = yup.object().shape({
   name: yup.string().required('Full Name is required'),
   email: yup.string().email('Invalid email').required('Email is required'),
+  password: yup
+    .string()
+    .required('Password is required')
+    .min(8, 'Password must be at least 8 characters'),
+  passwordConfirmation: yup
+    .string()
+    .oneOf([yup.ref('password')], 'Passwords must match')
+    .required('Password confirmation is required'),
 });
 
 export type TutorStartFormData = yup.InferType<typeof schema>;
@@ -59,7 +67,6 @@ const FormStart: FC<FormStartProps> = ({ onSubmit }) => {
                   <Input {...field} />
                 </FormControl>
                 <FormMessage />
-                <FormDescription>{_('This is your public display name.')}</FormDescription>
               </FormItem>
             )}
           />
@@ -74,7 +81,7 @@ const FormStart: FC<FormStartProps> = ({ onSubmit }) => {
                   <span>*</span>
                 </FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input {...field} type="email" />
                 </FormControl>
                 <FormMessage />
                 <FormDescription>
@@ -82,6 +89,40 @@ const FormStart: FC<FormStartProps> = ({ onSubmit }) => {
                     'Please use a valid email, via this email you can restore access to your account'
                   )}
                 </FormDescription>
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name={'password'}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="gap-0">
+                  {_('Password')}
+                  <span>*</span>
+                </FormLabel>
+                <FormControl>
+                  <Input {...field} type="password" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name={'passwordConfirmation'}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="gap-0">
+                  {_('Confirm Password')}
+                  <span>*</span>
+                </FormLabel>
+                <FormControl>
+                  <Input {...field} type="password" />
+                </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />

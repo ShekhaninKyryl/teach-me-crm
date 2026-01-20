@@ -95,5 +95,11 @@
   "Link to your account": "Посилання на ваш акаунт",
   "Phone or group invite": "Телефон або запрошення в групу",
   "Please use the availability table below to set up your own availability by selecting time slots that work best for you.": "Будь ласка, використовуйте таблицю нижче, щоб налаштувати власний розклад, вибираючи часові проміжки, які найкраще підходять вам.",
-  "{NAME} Availability": "Розклад - {NAME}"
+  "{NAME} Availability": "Розклад - {NAME}",
+  "Workspace": "Робочий простір",
+  "Logout": "Вийти",
+  "Password must be at least 8 characters": "Пароль повинен містити принаймі 8 символів",
+  "Passwords must match": "Паролі повинні співпадати",
+  "Confirm Password": "Підтвердьте пароль",
+  "Password confirmation is required": "Підтвердження пароля є обов'язковим"
 }
