@@ -58,8 +58,8 @@ export const PrimaryButton = ({
       iconPosition={iconPosition}
       disabled={disabled}
       className={classNames(
-        ' text-background-secondary transition',
-        disabled ? 'bg-primary-disabled' : 'bg-primary hover:bg-primary-hover',
+        'text-primary-foreground transition',
+        disabled ? 'bg-muted-foreground' : 'bg-card-foreground hover:bg-chart-2',
         className
       )}
       onClick={onClick}
@@ -227,7 +227,7 @@ export const ButtonLink = ({ title, to, ...props }: LinkProps) => {
   return (
     <Link
       to={to}
-      className={'inline-block px-4 py-2 rounded transition hover:bg-primary-foreground'}
+      className={'inline-block px-4 py-2 rounded transition hover:bg-primary/10'}
       title={title}
       {...props}
     ></Link>

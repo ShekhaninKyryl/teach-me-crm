@@ -9,48 +9,59 @@ import {
   NavigationMenuList,
 } from 'components/ui/navigation-menu';
 import LanguageSwitcher from 'components/language-switcher';
+import { useAuth } from '@/contexts/auth-context';
 
 export const Header = () => {
   const location = useLocation();
   const { lng } = useParams();
+  const { user, logout } = useAuth();
   const isActive = (pagePath: string) => location.pathname === `/${lng}/${pagePath}`;
 
   const navLinks: LinkProps[] = [
     { to: 'find-tutor', title: _('Find tutor'), icon: 'search' },
-    { to: 'become-tutor', title: _('Become a tutor'), icon: 'book' },
-    { to: 'about', title: _('About us'), icon: 'question' },
+    user
+      ? { to: 'workspace', title: _('Workspace'), icon: 'briefcase' }
+      : { to: 'become-tutor', title: _('Become a tutor'), icon: 'book' },
+    { to: 'about', title: _('About us'), icon: 'circle-question' },
   ];
 
-  const rightNavLinks: LinkProps[] = [{ to: 'login', title: _('Login'), icon: 'sign-in-alt' }];
+  const rightNavLinks: LinkProps[] = user
+    ? [{ title: _('Logout'), icon: 'sign-out-alt', onClick: logout }]
+    : [{ to: 'login', title: _('Login'), icon: 'sign-in-alt' }];
 
   return (
     <div className="flex items-center justify-between px-4 w-full">
       <div className="flex items-center gap-4">
-        <Logo />
+        <Logo className="hover:text-chart-2 transition" />
         <div className="text-xl font-bold">TeachMe</div>
         <LanguageSwitcher />
       </div>
 
-      {/* Навігація */}
       <NavigationMenu>
         <NavigationMenuList className="gap-4">
           {navLinks.map(({ title, to, icon }) => (
             <NavigationMenuItem key={to}>
-              <ButtonLink key={to} to={to} icon={icon} isActive={isActive(to)} title={title} />
+              <ButtonLink
+                key={to}
+                to={to}
+                icon={icon}
+                isActive={isActive(to ?? '')}
+                title={title}
+              />
             </NavigationMenuItem>
           ))}
         </NavigationMenuList>
       </NavigationMenu>
 
-      {/* Праві навігаційні посилання */}
       <div className="flex items-center gap-4">
-        {rightNavLinks.map(({ title, to, icon }) => (
+        {rightNavLinks.map(({ title, to, icon, onClick }) => (
           <ButtonLink
             key={to}
             to={to}
             icon={icon}
             isActive={location.pathname === `/${to}`}
             title={title}
+            onClick={onClick}
           />
         ))}
       </div>
