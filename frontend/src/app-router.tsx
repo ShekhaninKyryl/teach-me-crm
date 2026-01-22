@@ -1,17 +1,19 @@
 import { BrowserRouter, useRoutes } from 'react-router-dom';
-import { routes as landingRoutes } from 'pages/landing-pagel/routes';
-import { LoginPage } from 'pages/login/LoginPage';
+import { routes as landingRoutes } from 'pages/routes';
 import { useTranslation } from 'react-i18next';
+import { AuthProvider } from '@/contexts/auth-context';
 
 export const AppRouter = () => {
-  return useRoutes([...landingRoutes, { path: 'login', element: <LoginPage /> }]);
+  return useRoutes([...landingRoutes]);
 };
 
 export const AppRouterWithProvider = () => {
   const { i18n } = useTranslation();
   return (
     <BrowserRouter>
-      <AppRouter key={i18n.language} />
+      <AuthProvider>
+        <AppRouter key={i18n.language} />
+      </AuthProvider>
     </BrowserRouter>
   );
 };

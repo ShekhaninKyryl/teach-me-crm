@@ -11,6 +11,7 @@ i18n.use(initReactI18next).init({
   },
   saveMissing: false,
   lng: 'ua',
+  supportedLngs: ['en', 'ua'],
   resources: {
     en: { translation: en },
     ua: { translation: ua },

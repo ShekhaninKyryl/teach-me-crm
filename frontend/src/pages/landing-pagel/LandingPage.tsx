@@ -11,7 +11,6 @@ export const LandingPage = () => {
       <Layout.Body>
         <Outlet />
       </Layout.Body>
-      <Layout.Footer>some footer</Layout.Footer>
     </Layout>
   );
 };

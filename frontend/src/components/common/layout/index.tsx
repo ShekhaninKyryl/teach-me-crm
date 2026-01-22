@@ -1,19 +1,24 @@
 import type { ReactNode } from 'react';
+import { SidebarProvider } from 'components/ui/sidebar';
 
 type LayoutProps = {
   children: ReactNode;
 };
 
 const Layout = ({ children }: LayoutProps) => {
-  return <div className="min-h-screen flex flex-col bg-background text-text">{children}</div>;
+  return <div className="flex flex-col bg-background text-text">{children}</div>;
 };
 
 const Header = ({ children }: LayoutProps) => (
-  <header className="shadow-md py-4 px-6 sticky top-0 z-10 bg-muted text-text">{children}</header>
+  <header className="shadow-md py-4 px-6 sticky top-0 z-10 bg-sidebar text-text h-(--header-height) flex items-center">
+    {children}
+  </header>
 );
 
 const Body = ({ children }: LayoutProps) => (
-  <main className="flex-grow px-4 py-8 md:px-8 bg-background text-text">{children}</main>
+  <SidebarProvider className="flex flex-col">
+    <main className="flex-grow bg-background text-text">{children}</main>
+  </SidebarProvider>
 );
 
 const Footer = ({ children }: LayoutProps) => (
