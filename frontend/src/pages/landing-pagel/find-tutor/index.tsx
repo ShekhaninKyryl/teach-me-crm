@@ -6,9 +6,6 @@ import type { Tutor } from 'types/tutor';
 import { Loading } from 'components/common/loading';
 import SortTutors from 'components/sort-tutors';
 import { useSort } from 'hooks/useSort';
-import { TopTutors } from 'pages/landing-pagel/find-tutor/top-tutors';
-import { Label } from 'components/ui/label';
-import { _ } from '@/translates';
 import TutorCardDialog from 'components/tutor-card/tutor-card-dialog';
 
 export const FindTutor = () => {
@@ -48,11 +45,11 @@ export const FindTutor = () => {
   const findTutors = useCallback(handleFindTutors, []);
 
   return (
-    <>
-      <TopTutors />
-      <div className="grid grid-cols-1 lg:grid-cols-6 gap-4 mb-4">
-        <div className="lg:col-span-2 z-2">
-          <div className="sticky top-28 grid gap-2">
+    <div className="px-2 lg:px-4">
+      {/*<TopTutors />*/}
+      <div className="grid sm:gap-0 md:gap-4 mb-4 grid-cols-1 md:grid-cols-5">
+        <div className="z-2 col-span-1 md:col-span-2 lg:col-span-2 xl:col-span-1">
+          <div className="sticky top-(--header-height) pt-4 grid gap-2">
             <SortTutors
               ratingSort={sortList.rating}
               priceSort={sortList.price}
@@ -61,27 +58,20 @@ export const FindTutor = () => {
             <FilterTutors onChange={findTutors} />
           </div>
         </div>
-        <div className="lg:col-span-4 grid grid-cols-1">
+        <div className="mt-4 grid gap-4 lg:gap-6 col-span-3 lg:col-span-3 xl:col-span-4">
           {loading ? (
-            <div className="lg:col-span-4 flex items-center justify-center h-full">
+            <div className="flex items-center justify-center h-full w-full col-span-4">
               <Loading size={16} />
             </div>
           ) : (
-            <>
-              <Label className="mb-2">
-                <h2 className=" w-full scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0 text-center">
-                  {_('All Tutors')}
-                </h2>
-              </Label>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-fr z-1">
-                {sortedData.map((tutor) => (
-                  <TutorCardDialog tutor={tutor} key={tutor.id} />
-                ))}
-              </div>
-            </>
+            <div className="gap-4 auto-rows-fr z-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-4">
+              {sortedData.map((tutor) => (
+                <TutorCardDialog tutor={tutor} key={tutor.id} />
+              ))}
+            </div>
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 };

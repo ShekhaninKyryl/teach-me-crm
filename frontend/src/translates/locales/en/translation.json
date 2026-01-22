@@ -104,5 +104,11 @@
   "Password must be at least 8 characters": "",
   "Passwords must match": "",
   "Confirm Password": "",
-  "Password confirmation is required": ""
+  "Password confirmation is required": "",
+  "Balance": "",
+  "Students": "",
+  "Calendar": "",
+  "Reports": "",
+  "Integrations": "",
+  "Settings": ""
 }

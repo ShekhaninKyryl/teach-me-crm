@@ -5,6 +5,7 @@ import LanguageWrapper from './language-wrapper';
 import { FindTutor } from './landing-pagel/find-tutor';
 import BecomeATutor from './landing-pagel/become-a-tutor';
 import { LoginPage } from './login/LoginPage';
+import Workspace from 'pages/workspace';
 
 export const routes = [
   {
@@ -22,7 +23,7 @@ export const routes = [
           { index: true, element: <Navigate to="find-tutor" replace /> },
           { path: 'find-tutor', element: <FindTutor /> },
           { path: 'become-tutor', element: <BecomeATutor /> },
-          { path: 'workspace', element: <div>workspace</div> },
+          { path: 'workspace', element: <Workspace /> },
           { path: 'about', element: <div>About us</div> },
           { path: '*', element: <Navigate to={`/${i18n.language}/find-tutor`} /> },
         ],

@@ -101,5 +101,11 @@
   "Password must be at least 8 characters": "Пароль повинен містити принаймі 8 символів",
   "Passwords must match": "Паролі повинні співпадати",
   "Confirm Password": "Підтвердьте пароль",
-  "Password confirmation is required": "Підтвердження пароля є обов'язковим"
+  "Password confirmation is required": "Підтвердження пароля є обов'язковим",
+  "Balance": "Рахукунок",
+  "Students": "Студенти",
+  "Calendar": "Календар",
+  "Reports": "Звіти",
+  "Integrations": "Інтеграції",
+  "Settings": "Налаштування"
 }
