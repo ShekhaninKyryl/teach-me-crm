@@ -13,7 +13,7 @@ export const AppRouterWithProvider = () => {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <Theme appearance="dark">
+        <Theme className="overflow-clip">
           <AppRouter key={i18n.language} />
         </Theme>
       </AuthProvider>

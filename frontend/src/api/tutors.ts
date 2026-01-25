@@ -1,14 +1,15 @@
-import type { Tutor } from 'types/tutor';
 import axios from 'api/axios';
 import { FORMAT_OPTIONS } from 'constants/format';
 import { getConfig } from '@/configs';
 import { tutors as tutorsMock } from 'api/mocks/tutors';
 import type { User } from 'types/user';
+import type { Tutor } from 'types/tutor';
 
 export interface TutorApi {
   getTopTutors(): Promise<Tutor[]>;
   getTutorById(id: string): Promise<Tutor>;
   getTutorsStudents(tutorId: string): Promise<User[]>;
+  updateTutorProfile(tutorId: string, tutorData: Partial<Tutor>): Promise<Tutor>;
   saveTutorsStudents(tutorId: string, students: User[]): Promise<void>;
   searchTutors(query: string): Promise<Tutor[]>;
   createTutorProfile(tutor: Partial<Tutor>): Promise<Tutor>;
@@ -82,6 +83,26 @@ const tutorApiMock: TutorApi = {
       }, 1000)
     );
   },
+  async updateTutorProfile(tutorId: string, tutorData: Partial<Tutor>): Promise<Tutor> {
+    return new Promise((resolve) =>
+      setTimeout(() => {
+        resolve({
+          id: tutorId,
+          name: tutorData.name || 'Updated Tutor',
+          email: tutorData.email || '',
+          subjects: tutorData.subjects || [],
+          format: tutorData.format || [],
+          rating: tutorData.rating || 0,
+          price: tutorData.price || 0,
+          location: tutorData.location,
+          bio: tutorData.bio || '',
+          avatar: tutorData.avatar || '',
+          availability: tutorData.availability || [],
+          maxStudents: tutorData.maxStudents || 3,
+        });
+      }, 500)
+    );
+  },
   async saveTutorsStudents(tutorId: string, students: User[]): Promise<void> {
     return new Promise((resolve) =>
       setTimeout(() => {
@@ -129,6 +150,10 @@ const tutorApi = {
   },
   async getTutorsStudents(tutorId: string): Promise<User[]> {
     const response = await axios.get<User[]>(`/tutors/${tutorId}/students`);
+    return response.data;
+  },
+  async updateTutorProfile(tutorId: string, tutorData: Partial<Tutor>): Promise<Tutor> {
+    const response = await axios.put(`/api/tutors/${tutorId}`, tutorData);
     return response.data;
   },
   async saveTutorsStudents(tutorId: string, students: User[]): Promise<void> {

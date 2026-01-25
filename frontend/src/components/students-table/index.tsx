@@ -8,6 +8,7 @@ import { _ } from '@/translates';
 import { PrimaryButton } from 'components/common/button';
 import { AddStudent } from 'components/students-table/add-student';
 import { Progress } from 'components/ui/progress';
+import { UNLIMITED_STUDENTS_CAPACITY_THRESHOLD } from '@/constants';
 
 interface Props {
   maxStudents: number;
@@ -16,8 +17,12 @@ interface Props {
 export const StudentsTable: FC<Props> = ({ maxStudents }) => {
   const [students, setStudents] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [isDirty, setDirty] = useState(false);
 
-  const progressValue = (students.length / maxStudents) * 100;
+  const progressValue =
+    maxStudents === UNLIMITED_STUDENTS_CAPACITY_THRESHOLD
+      ? undefined
+      : (students.length / maxStudents) * 100;
 
   useEffect(() => {
     setLoading(true);
@@ -26,15 +31,29 @@ export const StudentsTable: FC<Props> = ({ maxStudents }) => {
       .then((fetchedStudents) => {
         setStudents(fetchedStudents);
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        setLoading(false);
+        setDirty(false);
+      });
   }, []);
 
   const handleAddStudent = (student: User) => {
     setStudents((prevStudents) => [...prevStudents, student]);
+    setDirty(true);
   };
 
   const handleRemoveStudent = (studentId: string) => {
     setStudents((prevStudents) => prevStudents.filter((student) => student.id !== studentId));
+    setDirty(true);
+  };
+
+  const handleUpdateStudent = (studentData: User) => {
+    setStudents((prevStudents) =>
+      prevStudents.map((student) =>
+        student.id === studentData.id ? { ...student, ...studentData } : student
+      )
+    );
+    setDirty(true);
   };
 
   const handleSubmit = async (students: User[]) => {
@@ -44,15 +63,19 @@ export const StudentsTable: FC<Props> = ({ maxStudents }) => {
     } catch (error) {
     } finally {
       setLoading(false);
+      setDirty(false);
     }
   };
 
   return (
-    <>
-      <div>
-        <Progress value={progressValue} className="rounded-b-none" />
-      </div>
-      <Table.Root variant="surface" className="rounded-t-none">
+    <div>
+      <div className="font-bold">{_('Students Table')}</div>
+      {progressValue ? (
+        <div>
+          <Progress value={progressValue} className="rounded-b-none" />
+        </div>
+      ) : null}
+      <Table.Root variant="surface" className={progressValue ? 'rounded-t-none' : ''}>
         <Table.Header>
           <Table.Row>
             <Table.ColumnHeaderCell>{_('Name')}</Table.ColumnHeaderCell>
@@ -73,7 +96,11 @@ export const StudentsTable: FC<Props> = ({ maxStudents }) => {
           ) : (
             <>
               {students.map((student) => (
-                <StudentsRow student={student} removeStudent={handleRemoveStudent} />
+                <StudentsRow
+                  student={student}
+                  removeStudent={handleRemoveStudent}
+                  updateStudent={handleUpdateStudent}
+                />
               ))}
               {students.length < maxStudents && (
                 <Table.Row>
@@ -88,12 +115,12 @@ export const StudentsTable: FC<Props> = ({ maxStudents }) => {
       </Table.Root>
       <div className="flex justify-end mt-4">
         <PrimaryButton
-          disabled={loading}
+          disabled={loading || !isDirty}
           className="w-xs"
           title={_('Save')}
           onClick={() => handleSubmit(students)}
         />
       </div>
-    </>
+    </div>
   );
 };
