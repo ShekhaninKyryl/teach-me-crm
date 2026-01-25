@@ -6,7 +6,12 @@ type LayoutProps = {
 };
 
 const Layout = ({ children }: LayoutProps) => {
-  return <div className="flex flex-col bg-background text-text">{children}</div>;
+  return (
+    // use data-id to identify the root element for portals
+    <div data-id={'layout-root'} className="flex flex-col text-text">
+      {children}
+    </div>
+  );
 };
 
 const Header = ({ children }: LayoutProps) => (
@@ -17,7 +22,7 @@ const Header = ({ children }: LayoutProps) => (
 
 const Body = ({ children }: LayoutProps) => (
   <SidebarProvider className="flex flex-col">
-    <main className="flex-grow bg-background text-text">{children}</main>
+    <main className="flex-grow text-text">{children}</main>
   </SidebarProvider>
 );
 

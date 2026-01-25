@@ -10,4 +10,5 @@ export type Tutor = User & {
   bio?: string;
   avatar?: string;
   availability: string[];
+  maxStudents?: number;
 };

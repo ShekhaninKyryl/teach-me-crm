@@ -11,14 +11,19 @@ import classNames from 'classnames';
 import { ButtonLink } from 'components/common/button';
 import type { LinkProps } from 'components/common/link/link';
 import { Separator } from '@radix-ui/themes';
+import { useMatch } from 'react-router-dom';
 
 type SidebarProps = {
   bodyLinks?: LinkProps[];
   footerLinks?: LinkProps[];
+  pathToDetectActivePage?: string;
   userSection?: ReactNode;
 };
 
-const Sidebar = ({ bodyLinks, footerLinks, userSection }: SidebarProps) => {
+const Sidebar = ({ bodyLinks, footerLinks, userSection, pathToDetectActivePage }: SidebarProps) => {
+  const { page } = useMatch({ path: pathToDetectActivePage ?? '', end: false })?.params || {};
+  const isActive = (pagePath: string) => page === pagePath;
+
   return (
     <SidebarSchad className="top-(--header-height) h-[calc(100svh-var(--header-height))]! w-(--sidebar-width) border-t">
       {userSection ?? <SidebarHeader>{userSection}</SidebarHeader>}
@@ -27,14 +32,14 @@ const Sidebar = ({ bodyLinks, footerLinks, userSection }: SidebarProps) => {
       <SidebarContent>
         <SidebarGroup>
           {bodyLinks?.map(({ to, icon, title }) => (
-            <ButtonLink key={to} to={to} icon={icon} title={title} />
+            <ButtonLink key={to} to={to} icon={icon} title={title} isActive={isActive(to ?? '')} />
           )) ?? null}
         </SidebarGroup>
       </SidebarContent>
 
       <SidebarFooter>
         {footerLinks?.map(({ to, icon, title }) => (
-          <ButtonLink key={to} to={to} icon={icon} title={title} />
+          <ButtonLink key={to} to={to} icon={icon} title={title} isActive={isActive(to ?? '')} />
         )) ?? null}
       </SidebarFooter>
 
@@ -54,7 +59,8 @@ const Content = ({ children }: { children: ReactNode }) => {
         open
           ? 'left-(--sidebar-width) w-[calc(100svw-var(--sidebar-width))]'
           : 'left-0 w-[calc(100svw)]',
-        'relative transition-[left,width] duration-200 ease-linear'
+        'relative transition-[left,width] duration-200 ease-linear',
+        'p-8'
       )}
     >
       {children}

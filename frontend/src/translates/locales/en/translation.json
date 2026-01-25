@@ -110,5 +110,21 @@
   "Calendar": "",
   "Reports": "",
   "Integrations": "",
-  "Settings": ""
+  "Settings": "",
+  "Name": "",
+  "or": "",
+  "Save": "",
+  "Add": "",
+  "Name is required when email is not provided": "",
+  "Email not found": "",
+  "Remove Student - {NAME}": "",
+  "Are you sure you want to remove this student?": "",
+  "Cancel": "",
+  "Remove": "",
+  "Students Table": "",
+  "Maximum Number of Students": "",
+  "Unlimited": "",
+  "students_page.capacity": "This page allows you to manage your students. You can set the number of available slots using the slider below (from 3 to unlimited). The cost is 50 UAH per month per student. Starting from the 15th student, the price becomes fixed and no longer increases. After setting your limit, be sure to save your changes.",
+  "students_page.table": "Add students via the button at the bottom of the table. You can find existing students by email or create new ones by name. Assign a specific color to each student to easily spot their lessons in the calendar. Remove students you’re no longer teaching. Don’t forget to click «Save» when you're done."
+
 }
