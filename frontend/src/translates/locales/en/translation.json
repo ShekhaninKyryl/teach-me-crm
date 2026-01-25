@@ -110,5 +110,15 @@
   "Calendar": "",
   "Reports": "",
   "Integrations": "",
-  "Settings": ""
+  "Settings": "",
+  "Name": "",
+  "or": "",
+  "Save": "",
+  "Add": "",
+  "Name is required when email is not provided": "",
+  "Email not found": "",
+  "Remove Student - {NAME}": "",
+  "Are you sure you want to remove this student?": "",
+  "Cancel": "",
+  "Remove": ""
 }

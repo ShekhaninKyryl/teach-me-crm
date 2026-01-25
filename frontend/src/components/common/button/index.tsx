@@ -164,7 +164,7 @@ export const ErrorButton = ({
       iconPosition={iconPosition}
       disabled={disabled}
       className={classNames(
-        'text-background-secondary transition',
+        'bg-destructive hover:bg-destructive/50 transition',
         disabled ? 'bg-error-disabled' : 'bg-error hover:bg-error-hover',
         className
       )}
@@ -190,7 +190,7 @@ export const TransparentButton = ({
       iconPosition={iconPosition}
       disabled={disabled}
       className={classNames(
-        'text-text hover:bg-background-secondary-hover transition',
+        'text-text transition hover:bg-muted',
         disabled ? 'bg-background-secondary-hover' : 'bg-transparent',
         className
       )}

@@ -103,9 +103,20 @@
   "Confirm Password": "Підтвердьте пароль",
   "Password confirmation is required": "Підтвердження пароля є обов'язковим",
   "Balance": "Рахукунок",
-  "Students": "Студенти",
+  "Students": "Учні",
   "Calendar": "Календар",
   "Reports": "Звіти",
   "Integrations": "Інтеграції",
-  "Settings": "Налаштування"
+  "Settings": "Налаштування",
+  "Name": "Ім'я",
+  "Add Student": "Додати учня",
+  "or": "або",
+  "Save": "Зберегти",
+  "Add": "Додати",
+  "Name is required when email is not provided": "Ім'я є обов'язковим, коли email не вказано",
+  "Email not found": "Email не знайдено",
+  "Remove Student - {NAME}": "Видалити учня - {NAME}",
+  "Are you sure you want to remove this student?": "Ви впевнені, що хочете видалити цього учня?",
+  "Cancel": "Скасувати",
+  "Remove": "Видалити"
 }

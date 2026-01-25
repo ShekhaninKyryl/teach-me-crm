@@ -1,5 +1,5 @@
 import { _ } from '@/translates';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useMatch } from 'react-router-dom';
 import { ButtonLink } from 'components/common/button';
 import { Logo } from 'components/logo';
 import type { LinkProps } from 'components/common/link/link';
@@ -13,9 +13,9 @@ import { useAuth } from '@/contexts/auth-context';
 
 export const Header = () => {
   const location = useLocation();
-  const { lng } = useParams();
   const { user, logout } = useAuth();
-  const isActive = (pagePath: string) => location.pathname === `/${lng}/${pagePath}`;
+  const { page } = useMatch({ path: `/:lng/:page`, end: false })?.params || {};
+  const isActive = (pagePath: string) => page === pagePath;
 
   const navLinks: LinkProps[] = [
     { to: 'find-tutor', title: _('Find tutor'), icon: 'search' },
