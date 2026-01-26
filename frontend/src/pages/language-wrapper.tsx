@@ -8,7 +8,6 @@ const LanguageWrapper = () => {
   const navigate = useNavigate();
 
   const navigateToLanguage = (lng: string) => {
-    console.log('Navigating to language:', lng);
     const currentPath = window.location.pathname.split('/').slice(2).join('/');
     navigate(`/${lng}/${currentPath}`);
   };

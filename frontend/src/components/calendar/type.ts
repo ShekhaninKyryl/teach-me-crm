@@ -1,0 +1,15 @@
+import type { EventContentArg } from '@fullcalendar/core';
+import type { EventStatusType } from 'types/event';
+
+type EventExtendedProps = {
+  studentId: string;
+  tutorId: string;
+  status: EventStatusType;
+  weekly: boolean;
+};
+
+export type CustomEventContentArg = Omit<EventContentArg, 'event'> & {
+  event: Omit<EventContentArg['event'], 'extendedProps'> & {
+    extendedProps: EventExtendedProps;
+  };
+};

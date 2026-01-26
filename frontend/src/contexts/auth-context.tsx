@@ -1,9 +1,10 @@
 import { createContext, useEffect, useState, type FC, type ReactNode, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import type { User } from 'types/user';
 
 type AuthContextType = {
-  user: any;
-  login: (userData: any) => void;
+  user: User | null;
+  login: (userData: User) => void;
   logout: () => void;
 };
 const AuthContext = createContext<AuthContextType>({
@@ -17,7 +18,7 @@ type AuthProviderProps = {
 };
 export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const navigate = useNavigate();
-  const [user, setUser] = useState(() => {
+  const [user, setUser] = useState<User | null>(() => {
     const storedUser = localStorage.getItem('user');
     return storedUser ? JSON.parse(storedUser) : null;
   });
@@ -30,7 +31,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     }
   }, [user]);
 
-  const login = (userData: any) => {
+  const login = (userData: User) => {
     setUser(userData);
     localStorage.setItem('user', JSON.stringify(userData));
     navigate('/');
