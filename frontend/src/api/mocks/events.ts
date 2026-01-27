@@ -8,7 +8,7 @@ export const MOCK_EVENTS: Event[] = [
     studentId: '1',
     tutorId: 'tr-501',
     title: 'Alex: Алгебра',
-    status: EventStatus.Completed,
+    status: EventStatus.Cancelled,
     weekly: true,
   },
   {

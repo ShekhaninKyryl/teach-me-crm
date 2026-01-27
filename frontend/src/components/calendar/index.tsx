@@ -9,9 +9,10 @@ import { type Event, EventStatus } from 'types/event';
 import type { User } from 'types/user';
 import { type FC, useEffect, useRef } from 'react';
 import { useSidebar } from 'components/ui/sidebar';
-import { getFullCalendarEvents } from 'components/calendar/functions';
+import { getFullCalendarEvents, isEditableEvent } from 'components/calendar/functions';
 import type { CustomEventContentArg } from 'components/calendar/type';
 import { EventDisplay } from 'components/calendar/event-display';
+import classNames from 'classnames';
 
 interface CalendarProps {
   events: Event[];
@@ -69,11 +70,20 @@ export const Calendar: FC<CalendarProps> = ({ events, students }) => {
       eventContent={renderEventContent}
       eventClassNames={(arg) => {
         const status = arg.event.extendedProps.status;
-        if (![EventStatus.Pending, EventStatus.Completed].includes(status)) {
-          return 'opacity-50';
-        }
+        const isEditable = isEditableEvent(status);
+        const isMuted = ![EventStatus.Pending, EventStatus.Completed].includes(status);
 
-        return '';
+        return classNames(
+          isEditable ? 'cursor-pointer' : 'cursor-zoom-in',
+          isMuted && 'opacity-50',
+          'w-full'
+        );
+      }}
+      eventTimeFormat={{
+        hour: '2-digit',
+        minute: '2-digit',
+        meridiem: false,
+        hour12: false,
       }}
     />
   );

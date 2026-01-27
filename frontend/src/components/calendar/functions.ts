@@ -1,4 +1,4 @@
-import type { Event } from 'types/event';
+import { type Event, EventStatus, type EventStatusType } from 'types/event';
 import type { User } from 'types/user';
 import type { EventInput } from '@fullcalendar/core';
 
@@ -36,6 +36,7 @@ export const getFullCalendarEvents = (events: Event[], students: User[]): EventI
       id: event.id,
       title: event.title,
       overlap: false,
+      editable: isEditableEvent(event.status),
       extendedProps: {
         studentId: event.studentId,
         tutorId: event.tutorId,
@@ -63,4 +64,9 @@ export const getFullCalendarEvents = (events: Event[], students: User[]): EventI
       end: event.end,
     };
   });
+};
+
+export const isEditableEvent = (status: EventStatusType): boolean => {
+  const editableStatuses: EventStatusType[] = [EventStatus.Pending];
+  return editableStatuses.includes(status);
 };
