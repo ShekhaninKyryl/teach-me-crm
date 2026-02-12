@@ -1,21 +1,24 @@
-import { XCircle, Check, ArrowRightFromLine, Coins } from 'lucide-react';
 import { EventStatus, type EventStatusType } from 'types/event';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const StatusIcon = ({ status }: { status: EventStatusType }) => {
-  const className = 'w-5 h-5';
+  const size = 'lg';
 
   switch (status) {
+    case EventStatus.Pending:
+      return <FontAwesomeIcon size={size} icon={['fas', 'clock']} />;
+
     case EventStatus.Rescheduled:
-      return <ArrowRightFromLine className={className} />;
+      return <FontAwesomeIcon size={size} icon={'arrow-alt-circle-right'} />;
 
     case EventStatus.Cancelled:
-      return <XCircle className={className} />;
+      return <FontAwesomeIcon size={size} icon={'cancel'} />;
 
     case EventStatus.Completed:
-      return <Check className={className} />;
+      return <FontAwesomeIcon size={size} icon={'check-circle'} />;
 
     case EventStatus.Paid:
-      return <Coins className={className} />;
+      return <FontAwesomeIcon size={size} icon={'coins'} />;
 
     default:
       return null;

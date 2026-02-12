@@ -6,6 +6,7 @@ type EventExtendedProps = {
   tutorId: string;
   status: EventStatusType;
   weekly: boolean;
+  color: string;
 };
 
 export type CustomEventContentArg = Omit<EventContentArg, 'event'> & {

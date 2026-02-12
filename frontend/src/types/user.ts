@@ -5,4 +5,5 @@ export type User = Contact & {
   name: string;
   email?: string;
   color?: string;
+  avatar?: string;
 };

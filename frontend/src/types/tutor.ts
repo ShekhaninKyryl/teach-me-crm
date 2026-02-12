@@ -8,7 +8,6 @@ export type Tutor = User & {
   price: number;
   location?: string;
   bio?: string;
-  avatar?: string;
   availability: string[];
   maxStudents?: number;
 };

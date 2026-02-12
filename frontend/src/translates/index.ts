@@ -1,4 +1,4 @@
-import i18next from './i18n';
+import i18next from "./i18n";
 
 export const _ = (key: string, replace?: Record<string, string | number>): string => {
   let translatedKey = i18next.t(key) || key;
@@ -11,4 +11,9 @@ export const _ = (key: string, replace?: Record<string, string | number>): strin
   }
 
   return translatedKey;
+};
+
+export const _safe = (key?: string, replace?: Record<string, string | number>): string => {
+  if (!key) return "";
+  return _(key, replace);
 };
