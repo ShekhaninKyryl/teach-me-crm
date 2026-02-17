@@ -1,55 +1,62 @@
-import i18n from 'i18next';
-import { Navigate } from 'react-router-dom';
-import { LandingPage } from './landing-pagel/LandingPage';
-import LanguageWrapper from './language-wrapper';
-import { FindTutor } from './landing-pagel/find-tutor';
-import BecomeATutor from './landing-pagel/become-a-tutor';
-import { LoginPage } from './login/LoginPage';
-import Workspace from 'pages/workspace';
-import { StudentsPage } from 'pages/workspace/students';
-import { CalendarPage } from 'pages/workspace/calendar';
+import i18n from "i18next";
+import { Navigate } from "react-router-dom";
+import { LandingPage } from "pages/landing-pagel/LandingPage";
+import LanguageWrapper from "pages/language-wrapper";
+import { FindTutor } from "pages/landing-pagel/find-tutor";
+import BecomeATutor from "pages/landing-pagel/become-a-tutor";
+import { LoginPage } from "pages/login/LoginPage";
+import Workspace from "pages/workspace";
+import { StudentsPage } from "pages/workspace/students";
+import { CalendarPage } from "pages/workspace/calendar";
+import { ReportsPage } from "pages/workspace/reports";
+import { IntegrationsPage } from "pages/workspace/integrations";
+import { BugReportPage } from "pages/workspace/bug-repport";
+import { PaymentsPage } from "pages/workspace/payments";
+import { SettingsPage } from "pages/workspace/settings";
 
 export const routes = [
   {
-    path: '/:lng',
+    path: "/:lng",
     element: <LanguageWrapper />,
     children: [
       {
-        path: 'login',
+        path: "login",
         element: <LoginPage />,
       },
       {
-        path: '',
+        path: "",
         element: <LandingPage />,
         children: [
           { index: true, element: <Navigate to="find-tutor" replace /> },
-          { path: 'find-tutor', element: <FindTutor /> },
-          { path: 'become-tutor', element: <BecomeATutor /> },
+          { path: "find-tutor", element: <FindTutor /> },
+          { path: "become-tutor", element: <BecomeATutor /> },
           {
-            path: 'workspace',
+            path: "workspace",
             element: <Workspace />,
             children: [
               { index: true, element: <Navigate to="students" replace /> },
-              { path: 'students', element: <StudentsPage /> },
-              { path: 'calendar', element: <CalendarPage /> },
-              { path: 'reports', element: <div>reports</div> },
-              { path: 'integrations', element: <div>integrations</div> },
-              { path: 'settings', element: <div>settings</div> },
-              { path: '*', element: <Navigate to="students" replace /> },
+              { path: "students", element: <StudentsPage /> },
+              { path: "calendar", element: <CalendarPage /> },
+              { path: "reports", element: <ReportsPage /> },
+              { path: "integrations", element: <IntegrationsPage /> },
+              { path: "settings", element: <SettingsPage /> },
+              { path: "payments", element: <PaymentsPage /> },
+              { path: "bug-report", element: <BugReportPage /> },
+              { path: "*", element: <Navigate to="students" replace /> },
             ],
           },
-          { path: 'about', element: <div>About us</div> },
-          { path: '*', element: <Navigate to="find-tutor" replace /> },
+          { path: "about", element: <div>About us</div> },
+          { path: "*", element: <Navigate to="find-tutor" replace /> },
         ],
       },
     ],
   },
   {
-    path: '/',
+    path: "/",
     element: <Navigate to={`/${i18n.language}/find-tutor`} replace />,
   },
   {
-    path: '*',
+    path: "*",
     element: <Navigate to={`/${i18n.language}/find-tutor`} replace />,
   },
 ];

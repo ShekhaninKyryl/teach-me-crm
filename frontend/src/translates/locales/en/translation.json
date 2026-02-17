@@ -160,5 +160,8 @@
   "paid": "",
   "Filter by students": "",
   "Filter by status": "",
-  "calendar_page.instruction": "This calendar allows you to manage your lessons. You can create a new lesson by clicking on an empty time slot. To edit an existing lesson, simply click on it. Use the filters at the top to quickly find specific lessons by student or status."
+  "calendar_page.instruction": "This calendar allows you to manage your lessons. You can create a new lesson by clicking on an empty time slot. To edit an existing lesson, simply click on it. Use the filters at the top to quickly find specific lessons by student or status.",
+  "This page is under development.": "",
+  "Payment": "",
+  "Report a bug": ""
 }
