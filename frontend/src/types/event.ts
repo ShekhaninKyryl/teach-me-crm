@@ -22,3 +22,8 @@ export type Event = {
   status: EventStatusType;
   price?: number;
 };
+
+export type EventsFilter = {
+  studentIds: string[];
+  statuses: string[];
+};

@@ -1,6 +1,6 @@
-import * as React from 'react';
-import { Check, ChevronsUpDown } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import * as React from "react";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -8,11 +8,11 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '@/components/ui/command';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { _ } from '@/translates';
+} from "@/components/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import type { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { _ } from "@/translates";
 
 interface Option {
   value: string;
@@ -24,12 +24,12 @@ interface SelectorInputProps {
   options: Option[];
   value?: string;
   placeholder?: string;
-  onChange?: (val?: string) => void;
+  onChange?: (val: string) => void;
 }
 
 export function SelectorInput({ options, value, placeholder, onChange }: SelectorInputProps) {
   const [open, setOpen] = React.useState(false);
-  const [inputValue, setInputValue] = React.useState('');
+  const [inputValue, setInputValue] = React.useState("");
   const [popoverWidth, setPopoverWidth] = React.useState<number | undefined>(undefined);
 
   const triggerRef = React.useRef<HTMLButtonElement>(null);
@@ -38,7 +38,7 @@ export function SelectorInput({ options, value, placeholder, onChange }: Selecto
 
   const handleSelect = (currentValue: string) => {
     const newValue = currentValue === value ? undefined : currentValue;
-    onChange?.(newValue);
+    onChange?.(newValue || "");
     setOpen(false);
   };
 
@@ -67,15 +67,15 @@ export function SelectorInput({ options, value, placeholder, onChange }: Selecto
           </Button>
         </PopoverTrigger>
 
-        <PopoverContent className="p-0" align="start" style={{ width: popoverWidth ?? 'auto' }}>
+        <PopoverContent className="p-0" align="start" style={{ width: popoverWidth ?? "auto" }}>
           <Command>
             <CommandInput
-              placeholder={_('Search')}
+              placeholder={_("Search")}
               value={inputValue}
               onValueChange={setInputValue}
             />
             <CommandList>
-              <CommandEmpty>{_('Not found')}</CommandEmpty>
+              <CommandEmpty>{_("Not found")}</CommandEmpty>
               <CommandGroup>
                 {options
                   .filter((opt) => opt.label.toLowerCase().includes(inputValue.toLowerCase()))
