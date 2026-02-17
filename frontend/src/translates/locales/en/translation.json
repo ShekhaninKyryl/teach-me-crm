@@ -163,5 +163,7 @@
   "calendar_page.instruction": "This calendar allows you to manage your lessons. You can create a new lesson by clicking on an empty time slot. To edit an existing lesson, simply click on it. Use the filters at the top to quickly find specific lessons by student or status.",
   "This page is under development.": "",
   "Payment": "",
-  "Report a bug": ""
+  "Report a bug": "",
+  "payments_page.under_developing": "This page is under development. We are working hard to provide a seamless payment experience and automate our processes. Stay tuned for updates!",
+  "payments_page.instructions": "Use the link below to send an email. Please attach your bill as a file. We will process your payment as soon as possible. If you have any questions, feel free to contact us."
 }
