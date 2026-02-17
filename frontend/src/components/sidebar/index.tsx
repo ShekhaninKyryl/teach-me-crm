@@ -1,4 +1,4 @@
-import { type ReactNode } from 'react';
+import { type ReactNode } from "react";
 import {
   Sidebar as SidebarSchad,
   SidebarContent,
@@ -6,12 +6,12 @@ import {
   SidebarGroup,
   SidebarHeader,
   useSidebar,
-} from 'components/ui/sidebar';
-import classNames from 'classnames';
-import { ButtonLink } from 'components/common/button';
-import type { LinkProps } from 'components/common/link/link';
-import { Separator } from '@radix-ui/themes';
-import { useMatch } from 'react-router-dom';
+} from "components/ui/sidebar";
+import classNames from "classnames";
+import { ButtonLink } from "components/common/button";
+import type { LinkProps } from "components/common/link/link";
+import { Separator } from "@radix-ui/themes";
+import { useMatch } from "react-router-dom";
 
 type SidebarProps = {
   bodyLinks?: LinkProps[];
@@ -21,7 +21,7 @@ type SidebarProps = {
 };
 
 const Sidebar = ({ bodyLinks, footerLinks, userSection, pathToDetectActivePage }: SidebarProps) => {
-  const { page } = useMatch({ path: pathToDetectActivePage ?? '', end: false })?.params || {};
+  const { page } = useMatch({ path: pathToDetectActivePage ?? "", end: false })?.params || {};
   const isActive = (pagePath: string) => page === pagePath;
 
   return (
@@ -31,15 +31,29 @@ const Sidebar = ({ bodyLinks, footerLinks, userSection, pathToDetectActivePage }
 
       <SidebarContent>
         <SidebarGroup>
-          {bodyLinks?.map(({ to, icon, title }) => (
-            <ButtonLink key={to} to={to} icon={icon} title={title} isActive={isActive(to ?? '')} />
+          {bodyLinks?.map(({ to, icon, title, rightIcon }) => (
+            <ButtonLink
+              key={to}
+              to={to}
+              icon={icon}
+              rightIcon={rightIcon}
+              title={title}
+              isActive={isActive(to ?? "")}
+            />
           )) ?? null}
         </SidebarGroup>
       </SidebarContent>
 
       <SidebarFooter>
-        {footerLinks?.map(({ to, icon, title }) => (
-          <ButtonLink key={to} to={to} icon={icon} title={title} isActive={isActive(to ?? '')} />
+        {footerLinks?.map(({ to, icon, rightIcon, title }) => (
+          <ButtonLink
+            key={to}
+            to={to}
+            icon={icon}
+            rightIcon={rightIcon}
+            title={title}
+            isActive={isActive(to ?? "")}
+          />
         )) ?? null}
       </SidebarFooter>
 
@@ -57,10 +71,10 @@ const Content = ({ children }: { children: ReactNode }) => {
     <div
       className={classNames(
         open
-          ? 'left-(--sidebar-width) w-[calc(100svw-var(--sidebar-width))]'
-          : 'left-0 w-[calc(100svw)]',
-        'relative transition-[left,width] duration-200 ease-linear',
-        'p-8'
+          ? "left-(--sidebar-width) w-[calc(100svw-var(--sidebar-width))]"
+          : "left-0 w-[calc(100svw)]",
+        "relative transition-[left,width] duration-200 ease-linear",
+        "p-8"
       )}
     >
       {children}

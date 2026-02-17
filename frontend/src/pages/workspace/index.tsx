@@ -1,38 +1,44 @@
-import type { FC } from 'react';
-import { Sidebar } from 'components/sidebar';
-import type { LinkProps } from 'components/common/link/link';
-import { UserInfo } from 'components/user-info';
-import { _ } from '@/translates';
-import { Outlet } from 'react-router-dom';
+import type { FC } from "react";
+import { Sidebar } from "components/sidebar";
+import type { LinkProps } from "components/common/link/link";
+import { UserInfo } from "components/user-info";
+import { _ } from "@/translates";
+import { Outlet } from "react-router-dom";
 
 const Workspace: FC = () => {
   const bodyLinks: LinkProps[] = [
-    { to: 'students', title: _('Students'), icon: 'users' },
+    { to: "students", title: _("Students"), icon: "users" },
     {
-      to: 'calendar',
-      title: _('Calendar'),
-      icon: 'calendar-days',
+      to: "calendar",
+      title: _("Calendar"),
+      icon: "calendar-days",
     },
     {
-      to: 'reports',
-      title: _('Reports'),
-      icon: 'chart-line',
+      to: "reports",
+      title: _("Reports"),
+      icon: "chart-line",
+      rightIcon: "triangle-exclamation",
     },
     {
-      to: 'integrations',
-      title: _('Integrations'),
-      icon: 'puzzle-piece',
+      to: "integrations",
+      title: _("Integrations"),
+      icon: "puzzle-piece",
+      rightIcon: "triangle-exclamation",
     },
   ];
 
-  const footerLinks: LinkProps[] = [{ to: 'settings', title: _('Settings'), icon: 'gear' }];
+  const footerLinks: LinkProps[] = [
+    { to: "payments", title: _("Payment"), icon: "credit-card", rightIcon: "triangle-exclamation" },
+    { to: "settings", title: _("Settings"), icon: "gear", rightIcon: "triangle-exclamation" },
+    { to: "bug-report", title: _("Report a bug"), icon: "bug", rightIcon: "triangle-exclamation" },
+  ];
 
   return (
     <>
       <Sidebar
         bodyLinks={bodyLinks}
         footerLinks={footerLinks}
-        pathToDetectActivePage={'/:lng/workspace/:page'}
+        pathToDetectActivePage={"/:lng/workspace/:page"}
         userSection={<UserInfo />}
       />
       <Sidebar.Content>

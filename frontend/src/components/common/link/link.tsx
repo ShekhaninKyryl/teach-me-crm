@@ -1,31 +1,35 @@
-import { Link as RRDLink } from 'react-router-dom';
-import classNames from 'classnames';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { Link as RRDLink } from "react-router-dom";
+import classNames from "classnames";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import type { IconProp } from "@fortawesome/fontawesome-svg-core";
 
 export type LinkProps = {
   title: string;
   to?: string;
   icon?: IconProp;
+  rightIcon?: IconProp;
   isActive?: boolean;
   className?: string;
   onClick?: () => void;
 };
 
-export const Link = ({ to, icon, isActive, title, className, onClick }: LinkProps) => {
+export const Link = ({ to, icon, rightIcon, isActive, title, className, onClick }: LinkProps) => {
   if (!to && !onClick) return null;
   if (onClick)
     return (
       <button
         className={classNames(
-          'cursor-pointer transition-colors duration-200 font-medium rounded hover:underline hover:text-chart-2',
-          isActive ? 'text-chart-2 font-semibold underline' : 'text-text',
+          "cursor-pointer transition-colors duration-200 font-medium rounded hover:underline hover:text-chart-2",
+          isActive ? "text-chart-2 font-semibold underline" : "text-text",
           className
         )}
         onClick={onClick}
       >
-        {icon ? <FontAwesomeIcon icon={icon} className="mr-2" /> : null}
-        {title}
+        <div>
+          {icon ? <FontAwesomeIcon icon={icon} className="mr-2" /> : null}
+          {title}
+        </div>
+        {rightIcon ? <FontAwesomeIcon icon={rightIcon} className="ml-2" /> : null}
       </button>
     );
 
@@ -34,14 +38,17 @@ export const Link = ({ to, icon, isActive, title, className, onClick }: LinkProp
       <RRDLink
         to={to}
         className={classNames(
-          'cursor-pointer transition-colors duration-200 font-medium rounded hover:underline hover:text-chart-2',
-          isActive ? 'text-chart-2 font-semibold underline' : 'text-text',
+          "cursor-pointer transition-colors duration-200 font-medium rounded hover:underline hover:text-chart-2",
+          isActive ? "text-chart-2 font-semibold underline" : "text-text",
           className
         )}
         onClick={onClick}
       >
-        {icon ? <FontAwesomeIcon icon={icon} className="mr-2" /> : null}
-        {title}
+        <div>
+          {icon ? <FontAwesomeIcon icon={icon} className="mr-2" /> : null}
+          {title}
+        </div>
+        {rightIcon ? <FontAwesomeIcon icon={rightIcon} className="ml-2" /> : null}
       </RRDLink>
     );
 };
