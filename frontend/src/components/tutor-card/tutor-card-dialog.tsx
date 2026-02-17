@@ -1,15 +1,16 @@
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from 'components/ui/dialog';
-import { TutorCardMini } from 'components/tutor-card/tutor-card-mini';
-import type { Tutor } from 'types/tutor';
-import type { FC } from 'react';
-import { TutorCard } from 'components/tutor-card/index';
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "components/ui/dialog";
+import { TutorCardMini } from "components/tutor-card/tutor-card-mini";
+import type { Tutor } from "types/tutor";
+import type { FC } from "react";
+import { TutorCard } from "components/tutor-card/index";
 
 type Props = {
   tutor: Tutor;
   top?: boolean;
+  preview?: boolean;
 };
 
-const TutorCardDialog: FC<Props> = ({ tutor, top }) => {
+const TutorCardDialog: FC<Props> = ({ tutor, top, preview }) => {
   return (
     <Dialog>
       <DialogTrigger className="w-full">
@@ -17,7 +18,7 @@ const TutorCardDialog: FC<Props> = ({ tutor, top }) => {
       </DialogTrigger>
       <DialogTitle className="rt-r-display-none" />
       <DialogContent>
-        <TutorCard {...tutor} />
+        <TutorCard {...tutor} preview={preview} />
       </DialogContent>
     </Dialog>
   );

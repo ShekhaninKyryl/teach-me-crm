@@ -1,24 +1,26 @@
-import type { Tutor } from 'types/tutor';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Rating } from 'components/rating/rating';
-import { _ } from '@/translates';
-import { FORMAT_OPTIONS } from 'constants/format';
-import { CardContent, CardFooter, CardHeader, CardTitle } from 'components/ui/card';
-import classNames from 'classnames';
-import { Avatar, AvatarFallback, AvatarImage } from 'components/ui/avatar';
-import { Separator } from 'components/ui/separator';
-import { DataList } from '@radix-ui/themes';
+import type { Tutor } from "types/tutor";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Rating } from "components/rating/rating";
+import { _ } from "@/translates";
+import { FORMAT_OPTIONS } from "constants/format";
+import { CardContent, CardFooter, CardHeader, CardTitle } from "components/ui/card";
+import classNames from "classnames";
+import { Avatar, AvatarFallback, AvatarImage } from "components/ui/avatar";
+import { Separator } from "components/ui/separator";
+import { DataList } from "@radix-ui/themes";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogTitle,
   DialogTrigger,
-} from 'components/ui/dialog';
-import AvailabilityTable from '../availability-table';
-import { Tooltip, TooltipContent, TooltipTrigger } from 'components/ui/tooltip';
+} from "components/ui/dialog";
+import AvailabilityTable from "../availability-table";
+import { Tooltip, TooltipContent, TooltipTrigger } from "components/ui/tooltip";
 
-type TutorCardProps = Tutor;
+type TutorCardProps = Tutor & {
+  preview?: boolean;
+};
 
 export const TutorCard = ({
   name,
@@ -34,8 +36,9 @@ export const TutorCard = ({
   telegram,
   whatsapp,
   availability,
+  preview,
 }: TutorCardProps) => {
-  const pricePerHourText = price ? `${price} ${_('₴ per hour')}` : _('No price specified or Free');
+  const pricePerHourText = price ? `${price} ${_("₴ per hour")}` : _("No price specified or Free");
 
   return (
     <div>
@@ -43,7 +46,7 @@ export const TutorCard = ({
         <Avatar className="w-24 h-24 rounded-lg">
           <AvatarImage src={avatar} alt={`${name}'s profile`} className="object-cover" />
           <AvatarFallback className="bg-background-secondary rounded-lg flex items-center justify-center">
-            <FontAwesomeIcon icon={['fas', 'user']} style={{ width: '4rem', height: '4rem' }} />
+            <FontAwesomeIcon icon={["fas", "user"]} style={{ width: "4rem", height: "4rem" }} />
           </AvatarFallback>
         </Avatar>
         <div>
@@ -55,36 +58,36 @@ export const TutorCard = ({
       <CardContent className="flex flex-col justify-between gap-2 grow">
         <DataList.Root>
           <DataList.Item>
-            <DataList.Label minWidth="106px">{_('Subjects')}:</DataList.Label>
+            <DataList.Label minWidth="106px">{_("Subjects")}:</DataList.Label>
             <DataList.Value>
               {subjects.map((subject, index) => (
                 <span key={subject} className="font-bold">
                   {subject}
-                  {index !== subjects.length - 1 && <span className="font-bold mr-1">{','}</span>}
+                  {index !== subjects.length - 1 && <span className="font-bold mr-1">{","}</span>}
                 </span>
               ))}
             </DataList.Value>
           </DataList.Item>
           <DataList.Item>
-            <DataList.Label minWidth="106px">{_('Format')}:</DataList.Label>
+            <DataList.Label minWidth="106px">{_("Format")}:</DataList.Label>
             <DataList.Value>
               {format.map((value, index) => (
                 <span key={value} className="font-bold">
                   <span
                     className={classNames(
-                      value.includes(FORMAT_OPTIONS.Online) ? 'text-chart-2' : 'text-chart-5'
+                      value.includes(FORMAT_OPTIONS.Online) ? "text-chart-2" : "text-chart-5"
                     )}
                   >
-                    {value.includes(FORMAT_OPTIONS.Online) ? _('Online') : `${location}`}
+                    {value.includes(FORMAT_OPTIONS.Online) ? _("Online") : `${location}`}
                   </span>
-                  {index !== format.length - 1 && <span className="font-bold mr-1">{','}</span>}
+                  {index !== format.length - 1 && <span className="font-bold mr-1">{","}</span>}
                 </span>
               ))}
             </DataList.Value>
           </DataList.Item>
           {bio && (
             <DataList.Item>
-              <DataList.Label minWidth="106px">{_('Biography')}:</DataList.Label>
+              <DataList.Label minWidth="106px">{_("Biography")}:</DataList.Label>
               <DataList.Value>
                 <p className="text-justify whitespace-break-spaces leading-5">{bio}</p>
               </DataList.Value>
@@ -93,14 +96,14 @@ export const TutorCard = ({
         </DataList.Root>
         <DataList.Root>
           <DataList.Item>
-            <DataList.Label minWidth="106px">{_('Phone')}:</DataList.Label>
+            <DataList.Label minWidth="106px">{_("Phone")}:</DataList.Label>
             <DataList.Value>
-              <p className="font-bold">{phone || _('Not provided')}</p>
+              <p className="font-bold">{phone || _("Not provided")}</p>
             </DataList.Value>
           </DataList.Item>
           {telegram && (
             <DataList.Item>
-              <DataList.Label minWidth="106px">{_('Telegram')}:</DataList.Label>
+              <DataList.Label minWidth="106px">{_("Telegram")}:</DataList.Label>
               <DataList.Value>
                 <a
                   href={`https://t.me/${telegram}`}
@@ -115,7 +118,7 @@ export const TutorCard = ({
           )}
           {viber && (
             <DataList.Item>
-              <DataList.Label minWidth="106px">{_('Viber')}:</DataList.Label>
+              <DataList.Label minWidth="106px">{_("Viber")}:</DataList.Label>
               <DataList.Value>
                 <a
                   target="_blank"
@@ -129,7 +132,7 @@ export const TutorCard = ({
           )}
           {whatsapp && (
             <DataList.Item>
-              <DataList.Label minWidth="106px">{_('WhatsApp')}:</DataList.Label>
+              <DataList.Label minWidth="106px">{_("WhatsApp")}:</DataList.Label>
               <DataList.Value>
                 <a
                   target="_blank"
@@ -158,7 +161,7 @@ export const TutorCard = ({
                     />
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>{_('See availability')}</p>
+                    <p>{_("See availability")}</p>
                   </TooltipContent>
                 </Tooltip>
               </DialogTrigger>
@@ -168,14 +171,17 @@ export const TutorCard = ({
                 <AvailabilityTable step="1h" value={availability} />
               </DialogContent>
             </Dialog>
-            <Tooltip>
-              <TooltipTrigger>
-                <FontAwesomeIcon icon="comment" className="hover:text-chart-2 cursor-pointer" />
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>{_('Send a message')}</p>
-              </TooltipContent>
-            </Tooltip>
+
+            {!preview && (
+              <Tooltip>
+                <TooltipTrigger>
+                  <FontAwesomeIcon icon="comment" className="hover:text-chart-2 cursor-pointer" />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{_("Send a message")}</p>
+                </TooltipContent>
+              </Tooltip>
+            )}
           </div>
         </div>
       </CardFooter>

@@ -1,18 +1,18 @@
-import axios from 'api/axios';
-import { FORMAT_OPTIONS } from 'constants/format';
-import { getConfig } from '@/configs';
-import { tutors as tutorsMock } from 'api/mocks/tutors';
-import type { User } from 'types/user';
-import type { Tutor } from 'types/tutor';
+import axios from "api/axios";
+import { FORMAT_OPTIONS } from "constants/format";
+import { getConfig } from "@/configs";
+import { tutors as tutorsMock } from "api/mocks/tutors";
+import type { User } from "types/user";
+import type { Tutor, TutorWithPassword } from "types/tutor";
 
 export interface TutorApi {
   getTopTutors(): Promise<Tutor[]>;
   getTutorById(id: string): Promise<Tutor>;
   getTutorsStudents(tutorId: string): Promise<User[]>;
-  updateTutorProfile(tutorId: string, tutorData: Partial<Tutor>): Promise<Tutor>;
+  updateTutorProfile(tutorId: string, tutorData: Partial<TutorWithPassword>): Promise<Tutor>;
   saveTutorsStudents(tutorId: string, students: User[]): Promise<void>;
   searchTutors(query: string): Promise<Tutor[]>;
-  createTutorProfile(tutor: Partial<Tutor>): Promise<Tutor>;
+  createTutorProfile(tutor: Partial<TutorWithPassword>): Promise<Tutor>;
 }
 
 const tutorApiMock: TutorApi = {
@@ -21,29 +21,29 @@ const tutorApiMock: TutorApi = {
       setTimeout(() => {
         resolve([
           {
-            id: '1',
-            name: 'John Doe',
-            email: 'j.doe@test.com',
-            subjects: ['Math', 'Physics'],
+            id: "1",
+            name: "John Doe",
+            email: "j.doe@test.com",
+            subjects: ["Math", "Physics"],
             format: [FORMAT_OPTIONS.Online],
             rating: 4.5,
             price: 20,
-            location: 'New York',
-            bio: 'Experienced tutor with a passion for teaching.',
-            avatar: 'https://i.pravatar.cc/150?img=47',
+            location: "New York",
+            bio: "Experienced tutor with a passion for teaching.",
+            avatar: "https://i.pravatar.cc/150?img=47",
             availability: [],
           },
           {
-            id: '2',
-            name: 'Jane Smith',
-            email: 'j.smith@test.com',
-            subjects: ['English', 'History'],
+            id: "2",
+            name: "Jane Smith",
+            email: "j.smith@test.com",
+            subjects: ["English", "History"],
             format: [FORMAT_OPTIONS.Offline],
             rating: 4.8,
             price: 25,
-            location: 'Los Angeles',
-            bio: 'Dedicated educator with over 10 years of experience.',
-            avatar: 'https://i.pravatar.cc/150?img=49',
+            location: "Los Angeles",
+            bio: "Dedicated educator with over 10 years of experience.",
+            avatar: "https://i.pravatar.cc/150?img=49",
             availability: [],
           },
         ]);
@@ -55,48 +55,48 @@ const tutorApiMock: TutorApi = {
       setTimeout(() => {
         resolve({
           id,
-          name: 'Mock Tutor',
-          email: 'm.tutor@test.com',
-          subjects: ['Math'],
+          name: "Mock Tutor",
+          email: "m.tutor@test.com",
+          subjects: ["Math"],
           format: [FORMAT_OPTIONS.Online],
           rating: 4.0,
           price: 30,
-          location: 'Mock City',
-          bio: 'Mock tutor bio',
-          avatar: 'https://example.com/mock-profile.jpg',
+          location: "Mock City",
+          bio: "Mock tutor bio",
+          avatar: "https://example.com/mock-profile.jpg",
           availability: [],
         });
       }, 500)
     );
   },
   async getTutorsStudents(tutorId: string): Promise<User[]> {
-    console.log('Getting students for tutor:', tutorId);
+    console.log("Getting students for tutor:", tutorId);
     return new Promise((resolve) =>
       setTimeout(() => {
         resolve([
-          { id: '1', name: 'Alice', email: 'alice@example.com', color: '#ff0000' },
-          { id: '2', name: 'Bob', email: 'bob@example.com', color: '#ff00ff' },
-          { id: '3', name: 'Charlie', email: 'charlie@example', color: '#ffff00' },
-          { id: '4', name: 'User 1', email: '', color: '#00ff00' },
-          { id: '5', name: 'User 2', email: '', color: '#0000ff' },
+          { id: "1", name: "Alice", email: "alice@example.com", color: "#ff0000" },
+          { id: "2", name: "Bob", email: "bob@example.com", color: "#ff00ff" },
+          { id: "3", name: "Charlie", email: "charlie@example", color: "#ffff00" },
+          { id: "4", name: "User 1", email: "", color: "#00ff00" },
+          { id: "5", name: "User 2", email: "", color: "#0000ff" },
         ]);
       }, 1000)
     );
   },
-  async updateTutorProfile(tutorId: string, tutorData: Partial<Tutor>): Promise<Tutor> {
+  async updateTutorProfile(tutorId: string, tutorData: Partial<TutorWithPassword>): Promise<Tutor> {
     return new Promise((resolve) =>
       setTimeout(() => {
         resolve({
           id: tutorId,
-          name: tutorData.name || 'Updated Tutor',
-          email: tutorData.email || '',
+          name: tutorData.name || "Updated Tutor",
+          email: tutorData.email || "",
           subjects: tutorData.subjects || [],
           format: tutorData.format || [],
           rating: tutorData.rating || 0,
           price: tutorData.price || 0,
           location: tutorData.location,
-          bio: tutorData.bio || '',
-          avatar: tutorData.avatar || '',
+          bio: tutorData.bio || "",
+          avatar: tutorData.avatar || "",
           availability: tutorData.availability || [],
           maxStudents: tutorData.maxStudents || 3,
         });
@@ -118,20 +118,20 @@ const tutorApiMock: TutorApi = {
       }, 500)
     );
   },
-  async createTutorProfile(tutor: Partial<Tutor>): Promise<Tutor> {
+  async createTutorProfile(tutor: Partial<TutorWithPassword>): Promise<Tutor> {
     return new Promise((resolve) =>
       setTimeout(() => {
         resolve({
-          id: 'new-id',
-          name: tutor.name || 'New Tutor',
-          email: tutor.email || '',
+          id: "new-id",
+          name: tutor.name || "New Tutor",
+          email: tutor.email || "",
           subjects: tutor.subjects || [],
           format: tutor.format || [],
           rating: tutor.rating || 0,
           price: tutor.price || 0,
           location: tutor.location,
-          bio: tutor.bio || '',
-          avatar: tutor.avatar || '',
+          bio: tutor.bio || "",
+          avatar: tutor.avatar || "",
           availability: [],
         });
       }, 500)
@@ -141,7 +141,7 @@ const tutorApiMock: TutorApi = {
 
 const tutorApi = {
   async getTopTutors(): Promise<Tutor[]> {
-    const response = await axios('/api/top-tutors');
+    const response = await axios("/api/top-tutors");
     return response.data;
   },
   async getTutorById(id: string): Promise<Tutor> {
@@ -152,7 +152,7 @@ const tutorApi = {
     const response = await axios.get<User[]>(`/tutors/${tutorId}/students`);
     return response.data;
   },
-  async updateTutorProfile(tutorId: string, tutorData: Partial<Tutor>): Promise<Tutor> {
+  async updateTutorProfile(tutorId: string, tutorData: Partial<TutorWithPassword>): Promise<Tutor> {
     const response = await axios.put(`/api/tutors/${tutorId}`, tutorData);
     return response.data;
   },
@@ -165,8 +165,8 @@ const tutorApi = {
     });
     return response.data;
   },
-  async createTutorProfile(tutor: Partial<Tutor>): Promise<Tutor> {
-    const response = await axios.post('/api/tutors', tutor);
+  async createTutorProfile(tutor: Partial<TutorWithPassword>): Promise<Tutor> {
+    const response = await axios.post("/api/tutors", tutor);
     return response.data;
   },
 };

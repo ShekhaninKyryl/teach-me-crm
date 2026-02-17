@@ -1,8 +1,8 @@
-import { Input } from 'components/ui/input';
-import { Button } from 'components/ui/button';
-import { _ } from '@/translates';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { Input } from "components/ui/input";
+import { Button } from "components/ui/button";
+import { _ } from "@/translates";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Form,
   FormControl,
@@ -11,18 +11,18 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from 'components/ui/form';
-import * as yup from 'yup';
-import type { FC } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Tooltip, TooltipContent, TooltipTrigger } from 'components/ui/tooltip';
-import { faViber, faTelegram, faWhatsapp } from '@fortawesome/free-brands-svg-icons';
+} from "components/ui/form";
+import * as yup from "yup";
+import type { FC } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Tooltip, TooltipContent, TooltipTrigger } from "components/ui/tooltip";
+import { faViber, faTelegram, faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 
 const schema = yup.object().shape({
-  phone: yup.string().default(''),
-  viber: yup.string().default(''),
-  telegram: yup.string().default(''),
-  whatsapp: yup.string().default(''),
+  phone: yup.string().default(""),
+  viber: yup.string().default(""),
+  telegram: yup.string().default(""),
+  whatsapp: yup.string().default(""),
 });
 
 export type TutorContactsFormData = yup.InferType<typeof schema>;
@@ -42,12 +42,12 @@ const FormContacts: FC<FormStartProps> = ({ onSubmit, onBack }) => {
     onSubmit(data);
   };
 
-  const phoneNumber = form.watch('phone');
+  const phoneNumber = form.watch("phone");
 
   return (
     <section className="w-full max-w-lg bg-surface rounded-xl shadow-2xl p-6 my-12">
       <h2 className="text-2xl font-semibold mb-4 text-center">
-        {_('Add you contact information')}
+        {_("Add you contact information")}
       </h2>
 
       <Form {...form}>
@@ -59,12 +59,12 @@ const FormContacts: FC<FormStartProps> = ({ onSubmit, onBack }) => {
               <FormItem>
                 <FormLabel>
                   <FontAwesomeIcon icon="phone" />
-                  {_('Phone')}
+                  {_("Phone")}
                 </FormLabel>
                 <FormControl>
                   <Input {...field} placeholder="+380..." />
                 </FormControl>
-                <FormDescription>{_('Enter your phone number.')}</FormDescription>
+                <FormDescription>{_("Enter your phone number.")}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -77,11 +77,11 @@ const FormContacts: FC<FormStartProps> = ({ onSubmit, onBack }) => {
               <FormItem>
                 <FormLabel>
                   <FontAwesomeIcon icon={faTelegram} />
-                  {_('Telegram')}
+                  {_("Telegram")}
                 </FormLabel>
                 <FormControl>
                   <div className="relative flex items-center gap-2">
-                    <Input {...field} placeholder={_('Link to your account')} />
+                    <Input {...field} placeholder={_("Add link to your account")} />
                   </div>
                 </FormControl>
                 <FormMessage />
@@ -96,11 +96,11 @@ const FormContacts: FC<FormStartProps> = ({ onSubmit, onBack }) => {
               <FormItem>
                 <FormLabel>
                   <FontAwesomeIcon icon={faViber} />
-                  {_('Viber')}
+                  {_("Viber")}
                 </FormLabel>
                 <FormControl>
                   <div className="relative flex items-center gap-2">
-                    <Input {...field} placeholder={_('Phone or group invite')} />
+                    <Input {...field} placeholder={_("Add phone or group invite")} />
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <FontAwesomeIcon
@@ -110,7 +110,7 @@ const FormContacts: FC<FormStartProps> = ({ onSubmit, onBack }) => {
                         />
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p>{_('Copy/Past Phone number')}</p>
+                        <p>{_("Copy/Past Phone number")}</p>
                       </TooltipContent>
                     </Tooltip>
                   </div>
@@ -127,11 +127,11 @@ const FormContacts: FC<FormStartProps> = ({ onSubmit, onBack }) => {
               <FormItem>
                 <FormLabel>
                   <FontAwesomeIcon icon={faWhatsapp} />
-                  {_('WhatsApp')}
+                  {_("WhatsApp")}
                 </FormLabel>
                 <FormControl>
                   <div className="relative flex items-center gap-2">
-                    <Input {...field} placeholder={_('Phone or group invite')} />
+                    <Input {...field} placeholder={_("Add phone or group invite")} />
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <FontAwesomeIcon
@@ -141,7 +141,7 @@ const FormContacts: FC<FormStartProps> = ({ onSubmit, onBack }) => {
                         />
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p>{_('Copy/Past Phone number')}</p>
+                        <p>{_("Copy/Past Phone number")}</p>
                       </TooltipContent>
                     </Tooltip>
                   </div>
@@ -154,10 +154,10 @@ const FormContacts: FC<FormStartProps> = ({ onSubmit, onBack }) => {
           <div className="flex gap-2">
             <Button type="button" onClick={onBack} variant="outline" className="flex-1">
               <FontAwesomeIcon icon="arrow-left" />
-              {_('Verify previous form')}
+              {_("Verify previous form")}
             </Button>
             <Button type="submit" className="flex-1">
-              {_('Set up your availability')}
+              {_("Set up your availability")}
               <FontAwesomeIcon icon="arrow-right" />
             </Button>
           </div>

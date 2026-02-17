@@ -1,7 +1,7 @@
-import { Button } from 'components/ui/button';
-import { _ } from '@/translates';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { Button } from "components/ui/button";
+import { _ } from "@/translates";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Form,
   FormControl,
@@ -10,56 +10,51 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from 'components/ui/form';
-import * as yup from 'yup';
-import { type FC, useEffect, useMemo, useState } from 'react';
-import { FORMAT_OPTIONS } from 'constants/format';
-import type { Format } from 'types/common';
-import { Checkbox } from 'components/ui/checkbox';
-import { Label } from 'components/ui/label';
-import { Textarea } from 'components/ui/textarea';
-import { Input } from 'components/ui/input';
-import type { Subject } from 'types/subject';
-import { SelectorInput } from 'components/common/selector/selector-input';
-import type { IconProp } from '@fortawesome/fontawesome-svg-core';
-import subjectApi from 'api/subject';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { X } from 'lucide-react';
-import { Badge } from 'components/ui/badge';
-import { Loading } from 'components/common/loading';
-import { Tooltip, TooltipContent, TooltipTrigger } from 'components/ui/tooltip';
+} from "components/ui/form";
+import * as yup from "yup";
+import { type FC, useEffect, useMemo, useState } from "react";
+import { FORMAT_OPTIONS } from "constants/format";
+import type { Format } from "types/common";
+import { Checkbox } from "components/ui/checkbox";
+import { Label } from "components/ui/label";
+import { Textarea } from "components/ui/textarea";
+import { Input } from "components/ui/input";
+import type { Subject } from "types/subject";
+import { SelectorInput } from "components/common/selector/selector-input";
+import type { IconProp } from "@fortawesome/fontawesome-svg-core";
+import subjectApi from "api/subject";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { X } from "lucide-react";
+import { Badge } from "components/ui/badge";
+import { Loading } from "components/common/loading";
+import { Tooltip, TooltipContent, TooltipTrigger } from "components/ui/tooltip";
 
 const schema = yup
   .object({
-    bio: yup.string().default(''),
+    bio: yup.string().default(""),
 
     format: yup
       .array()
       .of(
         yup
           .mixed<Format>()
-          .oneOf(Object.values(FORMAT_OPTIONS) as Format[], 'Format must be Online or Offline')
+          .oneOf(Object.values(FORMAT_OPTIONS) as Format[], "Format must be Online or Offline")
           .required()
       )
-      .min(1, 'Select at least one format') // щоб масив не був пустий
-      .required('Format is required')
+      .min(1, "Select at least one format") // щоб масив не був пустий
+      .required("Format is required")
       .default([]),
 
     location: yup
       .string()
-      .when('format', {
+      .when("format", {
         is: (formats: Format[]) => formats?.includes(FORMAT_OPTIONS.Offline),
-        then: (schema) => schema.required('Location is required for offline format'),
+        then: (schema) => schema.required("Location is required for offline format"),
         otherwise: (schema) => schema.optional(),
       })
-      .default(''),
+      .default(""),
 
-    subjects: yup
-      .array()
-      .of(yup.string().required())
-      .min(1, 'Select at least one subject')
-      .required()
-      .default([]),
+    subjects: yup.array().of(yup.string().required()).required().default([]),
 
     price: yup.number().required().min(0).default(0),
   })
@@ -87,13 +82,13 @@ const FormExperience: FC<FormExperienceProps> = ({ onSubmit, onBack }) => {
       .then((res) => setSubjects(res))
       .finally(() => setSubjectsLoading(false));
   }, []);
-  const selectedSubjects = form.watch('subjects');
+  const selectedSubjects = form.watch("subjects");
   const filteredSubjects = useMemo(
     () => subjects.filter((s) => !selectedSubjects.includes(s.id)),
     [selectedSubjects, subjects]
   );
 
-  const selectedFormats = form.watch('format');
+  const selectedFormats = form.watch("format");
 
   const isOfflineSelected = selectedFormats.includes(FORMAT_OPTIONS.Offline);
 
@@ -103,7 +98,7 @@ const FormExperience: FC<FormExperienceProps> = ({ onSubmit, onBack }) => {
 
   return (
     <section className="w-full max-w-lg bg-surface rounded-xl shadow-2xl p-6 my-12">
-      <h2 className="text-2xl font-semibold mb-4 text-center">{_('Share you experience')}</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-center">{_("Share your experience")}</h2>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
@@ -113,7 +108,7 @@ const FormExperience: FC<FormExperienceProps> = ({ onSubmit, onBack }) => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="gap-0">
-                  {_('Format')}
+                  {_("Format")}
                   <span>*</span>
                 </FormLabel>
                 <div className="flex gap-4 mt-2">
@@ -146,13 +141,13 @@ const FormExperience: FC<FormExperienceProps> = ({ onSubmit, onBack }) => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="gap-0">
-                    {_('Location')}
+                    {_("Location")}
                     <span>*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder={_('Enter your location')} />
+                    <Input {...field} placeholder={_("Enter your location")} />
                   </FormControl>
-                  <FormDescription>{_('Provide your city')}</FormDescription>
+                  <FormDescription>{_("Provide your city")}</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -164,10 +159,7 @@ const FormExperience: FC<FormExperienceProps> = ({ onSubmit, onBack }) => {
             name="subjects"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="gap-0">
-                  {_('Subjects')}
-                  <span>*</span>
-                </FormLabel>
+                <FormLabel className="gap-0">{_("Subjects")}</FormLabel>
                 <div className="flex flex-wrap gap-2">
                   {field.value?.map((val) => {
                     const subj = subjects.find((o) => o.id === val);
@@ -193,14 +185,14 @@ const FormExperience: FC<FormExperienceProps> = ({ onSubmit, onBack }) => {
                   {isSubjectsLoading ? (
                     <Loading />
                   ) : (
-                    <div className="flex gap-2">
+                    <div className="flex items-center gap-2">
                       <SelectorInput
                         options={filteredSubjects.map((subject) => ({
                           value: subject.id,
                           label: subject.label,
                           icon: (subject.faIcon as IconProp) || (subject.icon as IconProp),
                         }))}
-                        placeholder={_('Select subject')}
+                        placeholder={_("Select subject")}
                         value={undefined}
                         onChange={(val) => {
                           if (!val) return;
@@ -211,12 +203,14 @@ const FormExperience: FC<FormExperienceProps> = ({ onSubmit, onBack }) => {
                       />
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Button type="button" variant="outline">
-                            {_('Create you own subject')}
-                          </Button>
+                          <FontAwesomeIcon
+                            className="cursor-pointer"
+                            size="lg"
+                            icon="question-circle"
+                          />
                         </TooltipTrigger>
                         <TooltipContent>
-                          <p>{_('in development')}</p>
+                          <p>{_("create_subject.tooltip")}</p>
                         </TooltipContent>
                       </Tooltip>
                     </div>
@@ -224,7 +218,7 @@ const FormExperience: FC<FormExperienceProps> = ({ onSubmit, onBack }) => {
                 </FormControl>
 
                 <FormMessage />
-                <FormDescription>{_('You can select multiple subjects')}</FormDescription>
+                <FormDescription>{_("You can select multiple subjects")}</FormDescription>
               </FormItem>
             )}
           />
@@ -234,10 +228,7 @@ const FormExperience: FC<FormExperienceProps> = ({ onSubmit, onBack }) => {
             name="price"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="gap-0">
-                  {_('Price per hour')}
-                  <span>*</span>
-                </FormLabel>
+                <FormLabel className="gap-0">{_("Price per hour")}</FormLabel>
                 <FormControl>
                   <Input
                     type="number"
@@ -248,7 +239,7 @@ const FormExperience: FC<FormExperienceProps> = ({ onSubmit, onBack }) => {
                     onChange={(e) => field.onChange(Number(e.target.value))}
                   />
                 </FormControl>
-                <FormDescription>{_('Enter your hourly rate in UAH')}</FormDescription>
+                <FormDescription>{_("Enter your hourly rate in UAH")}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -256,17 +247,17 @@ const FormExperience: FC<FormExperienceProps> = ({ onSubmit, onBack }) => {
 
           <FormField
             control={form.control}
-            name={'bio'}
+            name={"bio"}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{_('Biography')}</FormLabel>
+                <FormLabel>{_("Biography")}</FormLabel>
                 <FormControl>
                   <Textarea {...field} />
                 </FormControl>
                 <FormMessage />
                 <FormDescription>
                   {_(
-                    'Describe your experience, also describe here details of you work, applicable methods and any other information what can help a student makes a correct chosen'
+                    "Describe your experience, also describe here details of you work, applicable methods and any other information what can help a student makes a correct chosen"
                   )}
                 </FormDescription>
               </FormItem>
@@ -276,7 +267,7 @@ const FormExperience: FC<FormExperienceProps> = ({ onSubmit, onBack }) => {
           <div className="flex gap-2">
             <Button type="button" onClick={onBack} variant="outline" className="flex-1">
               <FontAwesomeIcon icon="arrow-left" />
-              {_('Verify previous form')}
+              {_("Verify previous form")}
             </Button>
             <Button type="submit" className="flex-1">
               {_("Let's go to contact information")}
