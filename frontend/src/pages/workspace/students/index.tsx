@@ -5,7 +5,7 @@ import { Blockquote, Separator } from '@radix-ui/themes';
 import { _ } from '@/translates';
 import { useState } from 'react';
 
-export const Students = () => {
+export const StudentsPage = () => {
   const [maxStudents, setMaxStudents] = useState<number>(FREE_STUDENTS_CAPACITY_LIMIT + 2);
   return (
     <div className="flex flex-col gap-4">

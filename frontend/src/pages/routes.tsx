@@ -6,7 +6,8 @@ import { FindTutor } from './landing-pagel/find-tutor';
 import BecomeATutor from './landing-pagel/become-a-tutor';
 import { LoginPage } from './login/LoginPage';
 import Workspace from 'pages/workspace';
-import { Students } from 'pages/workspace/students';
+import { StudentsPage } from 'pages/workspace/students';
+import { CalendarPage } from 'pages/workspace/calendar';
 
 export const routes = [
   {
@@ -29,8 +30,8 @@ export const routes = [
             element: <Workspace />,
             children: [
               { index: true, element: <Navigate to="students" replace /> },
-              { path: 'students', element: <Students /> },
-              { path: 'calendar', element: <div>calendar</div> },
+              { path: 'students', element: <StudentsPage /> },
+              { path: 'calendar', element: <CalendarPage /> },
               { path: 'reports', element: <div>reports</div> },
               { path: 'integrations', element: <div>integrations</div> },
               { path: 'settings', element: <div>settings</div> },

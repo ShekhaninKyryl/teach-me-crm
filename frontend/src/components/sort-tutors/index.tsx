@@ -54,7 +54,7 @@ export const SortTutorsComponent = ({
           className={classNames('rounded-r-none', ratingSort === 'none' ? '' : 'flex-1')}
           onClick={() => onSortChange?.('rating')}
         >
-          {_('Rating')}
+          {_('by Rating')}
           {getSortIcon(ratingSort)}
         </Button>
         <Button
@@ -62,7 +62,7 @@ export const SortTutorsComponent = ({
           className={classNames('rounded-l-none', priceSort === 'none' ? '' : 'flex-1')}
           onClick={() => onSortChange?.('price')}
         >
-          {_('Price')}
+          {_('by Price')}
           {getSortIcon(priceSort)}
         </Button>
       </CardContent>

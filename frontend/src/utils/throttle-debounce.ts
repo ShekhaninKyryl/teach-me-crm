@@ -1,3 +1,5 @@
+import { FILTER_DEBOUNCE_TIMER } from 'constants/timer';
+
 export const throttle = <T extends (...args: any[]) => any>(func: T, delay: number) => {
   let lastCall = 0;
   return function (...args: Parameters<T>): ReturnType<T> | void {
@@ -10,7 +12,10 @@ export const throttle = <T extends (...args: any[]) => any>(func: T, delay: numb
   };
 };
 
-export const debounce = <T extends (...args: any[]) => any>(func: T, delay: number) => {
+export const debounce = <T extends (...args: any[]) => any>(
+  func: T,
+  delay = FILTER_DEBOUNCE_TIMER
+) => {
   let timeoutId: ReturnType<typeof setTimeout>;
   return function (...args: Parameters<T>): void {
     clearTimeout(timeoutId);
