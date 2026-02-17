@@ -1,15 +1,15 @@
-import { _ } from '@/translates';
-import { useLocation, useMatch } from 'react-router-dom';
-import { ButtonLink } from 'components/common/button';
-import { Logo } from 'components/logo';
-import type { LinkProps } from 'components/common/link/link';
+import { _ } from "@/translates";
+import { useLocation, useMatch } from "react-router-dom";
+import { ButtonLink } from "components/common/button";
+import { Logo } from "components/logo";
+import type { LinkProps } from "components/common/link/link";
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuList,
-} from 'components/ui/navigation-menu';
-import LanguageSwitcher from 'components/language-switcher';
-import { useAuth } from '@/contexts/auth-context';
+} from "components/ui/navigation-menu";
+import LanguageSwitcher from "components/language-switcher";
+import { useAuth } from "@/contexts/auth-context";
 
 export const Header = () => {
   const location = useLocation();
@@ -18,16 +18,21 @@ export const Header = () => {
   const isActive = (pagePath: string) => page === pagePath;
 
   const navLinks: LinkProps[] = [
-    { to: 'find-tutor', title: _('Find tutor'), icon: 'search' },
+    { to: "find-tutor", title: _("Find tutor"), icon: "search" },
     user
-      ? { to: 'workspace', title: _('Workspace'), icon: 'briefcase' }
-      : { to: 'become-tutor', title: _('Become a tutor'), icon: 'book' },
-    { to: 'about', title: _('About us'), icon: 'circle-question' },
+      ? { to: "workspace", title: _("Workspace"), icon: "briefcase" }
+      : { to: "become-tutor", title: _("Become a tutor"), icon: "book" },
+    {
+      to: "about",
+      title: _("About us"),
+      icon: "circle-question",
+      rightIcon: "triangle-exclamation",
+    },
   ];
 
   const rightNavLinks: LinkProps[] = user
-    ? [{ title: _('Logout'), icon: 'sign-out-alt', onClick: logout }]
-    : [{ to: 'login', title: _('Login'), icon: 'sign-in-alt' }];
+    ? [{ title: _("Logout"), icon: "sign-out-alt", onClick: logout }]
+    : [{ to: "login", title: _("Login"), icon: "sign-in-alt" }];
 
   return (
     <div className="flex items-center justify-between px-4 w-full">
@@ -39,13 +44,14 @@ export const Header = () => {
 
       <NavigationMenu>
         <NavigationMenuList className="gap-4">
-          {navLinks.map(({ title, to, icon }) => (
+          {navLinks.map(({ title, to, icon, rightIcon }) => (
             <NavigationMenuItem key={to}>
               <ButtonLink
                 key={to}
                 to={to}
                 icon={icon}
-                isActive={isActive(to ?? '')}
+                rightIcon={rightIcon}
+                isActive={isActive(to ?? "")}
                 title={title}
               />
             </NavigationMenuItem>

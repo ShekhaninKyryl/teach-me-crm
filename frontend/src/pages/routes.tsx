@@ -13,6 +13,7 @@ import { IntegrationsPage } from "pages/workspace/integrations";
 import { BugReportPage } from "pages/workspace/bug-repport";
 import { PaymentsPage } from "pages/workspace/payments";
 import { SettingsPage } from "pages/workspace/settings";
+import { AboutUsPage } from "pages/about-us";
 
 export const routes = [
   {
@@ -45,7 +46,7 @@ export const routes = [
               { path: "*", element: <Navigate to="students" replace /> },
             ],
           },
-          { path: "about", element: <div>About us</div> },
+          { path: "about", element: <AboutUsPage /> },
           { path: "*", element: <Navigate to="find-tutor" replace /> },
         ],
       },

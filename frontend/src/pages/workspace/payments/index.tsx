@@ -12,13 +12,15 @@ export const PaymentsPage = () => {
   const emailSubject = `Payment for Tutor - ${user?.id}`;
 
   return (
-    <div className="flex flex-col items-center justify-center gap-4">
+    <div className="flex flex-col gap-4">
       <UnderDevelopment text={_("payments_page.under_developing")} />
       <Blockquote>{_("payments_page.instructions")}</Blockquote>
-      <Link
-        to={`mailto:${emailAddress}?subject=${emailSubject}`}
-        title={"Надіслати нам лист"}
-      ></Link>
+      <div className="w-full flex justify-center">
+        <Link
+          to={`mailto:${emailAddress}?subject=${emailSubject}`}
+          title={_("Send an email")}
+        ></Link>
+      </div>
     </div>
   );
 };

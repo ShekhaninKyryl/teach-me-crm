@@ -30,7 +30,7 @@ const Workspace: FC = () => {
   const footerLinks: LinkProps[] = [
     { to: "payments", title: _("Payment"), icon: "credit-card" },
     { to: "settings", title: _("Settings"), icon: "gear", rightIcon: "triangle-exclamation" },
-    { to: "bug-report", title: _("Report a bug"), icon: "bug", rightIcon: "triangle-exclamation" },
+    { to: "bug-report", title: _("Report a bug"), icon: "bug" },
   ];
 
   return (

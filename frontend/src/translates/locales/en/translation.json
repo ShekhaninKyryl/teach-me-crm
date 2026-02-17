@@ -165,5 +165,7 @@
   "Payment": "",
   "Report a bug": "",
   "payments_page.under_developing": "This page is under development. We are working hard to provide a seamless payment experience and automate our processes. Stay tuned for updates!",
-  "payments_page.instructions": "Use the link below to send an email. Please attach your bill as a file. We will process your payment as soon as possible. If you have any questions, feel free to contact us."
+  "payments_page.instructions": "Use the link below to send an email. Please attach your bill as a file. We will process your payment as soon as possible. If you have any questions, feel free to contact us.",
+  "Send an email": "",
+  "bug_report_page.instructions": "If you have found a bug or have an improvement idea, please use the link below to send us an email. Include a detailed description of the issue, steps to reproduce it, and any relevant screenshots or files. We appreciate your help in improving our platform and are ready to give some reward for your contribution."
 }
