@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { Tutor, TutorWithPassword } from "types/tutor";
+import type { Tutor, TutorWithPassword } from "@shared/types/tutor";
 import tutorsApi from "api/tutors";
 import { useAuth } from "@/contexts/auth-context";
 import { TutorEditForm } from "components/tutor-edit-form";

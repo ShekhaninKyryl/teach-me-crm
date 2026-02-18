@@ -1,5 +1,5 @@
-import type { EventsFilter, EventStatusType } from "types/event";
-import type { User } from "types/user";
+import type { EventsFilter, EventStatusType } from "@shared/types/event";
+import type { User } from "@shared/types/user";
 import { type FC } from "react";
 import { _ } from "@/translates";
 import { SelectorInput } from "components/common/selector/selector-input";

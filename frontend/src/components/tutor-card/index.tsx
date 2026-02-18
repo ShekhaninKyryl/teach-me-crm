@@ -1,8 +1,7 @@
-import type { Tutor } from "types/tutor";
+import type { Tutor } from "@shared/types/tutor";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Rating } from "components/rating/rating";
 import { _ } from "@/translates";
-import { FORMAT_OPTIONS } from "constants/format";
 import { CardContent, CardFooter, CardHeader, CardTitle } from "components/ui/card";
 import classNames from "classnames";
 import { Avatar, AvatarFallback, AvatarImage } from "components/ui/avatar";
@@ -17,6 +16,7 @@ import {
 } from "components/ui/dialog";
 import AvailabilityTable from "../availability-table";
 import { Tooltip, TooltipContent, TooltipTrigger } from "components/ui/tooltip";
+import { FORMAT_OPTIONS } from "@shared/types/common";
 
 type TutorCardProps = Tutor & {
   preview?: boolean;

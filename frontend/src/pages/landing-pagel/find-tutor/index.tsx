@@ -1,18 +1,18 @@
-import FilterTutors from 'components/filter-tutors';
-import { useCallback, useEffect, useState } from 'react';
-import type { Filter } from 'types/filter';
-import tutorsApi from 'api/tutors';
-import type { Tutor } from 'types/tutor';
-import { Loading } from 'components/common/loading';
-import SortTutors from 'components/sort-tutors';
-import { useSort } from 'hooks/useSort';
-import TutorCardDialog from 'components/tutor-card/tutor-card-dialog';
+import FilterTutors from "components/filter-tutors";
+import { useCallback, useEffect, useState } from "react";
+import type { Filter } from "@shared/types/filter";
+import tutorsApi from "api/tutors";
+import type { Tutor } from "@shared/types/tutor";
+import { Loading } from "components/common/loading";
+import SortTutors from "components/sort-tutors";
+import { useSort } from "hooks/useSort";
+import TutorCardDialog from "components/tutor-card/tutor-card-dialog";
 
 export const FindTutor = () => {
   const [tutors, setTutors] = useState<Tutor[]>([]);
   const [loading, setLoading] = useState(true);
   const [, setError] = useState(null);
-  const { sortList, sortedData, sortData } = useSort<Tutor>(['rating', 'price']);
+  const { sortList, sortedData, sortData } = useSort<Tutor>(["rating", "price"]);
 
   useEffect(() => {
     handleFindTutors();
@@ -20,7 +20,7 @@ export const FindTutor = () => {
 
   useEffect(() => {
     if (tutors.length > 0) {
-      sortData(tutors, 'rating');
+      sortData(tutors, "rating");
     }
   }, [tutors]);
 

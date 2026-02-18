@@ -1,4 +1,4 @@
-import { type Event, type EventsFilter } from "types/event";
+import { type Event, type EventsFilter } from "@shared/types/event";
 
 const filterEventsByStudents = (events: Event[], studentIds: string[]): Event[] => {
   if (studentIds.length === 0) return events;

@@ -1,8 +1,8 @@
-import type { FC } from 'react';
-import type { CustomEventContentArg } from 'components/calendar/type';
-import type { EventStatusType } from 'types/event';
-import { StatusIcon } from 'components/calendar/status-icon';
-import { Tooltip, TooltipContent, TooltipTrigger } from 'components/ui/tooltip';
+import type { FC } from "react";
+import type { CustomEventContentArg } from "components/calendar/type";
+import type { EventStatusType } from "@shared/types/event";
+import { StatusIcon } from "components/calendar/status-icon";
+import { Tooltip, TooltipContent, TooltipTrigger } from "components/ui/tooltip";
 
 export const EventDisplay: FC<CustomEventContentArg> = ({ event, timeText }) => {
   const status: EventStatusType = event.extendedProps.status;

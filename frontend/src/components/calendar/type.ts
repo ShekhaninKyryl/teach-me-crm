@@ -1,5 +1,5 @@
-import type { EventContentArg } from '@fullcalendar/core';
-import type { EventStatusType } from 'types/event';
+import type { EventContentArg } from "@fullcalendar/core";
+import type { EventStatusType } from "@shared/types/event";
 
 type EventExtendedProps = {
   studentId: string;
@@ -9,8 +9,8 @@ type EventExtendedProps = {
   color: string;
 };
 
-export type CustomEventContentArg = Omit<EventContentArg, 'event'> & {
-  event: Omit<EventContentArg['event'], 'extendedProps'> & {
+export type CustomEventContentArg = Omit<EventContentArg, "event"> & {
+  event: Omit<EventContentArg["event"], "extendedProps"> & {
     extendedProps: EventExtendedProps;
   };
 };

@@ -1,5 +1,5 @@
-import type { User } from "types/user";
-import type { Format } from "types/common";
+import type { User } from "@shared/types/user";
+import type { Format } from "@shared/types/common";
 
 export type Tutor = User & {
   subjects: string[];

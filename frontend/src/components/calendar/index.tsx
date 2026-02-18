@@ -11,8 +11,8 @@ import type {
 } from "@fullcalendar/core";
 import ukLocale from "@fullcalendar/core/locales/uk";
 import { useParams } from "react-router-dom";
-import { type Event } from "types/event";
-import type { User } from "types/user";
+import { type Event } from "@shared/types/event";
+import type { User } from "@shared/types/user";
 import { type FC, useEffect, useMemo, useRef, useState } from "react";
 import { useSidebar } from "components/ui/sidebar";
 import { getFullCalendarEvents, isEditableEvent } from "components/calendar/functions";

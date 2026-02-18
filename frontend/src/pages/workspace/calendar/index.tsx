@@ -1,7 +1,7 @@
 import { Calendar } from "@/components/calendar";
 import { useEffect, useState } from "react";
-import { type Event, type EventsFilter, EventStatus } from "types/event";
-import type { User } from "types/user";
+import { type Event, type EventsFilter, EventStatus } from "@shared/types/event";
+import type { User } from "@shared/types/user";
 import eventApi from "api/event";
 import tutorsApi from "api/tutors";
 import { useAuth } from "@/contexts/auth-context";

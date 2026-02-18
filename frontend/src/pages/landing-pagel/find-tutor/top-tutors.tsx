@@ -1,14 +1,14 @@
-import * as React from 'react';
-import Autoplay from 'embla-carousel-autoplay';
-import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
-import tutorsApi from 'api/tutors';
-import { useEffect, useState } from 'react';
-import type { Tutor } from 'types/tutor';
-import { TOP_TUTOR_SLIDE_TIMER } from 'constants/timer';
-import { Label } from 'components/ui/label';
-import { _ } from '@/translates';
-import { Loading } from 'components/common/loading';
-import TutorCardDialog from 'components/tutor-card/tutor-card-dialog';
+import * as React from "react";
+import Autoplay from "embla-carousel-autoplay";
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
+import tutorsApi from "api/tutors";
+import { useEffect, useState } from "react";
+import type { Tutor } from "@shared/types/tutor";
+import { TOP_TUTOR_SLIDE_TIMER } from "constants/timer";
+import { Label } from "components/ui/label";
+import { _ } from "@/translates";
+import { Loading } from "components/common/loading";
+import TutorCardDialog from "components/tutor-card/tutor-card-dialog";
 
 export type TopTutorsProps = {};
 
@@ -19,7 +19,7 @@ export const TopTutors: React.FC<TopTutorsProps> = ({}) => {
   useEffect(() => {
     setLoading(true);
     tutorsApi
-      .searchTutors('')
+      .searchTutors("")
       .then((res) => setTutor(res))
       .finally(() => setLoading(false));
   }, []);
@@ -32,7 +32,7 @@ export const TopTutors: React.FC<TopTutorsProps> = ({}) => {
     <div>
       <Label className="mb-2">
         <h2 className=" w-full scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
-          {_('Top Tutors')}
+          {_("Top Tutors")}
         </h2>
       </Label>
       <Carousel

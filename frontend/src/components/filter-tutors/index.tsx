@@ -3,7 +3,7 @@ import { SelectorInput } from "components/common/selector/selector-input";
 import { useFilter } from "hooks/useFilter";
 import type { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { Loading } from "components/common/loading";
-import type { Filter } from "types/filter";
+import type { Filter } from "@shared/types/filter";
 
 import React, { type ChangeEvent, useCallback, useEffect, useState } from "react";
 import {

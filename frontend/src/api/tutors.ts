@@ -1,9 +1,9 @@
 import axios from "api/axios";
-import { FORMAT_OPTIONS } from "constants/format";
 import { getConfig } from "@/configs";
 import { tutors as tutorsMock } from "api/mocks/tutors";
-import type { User } from "types/user";
-import type { Tutor, TutorWithPassword } from "types/tutor";
+import type { User } from "@shared/types/user";
+import type { Tutor, TutorWithPassword } from "@shared/types/tutor";
+import { FORMAT_OPTIONS } from "@shared/types/common";
 
 export interface TutorApi {
   getTopTutors(): Promise<Tutor[]>;

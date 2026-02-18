@@ -1,9 +1,9 @@
-import { Popover, Table } from '@radix-ui/themes';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Wheel } from '@uiw/react-color';
-import { type FC, useState } from 'react';
-import type { User } from 'types/user';
-import { RemoveStudent } from 'components/students-table/remove-student';
+import { Popover, Table } from "@radix-ui/themes";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Wheel } from "@uiw/react-color";
+import { type FC, useState } from "react";
+import type { User } from "@shared/types/user";
+import { RemoveStudent } from "components/students-table/remove-student";
 
 interface Props {
   student: User;
@@ -13,7 +13,7 @@ interface Props {
 
 export const StudentsRow: FC<Props> = ({ student, updateStudent, removeStudent }) => {
   const { color: initialColor, email, name, id } = student;
-  const [hexColor, setHexColor] = useState<string>(initialColor || '');
+  const [hexColor, setHexColor] = useState<string>(initialColor || "");
 
   const handleChangeColor = (open: boolean) => {
     if (!open) updateStudent({ ...student, color: hexColor });
@@ -35,7 +35,7 @@ export const StudentsRow: FC<Props> = ({ student, updateStudent, removeStudent }
               />
             </Popover.Trigger>
             <Popover.Content>
-              <Wheel color={hexColor || '#ffffff'} onChange={(color) => setHexColor(color.hex)} />
+              <Wheel color={hexColor || "#ffffff"} onChange={(color) => setHexColor(color.hex)} />
             </Popover.Content>
           </Popover.Root>
           <RemoveStudent student={student} onChange={removeStudent} />

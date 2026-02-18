@@ -1,6 +1,6 @@
-import axios from './axios';
-import type { User } from 'types/user';
-import { getConfig } from '@/configs';
+import axios from "./axios";
+import type { User } from "@shared/types/user";
+import { getConfig } from "@/configs";
 
 export interface UserApi {
   getUsers(): Promise<User[]>;
@@ -14,8 +14,8 @@ const userApiMock: UserApi = {
     return new Promise((resolve) =>
       setTimeout(() => {
         resolve([
-          { id: '1', name: 'Alice', email: 'alice@example.com' },
-          { id: '2', name: 'Bob', email: 'bob@example.com' },
+          { id: "1", name: "Alice", email: "alice@example.com" },
+          { id: "2", name: "Bob", email: "bob@example.com" },
         ]);
       }, 1000)
     );
@@ -23,21 +23,21 @@ const userApiMock: UserApi = {
   async getUserByEmail(email: string): Promise<User> {
     return new Promise((resolve) =>
       setTimeout(() => {
-        resolve({ id: '1', name: 'Нечупара Антоненко', email });
+        resolve({ id: "1", name: "Нечупара Антоненко", email });
       }, 500)
     );
   },
   async getUserById(id: string): Promise<User> {
     return new Promise((resolve) =>
       setTimeout(() => {
-        resolve({ id, name: 'Нечупара Антоненко', email: 'mock@example.com' });
+        resolve({ id, name: "Нечупара Антоненко", email: "mock@example.com" });
       }, 500)
     );
   },
   async login(user: { email: string; password: string }): Promise<User> {
     return new Promise((resolve) =>
       setTimeout(() => {
-        resolve({ ...user, id: '1', name: 'Нечупара Антоненко' });
+        resolve({ ...user, id: "1", name: "Нечупара Антоненко" });
       }, 500)
     );
   },
@@ -45,11 +45,11 @@ const userApiMock: UserApi = {
 
 const userApi: UserApi = {
   async getUsers(): Promise<User[]> {
-    const response = await axios.get<User[]>('/users');
+    const response = await axios.get<User[]>("/users");
     return response.data;
   },
   async getUserByEmail(email: string): Promise<User> {
-    const response = await axios.get<User>('/users', {
+    const response = await axios.get<User>("/users", {
       params: { email },
     });
     return response.data;
@@ -59,7 +59,7 @@ const userApi: UserApi = {
     return response.data;
   },
   async login(user: { email: string; password: string }): Promise<User> {
-    const response = await axios.post<User>('/login', user);
+    const response = await axios.post<User>("/login", user);
     return response.data;
   },
 };

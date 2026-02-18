@@ -1,8 +1,8 @@
 import { Dialog, DialogContent, DialogTitle } from "components/ui/dialog";
 import { type FC } from "react";
 import { _, _safe } from "@/translates";
-import { type Event, EventStatus, type EventStatusType } from "types/event";
-import type { User } from "types/user";
+import { type Event, EventStatus, type EventStatusType } from "@shared/types/event";
+import type { User } from "@shared/types/user";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";

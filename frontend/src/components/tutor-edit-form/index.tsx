@@ -6,8 +6,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import * as yup from "yup";
 import { type FC, useEffect, useMemo, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import type { Format } from "types/common";
-import { FORMAT_OPTIONS } from "constants/format";
+import { FORMAT_OPTIONS, type Format } from "@shared/types/common";
 import { Checkbox } from "components/ui/checkbox";
 import { Label } from "components/ui/label";
 import { Badge } from "components/ui/badge";
@@ -19,7 +18,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "components/ui/tooltip";
 import { Textarea } from "components/ui/textarea";
 import subjectApi from "api/subject";
 import type { Subject } from "types/subject";
-import type { Tutor } from "types/tutor";
+import type { Tutor } from "@shared/types/tutor";
 import { faTelegram, faViber, faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import { AvatarField } from "components/avatar-field";
 import Dialog from "components/dialog";
@@ -108,7 +107,7 @@ export const TutorEditForm: FC<TutorEditFormProps> = ({ tutorData, onSubmit }) =
     setSubjectsLoading(true);
     subjectApi
       .getSubjects()
-      .then((res) => setSubjects(res))
+      .then((res) => setSubjects(res as Subject[]))
       .finally(() => setSubjectsLoading(false));
   }, []);
 
