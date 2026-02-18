@@ -15,12 +15,7 @@ export const PaymentsPage = () => {
     <div className="flex flex-col gap-4">
       <UnderDevelopment text={_("payments_page.under_developing")} />
       <Blockquote>{_("payments_page.instructions")}</Blockquote>
-      <div className="w-full flex justify-center">
-        <Link
-          to={`mailto:${emailAddress}?subject=${emailSubject}`}
-          title={_("Send an email")}
-        ></Link>
-      </div>
+      <Link to={`mailto:${emailAddress}?subject=${emailSubject}`} title={_("Send an email")} />
     </div>
   );
 };

@@ -10,10 +10,20 @@ export type LinkProps = {
   rightIcon?: IconProp;
   isActive?: boolean;
   className?: string;
+  target?: string;
   onClick?: () => void;
 };
 
-export const Link = ({ to, icon, rightIcon, isActive, title, className, onClick }: LinkProps) => {
+export const Link = ({
+  to,
+  icon,
+  rightIcon,
+  isActive,
+  title,
+  className,
+  onClick,
+  target,
+}: LinkProps) => {
   if (!to && !onClick) return null;
   if (onClick)
     return (
@@ -42,6 +52,7 @@ export const Link = ({ to, icon, rightIcon, isActive, title, className, onClick 
           isActive ? "text-chart-2 font-semibold underline" : "text-text",
           className
         )}
+        target={target}
         onClick={onClick}
       >
         <div>

@@ -13,12 +13,7 @@ export const BugReportPage = () => {
   return (
     <div className="flex flex-col gap-4">
       <Blockquote>{_("bug_report_page.instructions")}</Blockquote>
-      <div className="w-full flex justify-center">
-        <Link
-          to={`mailto:${emailAddress}?subject=${emailSubject}`}
-          title={_("Send an email")}
-        ></Link>
-      </div>
+      <Link to={`mailto:${emailAddress}?subject=${emailSubject}`} title={_("Send an email")} />
     </div>
   );
 };

@@ -1,5 +1,5 @@
-import type { User } from 'types/user';
-import type { Format } from 'types/common';
+import type { User } from "types/user";
+import type { Format } from "types/common";
 
 export type Tutor = User & {
   subjects: string[];
@@ -10,4 +10,9 @@ export type Tutor = User & {
   bio?: string;
   availability: string[];
   maxStudents?: number;
+};
+
+export type TutorWithPassword = Tutor & {
+  password: string;
+  currentPassword: string;
 };
