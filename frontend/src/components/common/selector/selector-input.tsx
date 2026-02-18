@@ -81,7 +81,7 @@ export function SelectorInput({ options, value, placeholder, onChange }: Selecto
                   .filter((opt) => opt.label.toLowerCase().includes(inputValue.toLowerCase()))
                   .map((opt) => (
                     <CommandItem key={opt.value} onSelect={() => handleSelect(opt.value)}>
-                      {opt.icon && <FontAwesomeIcon icon={opt.icon} className="mr-2" />}
+                      {<FontAwesomeIcon icon={opt.icon || "minus"} className="mr-2" />}
                       {opt.label}
                       {value === opt.value && <Check className="ml-auto h-4 w-4" />}
                     </CommandItem>

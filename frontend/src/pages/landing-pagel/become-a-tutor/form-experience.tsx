@@ -190,7 +190,7 @@ const FormExperience: FC<FormExperienceProps> = ({ onSubmit, onBack }) => {
                         options={filteredSubjects.map((subject) => ({
                           value: subject.id,
                           label: subject.label,
-                          icon: (subject.faIcon as IconProp) || (subject.icon as IconProp),
+                          icon: subject.faIcon as IconProp,
                         }))}
                         placeholder={_("Select subject")}
                         value={undefined}

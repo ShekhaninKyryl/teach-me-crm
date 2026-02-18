@@ -177,5 +177,11 @@
   "Current Password": "",
   "New Password": "",
   "Current password is required to set a new password": "",
-  "create_subject.tooltip": "Can't find your subject? No worries! You can create a new one in the Settings page after you register."
+  "create_subject.tooltip": "Can't find your subject? No worries! You can create a new one in the Settings page after you register.",
+  "Add a new subject": "",
+  "Subject name": "",
+  "Subject name is required": "",
+  "Enter subject name": "",
+  "FontAwesome Icon (optional)": "",
+  "e.g. book, atom, music": ""
 }

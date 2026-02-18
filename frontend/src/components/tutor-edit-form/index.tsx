@@ -1,5 +1,4 @@
 import { Input } from "components/ui/input";
-import { Button } from "components/ui/button";
 import { _ } from "@/translates";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -28,6 +27,7 @@ import AvailabilityTable from "components/availability-table";
 import { PrimaryButton } from "components/common/button";
 import { getTutorData } from "components/tutor-card/functions";
 import TutorCardDialog from "components/tutor-card/tutor-card-dialog";
+import { AddSubject } from "components/add-subject";
 
 const schema = yup.object().shape({
   name: yup.string().required("Full Name is required"),
@@ -129,6 +129,11 @@ export const TutorEditForm: FC<TutorEditFormProps> = ({ tutorData, onSubmit }) =
 
   const handleSubmit = (data: TutorFormData) => {
     onSubmit(data);
+  };
+
+  const handleSubjectAdded = (newSubject: Subject) => {
+    setSubjects((prev) => [...prev, newSubject]);
+    form.setValue("subjects", [...form.getValues("subjects"), newSubject.id]);
   };
 
   return (
@@ -278,7 +283,7 @@ export const TutorEditForm: FC<TutorEditFormProps> = ({ tutorData, onSubmit }) =
                           options={filteredSubjects.map((subject) => ({
                             value: subject.id,
                             label: subject.label,
-                            icon: (subject.faIcon as IconProp) || (subject.icon as IconProp),
+                            icon: subject.faIcon as IconProp,
                           }))}
                           placeholder={_("Select subject")}
                           value={undefined}
@@ -289,7 +294,7 @@ export const TutorEditForm: FC<TutorEditFormProps> = ({ tutorData, onSubmit }) =
                             }
                           }}
                         />
-                        <Button type="button">{_("Add you own subject")}</Button>
+                        <AddSubject onAdded={handleSubjectAdded} />
                       </div>
                     )}
                   </FormControl>

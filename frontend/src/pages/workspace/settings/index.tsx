@@ -39,7 +39,7 @@ export const SettingsPage = () => {
   };
 
   if (!tutor || loading) {
-    return <Loading size={16} />;
+    return <Loading size={20} />;
   }
 
   return <TutorEditForm tutorData={tutor} onSubmit={handleSubmit} />;
