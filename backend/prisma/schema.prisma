@@ -5,10 +5,163 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
   output   = "../generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+model Subject {
+  id     String  @id @default(uuid())
+  label  String  @unique
+  faIcon String?
+
+  createdById String?
+  createdBy   User?   @relation(fields: [createdById], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tutors TutorSubject[]
+
+  @@map("subjects")
+}
+
+model TutorSubject {
+  tutorId   String
+  subjectId String
+
+  tutor   TutorProfile @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+  subject Subject      @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@id([tutorId, subjectId]) // один предмет один раз у цього репетитора
+  @@index([subjectId])
+  @@map("tutor_subjects")
+}
+
+model User {
+  id           String  @id @default(uuid())
+  name         String
+  email        String? @unique
+  passwordHash String?
+
+  avatar String?
+
+  phone    String?
+  viber    String?
+  telegram String?
+  whatsapp String?
+
+  tutorProfile    TutorProfile?
+  linkedStudents  Student[]
+  createdSubjects Subject[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+enum LessonFormat {
+  ONLINE
+  OFFLINE
+}
+
+model TutorProfile {
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  subjects     TutorSubject[]
+  formats      TutorFormat[]
+  rating       Float          @default(0)
+  price        Int
+  location     String?
+  bio          String?
+  availability Json?
+  maxStudents  Int?
+
+  students Student[]
+  events   Event[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("tutor_profiles")
+}
+
+model TutorFormat {
+  tutorId String
+  tutor   TutorProfile @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+
+  format LessonFormat
+
+  @@id([tutorId, format])
+  @@map("tutor_formats")
+}
+
+model Student {
+  id String @id @default(uuid())
+
+  tutorId String
+  tutor   TutorProfile @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+
+  name   String
+  color  String?
+  avatar String?
+
+  phone    String?
+  viber    String?
+  telegram String?
+  whatsapp String?
+
+  events       Event[]
+  linkedUserId String?
+  linkedUser   User?   @relation(fields: [linkedUserId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([tutorId])
+  @@map("students")
+}
+
+enum EventStatus {
+  PENDING
+  RESCHEDULED
+  CANCELLED
+  COMPLETED
+  PAID
+}
+
+model Event {
+  id String @id @default(uuid())
+
+  tutorId String
+  tutor   TutorProfile @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+
+  studentId String
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  title       String
+  description String?
+
+  startAt DateTime?
+  endAt   DateTime?
+
+  weekly Boolean     @default(false)
+  status EventStatus @default(PENDING)
+
+  price Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([tutorId, startAt])
+  @@index([studentId, startAt])
+  @@map("events")
 }

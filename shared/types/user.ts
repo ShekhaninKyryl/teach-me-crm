@@ -1,4 +1,4 @@
-import type { Contact } from "@shared/types/contacts";
+import { Contact } from "./contacts";
 
 export type User = Contact & {
   id: string;
