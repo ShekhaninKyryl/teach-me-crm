@@ -10,6 +10,7 @@ import {
 } from "components/ui/navigation-menu";
 import LanguageSwitcher from "components/language-switcher";
 import { useAuth } from "@/contexts/auth-context";
+import { AppearanceToggle } from "components/appearance-toggle";
 
 export const Header = () => {
   const location = useLocation();
@@ -39,7 +40,10 @@ export const Header = () => {
       <div className="flex items-center gap-4">
         <Logo className="hover:text-chart-2 transition" />
         <div className="text-xl font-bold">TeachMe</div>
-        <LanguageSwitcher />
+        <div className="hidden md:flex items-center gap-4">
+          <LanguageSwitcher />
+          <AppearanceToggle />
+        </div>
       </div>
 
       <NavigationMenu>

@@ -2,7 +2,8 @@ import { BrowserRouter, useRoutes } from "react-router-dom";
 import { routes as landingRoutes } from "pages/routes";
 import { useTranslation } from "react-i18next";
 import { AuthProvider } from "@/contexts/auth-context";
-import { Theme } from "@radix-ui/themes";
+import { AppearanceProvider } from "@/contexts/appearance-context";
+import ThemeWrapper from "@/theme-wrapper";
 
 export const AppRouter = () => {
   return useRoutes([...landingRoutes]);
@@ -13,9 +14,11 @@ export const AppRouterWithProvider = () => {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <Theme className="overflow-clip">
-          <AppRouter key={i18n.language} />
-        </Theme>
+        <AppearanceProvider>
+          <ThemeWrapper>
+            <AppRouter key={i18n.language} />
+          </ThemeWrapper>
+        </AppearanceProvider>
       </AuthProvider>
     </BrowserRouter>
   );
