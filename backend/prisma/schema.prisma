@@ -37,7 +37,7 @@ model TutorSubject {
 
   createdAt DateTime @default(now())
 
-  @@id([tutorId, subjectId]) // один предмет один раз у цього репетитора
+  @@id([tutorId, subjectId])
   @@index([subjectId])
   @@map("tutor_subjects")
 }
