@@ -9,10 +9,10 @@ export interface TutorApi {
   getTopTutors(): Promise<Tutor[]>;
   getTutorById(id: string): Promise<Tutor>;
   getTutorsStudents(tutorId: string): Promise<User[]>;
-  updateTutorProfile(tutorId: string, tutorData: Partial<TutorWithPassword>): Promise<Tutor>;
   saveTutorsStudents(tutorId: string, students: User[]): Promise<void>;
-  searchTutors(query: string): Promise<Tutor[]>;
+  updateTutorProfile(tutorId: string, tutorData: Partial<TutorWithPassword>): Promise<Tutor>;
   createTutorProfile(tutor: Partial<TutorWithPassword>): Promise<Tutor>;
+  searchTutors(query: string): Promise<Tutor[]>;
 }
 
 const tutorApiMock: TutorApi = {

@@ -1,4 +1,4 @@
-import { Contact } from "./contacts";
+import type {Contact} from "./contacts";
 
 export type User = Contact & {
   id: string;

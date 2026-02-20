@@ -3,23 +3,12 @@ import type { User } from "@shared/types/user";
 import { getConfig } from "@/configs";
 
 export interface UserApi {
-  getUsers(): Promise<User[]>;
   getUserByEmail(email: string): Promise<User>;
   getUserById(id: string): Promise<User>;
   login(user: { email: string; password: string }): Promise<User>;
 }
 
 const userApiMock: UserApi = {
-  async getUsers(): Promise<User[]> {
-    return new Promise((resolve) =>
-      setTimeout(() => {
-        resolve([
-          { id: "1", name: "Alice", email: "alice@example.com" },
-          { id: "2", name: "Bob", email: "bob@example.com" },
-        ]);
-      }, 1000)
-    );
-  },
   async getUserByEmail(email: string): Promise<User> {
     return new Promise((resolve) =>
       setTimeout(() => {
@@ -44,10 +33,6 @@ const userApiMock: UserApi = {
 };
 
 const userApi: UserApi = {
-  async getUsers(): Promise<User[]> {
-    const response = await axios.get<User[]>("/users");
-    return response.data;
-  },
   async getUserByEmail(email: string): Promise<User> {
     const response = await axios.get<User>("/users", {
       params: { email },
