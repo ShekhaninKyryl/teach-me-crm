@@ -1,7 +1,7 @@
-import axios from './axios';
-import { getConfig } from '@/configs';
-import type { Event } from 'types/event';
-import { MOCK_EVENTS } from 'api/mocks/events';
+import axios from "./axios";
+import { getConfig } from "@/configs";
+import type { Event } from "@shared/types/event";
+import { MOCK_EVENTS } from "api/mocks/events";
 
 export interface EventApi {
   getEvents(userId: string): Promise<Event[]>;
@@ -10,7 +10,7 @@ export interface EventApi {
 
 const eventApiMock: EventApi = {
   async getEvents(userId) {
-    console.log('Fetched events for ', userId);
+    console.log("Fetched events for ", userId);
     return new Promise((resolve) =>
       setTimeout(() => {
         resolve(MOCK_EVENTS);
@@ -18,19 +18,19 @@ const eventApiMock: EventApi = {
     );
   },
   async setEvents(events) {
-    console.log('Updated events: ', events.length);
+    console.log("Updated events: ", events.length);
   },
 };
 
 const eventApi: EventApi = {
   async getEvents(userId) {
-    const response = await axios.get<Event[]>('/events', {
+    const response = await axios.get<Event[]>("/events", {
       params: { userId },
     });
     return response.data;
   },
   async setEvents(events) {
-    const response = await axios.post<void>('/events', events);
+    const response = await axios.post<void>("/events", events);
     return response.data;
   },
 };

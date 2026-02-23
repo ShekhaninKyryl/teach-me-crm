@@ -1,6 +1,6 @@
-import { createContext, useEffect, useState, type FC, type ReactNode, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import type { User } from 'types/user';
+import { createContext, useEffect, useState, type FC, type ReactNode, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import type { User } from "@shared/types/user";
 
 type AuthContextType = {
   user: User | null;
@@ -19,28 +19,28 @@ type AuthProviderProps = {
 export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(() => {
-    const storedUser = localStorage.getItem('user');
+    const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser) : null;
   });
 
   useEffect(() => {
     if (user) {
-      sessionStorage.setItem('user', JSON.stringify(user));
+      sessionStorage.setItem("user", JSON.stringify(user));
     } else {
-      sessionStorage.removeItem('user');
+      sessionStorage.removeItem("user");
     }
   }, [user]);
 
   const login = (userData: User) => {
     setUser(userData);
-    localStorage.setItem('user', JSON.stringify(userData));
-    navigate('/');
+    localStorage.setItem("user", JSON.stringify(userData));
+    navigate("/");
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('user');
-    navigate('/');
+    localStorage.removeItem("user");
+    navigate("/");
   };
 
   return <AuthContext.Provider value={{ user, login, logout }}>{children}</AuthContext.Provider>;

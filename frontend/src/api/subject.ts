@@ -1,6 +1,6 @@
 import axios from "api/axios";
-import type { Subject } from "types/subject";
 import { getConfig } from "@/configs";
+import type { Subject } from "@shared/types/subject";
 
 export interface SubjectApi {
   getSubjects(): Promise<Subject[]>;

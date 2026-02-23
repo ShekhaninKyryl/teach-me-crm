@@ -1,18 +1,19 @@
 import axios from "api/axios";
-import { FORMAT_OPTIONS } from "constants/format";
 import { getConfig } from "@/configs";
 import { tutors as tutorsMock } from "api/mocks/tutors";
-import type { User } from "types/user";
-import type { Tutor, TutorWithPassword } from "types/tutor";
+import type { User } from "@shared/types/user";
+import type { Tutor, TutorWithPassword } from "@shared/types/tutor";
+import { FORMAT_OPTIONS } from "@shared/types/common";
+import type {Filter} from "@shared/types/filter";
 
 export interface TutorApi {
   getTopTutors(): Promise<Tutor[]>;
   getTutorById(id: string): Promise<Tutor>;
   getTutorsStudents(tutorId: string): Promise<User[]>;
-  updateTutorProfile(tutorId: string, tutorData: Partial<TutorWithPassword>): Promise<Tutor>;
   saveTutorsStudents(tutorId: string, students: User[]): Promise<void>;
-  searchTutors(query: string): Promise<Tutor[]>;
+  updateTutorProfile(tutorId: string, tutorData: Partial<TutorWithPassword>): Promise<Tutor>;
   createTutorProfile(tutor: Partial<TutorWithPassword>): Promise<Tutor>;
+  searchTutors(query: Filter[]): Promise<Tutor[]>;
 }
 
 const tutorApiMock: TutorApi = {
@@ -141,11 +142,11 @@ const tutorApiMock: TutorApi = {
 
 const tutorApi = {
   async getTopTutors(): Promise<Tutor[]> {
-    const response = await axios("/api/top-tutors");
+    const response = await axios("/top-tutors");
     return response.data;
   },
   async getTutorById(id: string): Promise<Tutor> {
-    const response = await axios(`/api/tutors/${id}`);
+    const response = await axios(`/tutors/${id}`);
     return response.data;
   },
   async getTutorsStudents(tutorId: string): Promise<User[]> {
@@ -153,20 +154,18 @@ const tutorApi = {
     return response.data;
   },
   async updateTutorProfile(tutorId: string, tutorData: Partial<TutorWithPassword>): Promise<Tutor> {
-    const response = await axios.put(`/api/tutors/${tutorId}`, tutorData);
+    const response = await axios.put(`/tutors/${tutorId}`, tutorData);
     return response.data;
   },
   async saveTutorsStudents(tutorId: string, students: User[]): Promise<void> {
     await axios.post(`/tutors/${tutorId}/students`, { students });
   },
-  async searchTutors(query: string): Promise<Tutor[]> {
-    const response = await axios(`/api/tutors/search`, {
-      params: { query },
-    });
+  async searchTutors(query: Filter[]): Promise<Tutor[]> {
+    const response = await axios.post(`/tutors/search`, query);
     return response.data;
   },
   async createTutorProfile(tutor: Partial<TutorWithPassword>): Promise<Tutor> {
-    const response = await axios.post("/api/tutors", tutor);
+    const response = await axios.post("/tutors", tutor);
     return response.data;
   },
 };

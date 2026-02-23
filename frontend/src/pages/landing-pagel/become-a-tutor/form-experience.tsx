@@ -13,8 +13,7 @@ import {
 } from "components/ui/form";
 import * as yup from "yup";
 import { type FC, useEffect, useMemo, useState } from "react";
-import { FORMAT_OPTIONS } from "constants/format";
-import type { Format } from "types/common";
+import { type Format, FORMAT_OPTIONS } from "@shared/types/common";
 import { Checkbox } from "components/ui/checkbox";
 import { Label } from "components/ui/label";
 import { Textarea } from "components/ui/textarea";
@@ -79,7 +78,7 @@ const FormExperience: FC<FormExperienceProps> = ({ onSubmit, onBack }) => {
     setSubjectsLoading(true);
     subjectApi
       .getSubjects()
-      .then((res) => setSubjects(res))
+      .then((res) => setSubjects(res as Subject[]))
       .finally(() => setSubjectsLoading(false));
   }, []);
   const selectedSubjects = form.watch("subjects");

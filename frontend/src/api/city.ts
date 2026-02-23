@@ -3,7 +3,6 @@ import { getConfig } from '@/configs';
 
 export interface CityApi {
   getCities(): Promise<string[]>;
-  getCityByValue(city: string): Promise<string>;
 }
 
 const cityApiMock: CityApi = {
@@ -36,22 +35,11 @@ const cityApiMock: CityApi = {
       })
     );
   },
-  async getCityByValue(city: string): Promise<string> {
-    return new Promise((resolve) =>
-      setTimeout(() => {
-        resolve(`City: ${city}`);
-      }, 500)
-    );
-  },
 };
 
 const cityApi: CityApi = {
   async getCities(): Promise<string[]> {
     const response = await axios.get<string[]>('/cities');
-    return response.data;
-  },
-  async getCityByValue(city: string): Promise<string> {
-    const response = await axios.get<string>(`/cities/${city}`);
     return response.data;
   },
 };

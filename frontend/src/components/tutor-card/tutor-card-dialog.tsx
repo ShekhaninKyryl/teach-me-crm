@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "components/ui/dialog";
 import { TutorCardMini } from "components/tutor-card/tutor-card-mini";
-import type { Tutor } from "types/tutor";
+import type { Tutor } from "@shared/types/tutor";
 import type { FC } from "react";
 import { TutorCard } from "components/tutor-card/index";
 

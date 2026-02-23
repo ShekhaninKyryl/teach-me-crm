@@ -1,14 +1,14 @@
-import { Table } from '@radix-ui/themes';
-import { StudentsRow } from 'components/students-table/sturend-row';
-import { type FC, useEffect, useState } from 'react';
-import type { User } from 'types/user';
-import tutors from 'api/tutors';
-import { Loading } from 'components/common/loading';
-import { _ } from '@/translates';
-import { PrimaryButton } from 'components/common/button';
-import { AddStudent } from 'components/students-table/add-student';
-import { Progress } from 'components/ui/progress';
-import { UNLIMITED_STUDENTS_CAPACITY_THRESHOLD } from '@/constants';
+import { Table } from "@radix-ui/themes";
+import { StudentsRow } from "components/students-table/sturend-row";
+import { type FC, useEffect, useState } from "react";
+import type { User } from "@shared/types/user";
+import tutors from "api/tutors";
+import { Loading } from "components/common/loading";
+import { _ } from "@/translates";
+import { PrimaryButton } from "components/common/button";
+import { AddStudent } from "components/students-table/add-student";
+import { Progress } from "components/ui/progress";
+import { UNLIMITED_STUDENTS_CAPACITY_THRESHOLD } from "@/constants";
 
 interface Props {
   maxStudents: number;
@@ -27,7 +27,7 @@ export const StudentsTable: FC<Props> = ({ maxStudents }) => {
   useEffect(() => {
     setLoading(true);
     tutors
-      .getTutorsStudents('some-tutor-id')
+      .getTutorsStudents("some-tutor-id")
       .then((fetchedStudents) => {
         setStudents(fetchedStudents);
       })
@@ -59,7 +59,7 @@ export const StudentsTable: FC<Props> = ({ maxStudents }) => {
   const handleSubmit = async (students: User[]) => {
     setLoading(true);
     try {
-      await tutors.saveTutorsStudents('some-tutor-id', students);
+      await tutors.saveTutorsStudents("some-tutor-id", students);
     } catch (error) {
     } finally {
       setLoading(false);
@@ -69,17 +69,17 @@ export const StudentsTable: FC<Props> = ({ maxStudents }) => {
 
   return (
     <div>
-      <div className="font-bold">{_('Students Table')}</div>
+      <div className="font-bold">{_("Students Table")}</div>
       {progressValue ? (
         <div>
           <Progress value={progressValue} className="rounded-b-none" />
         </div>
       ) : null}
-      <Table.Root variant="surface" className={progressValue ? 'rounded-t-none' : ''}>
+      <Table.Root variant="surface" className={progressValue ? "rounded-t-none" : ""}>
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeaderCell>{_('Name')}</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>{_('Email')}</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>{_("Name")}</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>{_("Email")}</Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell />
           </Table.Row>
         </Table.Header>
@@ -117,7 +117,7 @@ export const StudentsTable: FC<Props> = ({ maxStudents }) => {
         <PrimaryButton
           disabled={loading || !isDirty}
           className="w-xs"
-          title={_('Save')}
+          title={_("Save")}
           onClick={() => handleSubmit(students)}
         />
       </div>

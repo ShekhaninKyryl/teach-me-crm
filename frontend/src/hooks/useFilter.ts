@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useState } from 'react';
-import subjectApi from 'api/subject';
-import cityApi from 'api/city';
-import priceApi from 'api/price';
-import type { Subject } from 'types/subject';
-import type { IconProp } from '@fortawesome/fontawesome-svg-core';
-import type { FilterType } from 'types/filter';
+import { useEffect, useMemo, useState } from "react";
+import subjectApi from "api/subject";
+import cityApi from "api/city";
+import priceApi from "api/price";
+import type { Subject } from "types/subject";
+import type { IconProp } from "@fortawesome/fontawesome-svg-core";
+import type { FilterType } from "@shared/types/filter";
 
 type Selected = {
   type: FilterType;
@@ -24,7 +24,7 @@ export const useFilter = () => {
     setIsLoading(true);
     Promise.all([subjectApi.getSubjects(), cityApi.getCities(), priceApi.getPriceRange()])
       .then(([subjectsRes, citiesRes, priceRes]) => {
-        setSubjects(subjectsRes);
+        setSubjects(subjectsRes as Subject[]);
         setCities(citiesRes);
         setMinMaxPriceRange(priceRes);
       })
@@ -36,14 +36,14 @@ export const useFilter = () => {
   const filterSubjects = useMemo(() => {
     return subjects.filter((subject) => {
       return !selected
-        .filter(({ type }) => type === 'subject')
+        .filter(({ type }) => type === "subject")
         .find(({ value }) => value === subject.label);
     });
   }, [selected, subjects]);
 
   const filterCities = useMemo(() => {
     return cities.filter((city) => {
-      return !selected.filter(({ type }) => type === 'city').find(({ value }) => value === city);
+      return !selected.filter(({ type }) => type === "city").find(({ value }) => value === city);
     });
   }, [selected, cities]);
 

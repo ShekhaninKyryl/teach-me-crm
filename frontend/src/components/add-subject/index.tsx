@@ -13,11 +13,12 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import subjectApi from "api/subject";
-import type { Subject } from "types/subject";
 import { type FC, useState } from "react";
 import type { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { Link } from "components/common/link/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import type { Subject } from "types/subject";
+import type { IconName } from "@fortawesome/free-solid-svg-icons";
 
 const schema = yup.object().shape({
   label: yup.string().required("Subject name is required").default(""),
@@ -43,10 +44,10 @@ export const AddSubject: FC<AddSubjectProps> = ({ onAdded }) => {
       const newSubject = await subjectApi.addSubject({
         id: data.label.toLowerCase().replace(/\s+/g, "-"),
         label: data.label,
-        faIcon: (data.faIcon as IconProp) || undefined,
+        faIcon: (data.faIcon as IconName) || undefined,
       });
 
-      onAdded?.(newSubject);
+      onAdded?.(newSubject as Subject);
       setOpen(false);
       form.reset();
     } finally {
