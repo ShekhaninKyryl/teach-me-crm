@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, Patch, Post, Put, Query } from "@nestjs/common";
+import { Body, Controller, Get, Param, Patch, Post, Put } from "@nestjs/common";
 import { TutorsService } from "./tutors.service";
 import { CreateTutorDto } from "./dto/create-tutor.dto";
 import { UpdateTutorDto } from "./dto/update-tutor.dto";
+import {Filter} from "@shared/types/filter";
 
 @Controller("tutors")
 export class TutorsController {
@@ -12,9 +13,9 @@ export class TutorsController {
         return this.tutors.getTopTutors();
     }
 
-    @Get("search")
-    search(@Query("q") q: string) {
-        return this.tutors.searchTutors(q ?? "");
+    @Post("search")
+    search(@Body() filters: Filter[]) {
+        return this.tutors.searchTutors(filters);
     }
 
     @Get(":id")

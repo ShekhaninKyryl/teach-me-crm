@@ -1,18 +1,17 @@
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
-import { PrismaService } from "prisma/prisma.service";
 import { CreateTutorDto } from "./dto/create-tutor.dto";
 import { UpdateTutorDto } from "./dto/update-tutor.dto";
 import * as bcrypt from "bcryptjs";
-import { Prisma } from "@prisma/client";
 import { StudentAsUserDto } from "./dto/student-as-user.dto";
-
-function tutorInclude() {
-    return {
-        user: true,
-        subjects: { include: { subject: true } },
-        formats: true,
-    } satisfies Prisma.TutorProfileInclude;
-}
+import {
+    mapFiltersToPrismaWhere,
+    mapTutorProfileToDto,
+    tutorInclude,
+    TutorProfileWithInclude
+} from "src/tutors/functions";
+import {Tutor} from "@shared/types/tutor";
+import {Filter} from "@shared/types/filter";
+import {PrismaService} from "prisma/prisma.service";
 
 @Injectable()
 export class TutorsService {
@@ -35,21 +34,16 @@ export class TutorsService {
         return tutor;
     }
 
-    async searchTutors(query: string) {
-        const q = query.trim();
-        if (!q) return [];
+    async searchTutors(filters: Filter[]): Promise<Tutor[]> {
+        const where = mapFiltersToPrismaWhere(filters);
 
-        return this.prisma.tutorProfile.findMany({
-            take: 30,
-            where: {
-                OR: [
-                    { user: { name: { contains: q, mode: "insensitive" } } },
-                    { location: { contains: q, mode: "insensitive" } },
-                    { subjects: { some: { subject: { label: { contains: q, mode: "insensitive" } } } } },
-                ],
-            },
+        const tutors: TutorProfileWithInclude[] = await this.prisma.tutorProfile.findMany({
+            take: 50,
+            where,
             include: tutorInclude(),
         });
+
+        return tutors.map((t) => mapTutorProfileToDto(t));
     }
 
     async createTutorProfile(dto: CreateTutorDto) {
