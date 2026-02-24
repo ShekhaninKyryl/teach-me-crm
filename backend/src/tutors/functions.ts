@@ -92,7 +92,7 @@ export function mapFiltersToPrismaWhere(
   }
 
   if (spread.city?.length) {
-    where.location = { in: spread.city, mode: "insensitive" };
+    where.location = { in: spread.city };
   }
 
   if (spread.search?.length) {
