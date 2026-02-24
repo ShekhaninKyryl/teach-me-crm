@@ -78,7 +78,7 @@
   "Login Page": "",
   "title": "",
   "Password": "",
-  "Searching by subject, tutor's name or location": "",
+  "Searching tutor's name or bio": "",
   "Price: {VAL1} - {VAL2} UAH, { VAL1: value[0], VAL2: value[1] }": "",
   "Set up you own availability": "",
   "Lets go to contact information": "",
@@ -183,5 +183,8 @@
   "Subject name is required": "",
   "Enter subject name": "",
   "FontAwesome Icon (optional)": "",
-  "e.g. book, atom, music": ""
+  "e.g. book, atom, music": "",
+  "No tutors found matching the criteria.": "",
+  "Try adjusting your filters or search terms to find more tutors.": "",
+  "or you can": ""
 }

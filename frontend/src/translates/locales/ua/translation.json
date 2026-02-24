@@ -76,7 +76,7 @@
   "Password is required": "Пароль вимагається",
   "Login Page": "Сторінка входу",
   "Password": "Пароль",
-  "Searching by subject, tutor's name or location": "Пошук за предметом, ім'ям викладача або місцезнаходженням",
+  "Searching tutor's name or bio": "Пошук за ім'ям викладача або біографією",
   "Price: {VAL1} - {VAL2} UAH": "Ціна: {VAL1} - {VAL2} грн",
   "Lets go to contact information": "Вперед до контактної інформації",
   "Monday": "Понеділок",
@@ -181,5 +181,8 @@
   "Subject name is required": "Назва предмета є обов'язковою",
   "Enter subject name": "Введіть назву предмета",
   "FontAwesome Icon (optional)": "Іконка FontAwesome (необов'язково)",
-  "e.g. book, atom, music": "напр. book, atom, music"
+  "e.g. book, atom, music": "напр. book, atom, music",
+  "No tutors found matching the criteria.": "Викладачів, що відповідають критеріям пошуку, не знайдено",
+  "Try adjusting your filters or search terms to find more tutors.": "Спробуйте змінити налаштування фільтрів або умови пошуку, щоб знайти більше репетиторів",
+  "or you can": "або ви можете"
 }

@@ -36,6 +36,8 @@ export const FilterTutorsComponent = ({ onChange }: FilterTutorsProps) => {
     cities,
     minMaxPriceRange: { min, max },
     selected,
+    disabled,
+    setDisabled,
     removeSelected,
     addSelected,
     findSelected,
@@ -97,6 +99,7 @@ export const FilterTutorsComponent = ({ onChange }: FilterTutorsProps) => {
 
   const handleFindTutors = () => {
     onChange(selected);
+    setDisabled(true);
   };
 
   const offlineChecked = Boolean(findSelected({ value: "offline", filterType: "format" }));
@@ -128,7 +131,7 @@ export const FilterTutorsComponent = ({ onChange }: FilterTutorsProps) => {
         <>
           <CardContent>
             <div className="grid w-full items-center gap-3">
-              <Label>{_("Searching by subject, tutor's name or location")}</Label>
+              <Label>{_("Searching tutor's name or bio")}</Label>
               <div className="flex w-full items-center gap-2">
                 <Input
                   type="text"
@@ -195,7 +198,7 @@ export const FilterTutorsComponent = ({ onChange }: FilterTutorsProps) => {
             </div>
           </CardContent>
           <CardFooter className="flex-col gap-2">
-            <Button disabled={!selected.length} className="w-full" onClick={handleFindTutors}>
+            <Button disabled={disabled} className="w-full" onClick={handleFindTutors}>
               {_("Apply Filters")}
             </Button>
           </CardFooter>
