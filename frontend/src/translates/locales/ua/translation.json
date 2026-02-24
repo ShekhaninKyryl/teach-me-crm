@@ -3,7 +3,7 @@
   "No options found": "Варіантів не знайдено",
   "Not found": "не знайдено",
   "Filters": "Фільтри",
-  "Select filters to find the best tutor for you": "Оберіть фільтри для пошуку найкращого викладача для Вас",
+  "Select filters to find the best tutor for you": "Оберіть фільтри для пошуку найкращого викладача для Вас ",
   "Enter search term...": "Введіть пошукове значення...",
   "Search": "Пошук",
   "Select a format": "Оберіть формат",
@@ -184,5 +184,6 @@
   "e.g. book, atom, music": "напр. book, atom, music",
   "No tutors found matching the criteria.": "Викладачів, що відповідають критеріям пошуку, не знайдено",
   "Try adjusting your filters or search terms to find more tutors.": "Спробуйте змінити налаштування фільтрів або умови пошуку, щоб знайти більше репетиторів",
-  "or you can": "або ви можете"
+  "or you can": "або ви можете",
+  "No rating": "Без рейтингу"
 }
