@@ -1,20 +1,22 @@
-import { type FC, useState } from 'react';
-import { HowItWorks } from 'pages/landing-pagel/become-a-tutor/hot-it-works';
-import FormStart, { type TutorStartFormData } from 'pages/landing-pagel/become-a-tutor/form-start';
-import { Carousel, CarouselContent, CarouselItem } from 'components/ui/carousel';
+import { type FC, useState } from "react";
+import { HowItWorks } from "pages/landing-pagel/become-a-tutor/hot-it-works";
+import FormStart, { type TutorStartFormData } from "pages/landing-pagel/become-a-tutor/form-start";
+import { Carousel, CarouselContent, CarouselItem } from "components/ui/carousel";
 import FormExperience, {
   type TutorExperienceFormData,
-} from 'pages/landing-pagel/become-a-tutor/form-experience';
-import { type CarouselApi } from '@/components/ui/carousel';
+} from "pages/landing-pagel/become-a-tutor/form-experience";
+import { type CarouselApi } from "@/components/ui/carousel";
 import FormContacts, {
   type TutorContactsFormData,
-} from 'pages/landing-pagel/become-a-tutor/form-contacts';
+} from "pages/landing-pagel/become-a-tutor/form-contacts";
 import FormAvailability, {
   type TutorAvailabilityFormData,
-} from 'pages/landing-pagel/become-a-tutor/form-availability';
-import FormAvatar, { type TutorAvatarData } from 'pages/landing-pagel/become-a-tutor/form-avatar';
-import TutorPreview from 'pages/landing-pagel/become-a-tutor/tutor-preview';
-import tutorsApi from 'api/tutors';
+} from "pages/landing-pagel/become-a-tutor/form-availability";
+import FormAvatar, { type TutorAvatarData } from "pages/landing-pagel/become-a-tutor/form-avatar";
+import TutorPreview from "pages/landing-pagel/become-a-tutor/tutor-preview";
+import tutorsApi from "api/tutors";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 export type TutorFormData = Partial<
   TutorStartFormData &
@@ -27,6 +29,8 @@ export type TutorFormData = Partial<
 const BecomeATutor: FC = ({}) => {
   const [api, setApi] = useState<CarouselApi>();
   const [tutorData, setTutorData] = useState<TutorFormData>({});
+  const { i18n } = useTranslation();
+  const navigate = useNavigate();
 
   const handleSubmit = (data: TutorFormData) => {
     if (api) api.scrollNext();
@@ -37,10 +41,13 @@ const BecomeATutor: FC = ({}) => {
     if (api) api.scrollPrev();
   };
 
-  const handleCreateAccount = () => {
-    // Here you would typically handle the final submission of the tutor data,
-    // such as sending it to your backend API.
-    tutorsApi.createTutorProfile(tutorData);
+  const handleCreateAccount = async () => {
+    try {
+      await tutorsApi.createTutorProfile(tutorData);
+      navigate(`/${i18n.language}/workspace`);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -50,7 +57,7 @@ const BecomeATutor: FC = ({}) => {
       <Carousel
         className="w-full"
         opts={{
-          align: 'center',
+          align: "center",
           loop: false,
           watchDrag: false,
         }}
