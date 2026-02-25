@@ -12,21 +12,21 @@ const userApiMock: UserApi = {
   async getUserByEmail(email: string): Promise<User> {
     return new Promise((resolve) =>
       setTimeout(() => {
-        resolve({ id: "1", name: "Нечупара Антоненко", email });
+        resolve({ id: "1", name: "Tom Smith", email });
       }, 500)
     );
   },
   async getUserById(id: string): Promise<User> {
     return new Promise((resolve) =>
       setTimeout(() => {
-        resolve({ id, name: "Нечупара Антоненко", email: "mock@example.com" });
+        resolve({ id, name: "Tom Smith", email: "mock@example.com" });
       }, 500)
     );
   },
   async login(user: { email: string; password: string }): Promise<User> {
     return new Promise((resolve) =>
       setTimeout(() => {
-        resolve({ ...user, id: "1", name: "Нечупара Антоненко" });
+        resolve({ ...user, id: "1", name: "Tom Smith" });
       }, 500)
     );
   },
