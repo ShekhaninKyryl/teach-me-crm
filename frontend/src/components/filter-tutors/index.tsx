@@ -131,7 +131,7 @@ export const FilterTutorsComponent = ({ onChange }: FilterTutorsProps) => {
         <>
           <CardContent>
             <div className="grid w-full items-center gap-2">
-              <Label>{_("Searching tutor's name or bio")}</Label>
+              <Label>{_("Searching by tutor's name or bio")}</Label>
               <div className="flex w-full items-center gap-2">
                 <Input
                   type="text"
@@ -147,7 +147,7 @@ export const FilterTutorsComponent = ({ onChange }: FilterTutorsProps) => {
                   }
                   onClick={handleSearchAdd}
                 >
-                  {_("Search")}
+                  {_("Add")}
                 </Button>
               </div>
             </div>

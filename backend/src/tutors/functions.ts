@@ -27,7 +27,7 @@ export function mapTutorProfileToDto(tp: TutorProfileWithInclude): Tutor {
     whatsapp: tp.user?.whatsapp ?? undefined,
 
     subjects: (tp.subjects ?? []).map((x: any) => x.subject.label),
-    format: (tp.formats ?? []).map((x: any) => x.format),
+    format: (tp.formats ?? []).map((x: any) => x.format.toLowerCase()),
 
     rating: tp.rating,
     price: tp.price,

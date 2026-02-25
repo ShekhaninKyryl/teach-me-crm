@@ -17,6 +17,7 @@ import {
 import AvailabilityTable from "../availability-table";
 import { Tooltip, TooltipContent, TooltipTrigger } from "components/ui/tooltip";
 import { FORMAT_OPTIONS } from "@shared/types/common";
+import { useAuth } from "@/contexts/auth-context";
 
 type TutorCardProps = Tutor & {
   preview?: boolean;
@@ -38,6 +39,7 @@ export const TutorCard = ({
   availability,
   preview,
 }: TutorCardProps) => {
+  const { user } = useAuth();
   const pricePerHourText = price ? `${price} ${_("₴ per hour")}` : _("No price specified or Free");
 
   return (
@@ -60,12 +62,7 @@ export const TutorCard = ({
           <DataList.Item>
             <DataList.Label minWidth="106px">{_("Subjects")}:</DataList.Label>
             <DataList.Value>
-              {subjects.map((subject, index) => (
-                <span key={subject} className="font-bold">
-                  {subject}
-                  {index !== subjects.length - 1 && <span className="font-bold mr-1">{","}</span>}
-                </span>
-              ))}
+              <p className="font-bold">{subjects.join(", ")}</p>
             </DataList.Value>
           </DataList.Item>
           <DataList.Item>
@@ -172,16 +169,17 @@ export const TutorCard = ({
               </DialogContent>
             </Dialog>
 
-            {!preview && (
-              <Tooltip>
-                <TooltipTrigger>
-                  <FontAwesomeIcon icon="comment" className="hover:text-chart-2 cursor-pointer" />
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>{_("Send a message")}</p>
-                </TooltipContent>
-              </Tooltip>
-            )}
+            {!preview ||
+              (!user && (
+                <Tooltip>
+                  <TooltipTrigger>
+                    <FontAwesomeIcon icon="comment" className="hover:text-chart-2 cursor-pointer" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{_("Send a message")}</p>
+                  </TooltipContent>
+                </Tooltip>
+              ))}
           </div>
         </div>
       </CardFooter>
