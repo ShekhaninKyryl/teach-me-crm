@@ -1,14 +1,23 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar as solidStar } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
+import { _ } from "@/translates";
 
 type RatingProps = {
-  rating: number;
+  rating: number | null;
   color?: string;
   size?: number;
   showPercentage?: boolean;
 };
 
-export const Rating = ({ rating, color = 'accent', size = 20, showPercentage }: RatingProps) => {
+export const Rating = ({ rating, color = "accent", size = 20, showPercentage }: RatingProps) => {
+  if (!rating) {
+    return (
+      <div className="flex items-center">
+        <span>{_("No rating")}</span>
+      </div>
+    );
+  }
+
   const stars = Array.from({ length: 5 }, (_, i) => {
     const starValue = i + 1;
     const fillPercent = rating >= starValue ? 100 : rating > i ? (rating - i) * 100 : 0;

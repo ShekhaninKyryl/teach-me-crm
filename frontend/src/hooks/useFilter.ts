@@ -15,6 +15,7 @@ type Selected = {
 export const useFilter = () => {
   const [selected, setSelected] = useState<Selected[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [disabled, setDisabled] = useState<boolean>(true);
 
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [cities, setCities] = useState<string[]>([]);
@@ -55,10 +56,12 @@ export const useFilter = () => {
       }
       return [...prev, { type, value, icon }];
     });
+    setDisabled(false);
   };
 
   const removeSelected = (value: string) => {
     setSelected((prev) => prev.filter((s) => s.value !== value));
+    setDisabled(false);
   };
 
   const findSelected = ({ value, filterType }: { value?: string; filterType?: FilterType }) =>
@@ -84,6 +87,8 @@ export const useFilter = () => {
       max: minMaxPriceRange[1],
     },
     selected,
+    disabled,
+    setDisabled,
     addSelected,
     removeSelected,
     findSelected,

@@ -36,6 +36,8 @@ export const FilterTutorsComponent = ({ onChange }: FilterTutorsProps) => {
     cities,
     minMaxPriceRange: { min, max },
     selected,
+    disabled,
+    setDisabled,
     removeSelected,
     addSelected,
     findSelected,
@@ -97,6 +99,7 @@ export const FilterTutorsComponent = ({ onChange }: FilterTutorsProps) => {
 
   const handleFindTutors = () => {
     onChange(selected);
+    setDisabled(true);
   };
 
   const offlineChecked = Boolean(findSelected({ value: "offline", filterType: "format" }));
@@ -107,7 +110,7 @@ export const FilterTutorsComponent = ({ onChange }: FilterTutorsProps) => {
       <CardHeader>
         <CardTitle> {_("Filters")}</CardTitle>
         <CardDescription> {_("Select filters to find the best tutor for you")}</CardDescription>
-        <div className="flex flex-wrap gap-2 mb-2">
+        <div className="flex flex-wrap gap-2">
           {selected.map(({ value, icon }) => (
             <Badge key={value}>
               {icon && <FontAwesomeIcon icon={icon} className="mr-1" />}
@@ -127,8 +130,8 @@ export const FilterTutorsComponent = ({ onChange }: FilterTutorsProps) => {
       ) : (
         <>
           <CardContent>
-            <div className="grid w-full items-center gap-3">
-              <Label>{_("Searching by subject, tutor's name or location")}</Label>
+            <div className="grid w-full items-center gap-2">
+              <Label>{_("Searching by tutor's name or bio")}</Label>
               <div className="flex w-full items-center gap-2">
                 <Input
                   type="text"
@@ -144,7 +147,7 @@ export const FilterTutorsComponent = ({ onChange }: FilterTutorsProps) => {
                   }
                   onClick={handleSearchAdd}
                 >
-                  {_("Search")}
+                  {_("Add")}
                 </Button>
               </div>
             </div>
@@ -169,6 +172,14 @@ export const FilterTutorsComponent = ({ onChange }: FilterTutorsProps) => {
             </div>
             <div className="grid w-full items-center gap-3 mt-4">
               <SelectorInput
+                placeholder={_("Select a city")}
+                options={cities.map((city) => ({
+                  value: city,
+                  label: city,
+                }))}
+                onChange={handleCityChange}
+              />
+              <SelectorInput
                 placeholder={_("Select a subject")}
                 options={subjects.map((subject) => ({
                   value: subject.id,
@@ -176,15 +187,6 @@ export const FilterTutorsComponent = ({ onChange }: FilterTutorsProps) => {
                   icon: subject.faIcon as IconProp,
                 }))}
                 onChange={handleSubjectChange}
-              />
-              {/*  /!* City Selector *!/*/}
-              <SelectorInput
-                placeholder={_("Select a city")}
-                options={cities.map((city) => ({
-                  value: city,
-                  label: city,
-                }))}
-                onChange={handleCityChange}
               />
               <PriceRange
                 value={priceRange}
@@ -195,7 +197,7 @@ export const FilterTutorsComponent = ({ onChange }: FilterTutorsProps) => {
             </div>
           </CardContent>
           <CardFooter className="flex-col gap-2">
-            <Button disabled={!selected.length} className="w-full" onClick={handleFindTutors}>
+            <Button disabled={disabled} className="w-full" onClick={handleFindTutors}>
               {_("Apply Filters")}
             </Button>
           </CardFooter>

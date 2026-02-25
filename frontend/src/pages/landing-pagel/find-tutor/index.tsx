@@ -7,6 +7,7 @@ import { Loading } from "components/common/loading";
 import SortTutors from "components/sort-tutors";
 import { useSort } from "hooks/useSort";
 import TutorCardDialog from "components/tutor-card/tutor-card-dialog";
+import { NoTutors } from "components/filter-tutors/no-tutors";
 
 export const FindTutor = () => {
   const [tutors, setTutors] = useState<Tutor[]>([]);
@@ -18,18 +19,14 @@ export const FindTutor = () => {
     handleFindTutors();
   }, []);
 
-  useEffect(() => {
-    if (tutors.length > 0) {
-      sortData(tutors, "rating");
-    }
-  }, [tutors]);
+  useEffect(() => sortData(tutors, "rating"), [tutors]);
 
   const handleFindTutors = (filters: Filter[] = []) => {
     setLoading(true);
     setError(null);
 
     tutorsApi
-      .searchTutors(JSON.stringify(filters))
+      .searchTutors(filters)
       .then((data) => {
         setTutors(data);
         setLoading(false);
@@ -43,6 +40,28 @@ export const FindTutor = () => {
   );
 
   const findTutors = useCallback(handleFindTutors, []);
+
+  const renderTutors = () => {
+    if (loading) {
+      return (
+        <div className="flex items-center justify-center h-full w-full col-span-4">
+          <Loading size={16} />
+        </div>
+      );
+    }
+
+    if (!sortedData.length) {
+      return <NoTutors />;
+    }
+
+    return (
+      <div className="gap-4 auto-rows-[min-content] z-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-4 ">
+        {sortedData.map((tutor) => (
+          <TutorCardDialog tutor={tutor} key={tutor.id} />
+        ))}
+      </div>
+    );
+  };
 
   return (
     <div className="px-2 lg:px-4">
@@ -59,17 +78,7 @@ export const FindTutor = () => {
           </div>
         </div>
         <div className="mt-4 grid gap-4 lg:gap-6 col-span-3 lg:col-span-3 xl:col-span-4">
-          {loading ? (
-            <div className="flex items-center justify-center h-full w-full col-span-4">
-              <Loading size={16} />
-            </div>
-          ) : (
-            <div className="gap-4 auto-rows-fr z-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-4">
-              {sortedData.map((tutor) => (
-                <TutorCardDialog tutor={tutor} key={tutor.id} />
-              ))}
-            </div>
-          )}
+          {renderTutors()}
         </div>
       </div>
     </div>

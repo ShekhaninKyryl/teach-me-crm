@@ -19,7 +19,7 @@ export const TopTutors: React.FC<TopTutorsProps> = ({}) => {
   useEffect(() => {
     setLoading(true);
     tutorsApi
-      .searchTutors("")
+      .getTopTutors()
       .then((res) => setTutor(res))
       .finally(() => setLoading(false));
   }, []);

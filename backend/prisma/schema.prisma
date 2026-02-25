@@ -77,7 +77,7 @@ model TutorProfile {
 
   subjects     TutorSubject[]
   formats      TutorFormat[]
-  rating       Float          @default(0)
+  rating       Float?
   price        Int
   location     String?
   bio          String?

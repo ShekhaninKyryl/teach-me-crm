@@ -4,7 +4,6 @@ import type { Subject } from "@shared/types/subject";
 
 export interface SubjectApi {
   getSubjects(): Promise<Subject[]>;
-  getSubjectById(id: string): Promise<Subject>;
   addSubject(subject: Subject): Promise<Subject>;
 }
 
@@ -28,13 +27,6 @@ const subjectApiMock: SubjectApi = {
       }, 1000)
     );
   },
-  async getSubjectById(id: string): Promise<Subject> {
-    return new Promise((resolve) =>
-      setTimeout(() => {
-        resolve({ id, label: "Mock Subject" });
-      }, 500)
-    );
-  },
   async addSubject(subject: Subject): Promise<Subject> {
     console.log("Subject was added: ", subject);
     return new Promise<Subject>((resolve) => setTimeout(() => resolve(subject), 500));
@@ -44,10 +36,6 @@ const subjectApiMock: SubjectApi = {
 const subjectApi: SubjectApi = {
   async getSubjects(): Promise<Subject[]> {
     const response = await axios.get<Subject[]>("/subjects");
-    return response.data;
-  },
-  async getSubjectById(id: string): Promise<Subject> {
-    const response = await axios.get<Subject>(`/subjects/${id}`);
     return response.data;
   },
   async addSubject(subject: Subject): Promise<Subject> {
