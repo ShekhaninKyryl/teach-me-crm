@@ -15,14 +15,14 @@ type TutorCardProps = Tutor & {
 export const TutorCardMini = ({
   name,
   subjects,
-  format,
+  formats,
   rating,
   price,
   location,
   avatar,
   top,
 }: TutorCardProps) => {
-  const locationText = format.includes(FORMAT_OPTIONS.Online) ? _("Online") : `${location}`;
+  const locationText = formats.includes(FORMAT_OPTIONS.Online) ? _("Online") : `${location}`;
   const pricePerHourText = price ? `${price} ${_("₴ per hour")}` : _("No price specified or Free");
 
   return (
@@ -65,7 +65,7 @@ export const TutorCardMini = ({
           <p
             className={classNames(
               "text-right",
-              format.includes(FORMAT_OPTIONS.Online) ? "text-chart-2" : "text-chart-5"
+              formats.includes(FORMAT_OPTIONS.Online) ? "text-chart-2" : "text-chart-5"
             )}
           >
             {locationText}

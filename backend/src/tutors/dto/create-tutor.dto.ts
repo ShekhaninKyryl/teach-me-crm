@@ -1,7 +1,17 @@
-import {IsArray, IsEmail, IsInt, IsOptional, IsString, Min} from 'class-validator';
-
+import {
+  IsArray,
+  IsEmail,
+  IsInt,
+  IsOptional,
+  IsString,
+  Min,
+} from "class-validator";
 
 export class CreateTutorDto {
+  @IsString()
+  @IsOptional()
+  avatar?: string;
+
   @IsString()
   name!: string;
 
@@ -26,7 +36,7 @@ export class CreateTutorDto {
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  availability?:  string[];
+  availability?: string[];
 
   @IsOptional()
   @IsArray()

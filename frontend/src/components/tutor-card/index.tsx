@@ -26,7 +26,7 @@ type TutorCardProps = Tutor & {
 export const TutorCard = ({
   name,
   subjects,
-  format,
+  formats,
   rating,
   price,
   location,
@@ -68,7 +68,7 @@ export const TutorCard = ({
           <DataList.Item>
             <DataList.Label minWidth="106px">{_("Format")}:</DataList.Label>
             <DataList.Value>
-              {format.map((value, index) => (
+              {formats.map((value, index) => (
                 <span key={value} className="font-bold">
                   <span
                     className={classNames(
@@ -77,7 +77,7 @@ export const TutorCard = ({
                   >
                     {value.includes(FORMAT_OPTIONS.Online) ? _("Online") : `${location}`}
                   </span>
-                  {index !== format.length - 1 && <span className="font-bold mr-1">{","}</span>}
+                  {index !== formats.length - 1 && <span className="font-bold mr-1">{","}</span>}
                 </span>
               ))}
             </DataList.Value>

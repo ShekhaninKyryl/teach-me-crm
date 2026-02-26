@@ -8,11 +8,6 @@ import { CitiesModule } from "src/cities/cities.module";
 import { PriceModule } from "src/price/price.module";
 import { SubjectsModule } from "src/subjects/subjects.module";
 
-ConfigModule.forRoot({
-  isGlobal: true,
-  envFilePath: [".env"],
-});
-
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),

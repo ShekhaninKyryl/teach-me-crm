@@ -17,10 +17,14 @@ import { Tutor } from "@shared/types/tutor";
 import { Filter } from "@shared/types/filter";
 import { PrismaService } from "prisma/prisma.service";
 import { LessonFormat } from "@prisma/client";
+import { JwtService } from "@nestjs/jwt";
 
 @Injectable()
 export class TutorsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private jwtService: JwtService,
+  ) {}
 
   async getTopTutors() {
     return this.prisma.tutorProfile.findMany({
@@ -32,11 +36,11 @@ export class TutorsService {
 
   async getTutorById(id: string) {
     const tutor = await this.prisma.tutorProfile.findUnique({
-      where: { id },
+      where: { userId: id },
       include: tutorInclude(),
     });
     if (!tutor) throw new NotFoundException("Tutor not found");
-    return tutor;
+    return mapTutorProfileToDto(tutor);
   }
 
   async searchTutors(filters: Filter[]): Promise<Tutor[]> {
@@ -53,75 +57,12 @@ export class TutorsService {
   }
 
   async createTutorProfile(dto: CreateTutorDto) {
-    const exists = await this.prisma.user.findUnique({
-      where: { email: dto.email },
-    });
-    if (exists)
-      throw new BadRequestException("User with this email already exists");
+    return this.prisma.$transaction(async (tx) => {
+      const passwordHash = await bcrypt.hash(dto.password, 10);
 
-    const passwordHash = await bcrypt.hash(dto.password, 10);
-
-    const labels = dto.subjects ?? [];
-    const subjects = await Promise.all(
-      labels.map((label) =>
-        this.prisma.subject.upsert({
-          where: { label },
-          update: {},
-          create: { label },
-        }),
-      ),
-    );
-
-    return this.prisma.user.create({
-      data: {
-        name: dto.name,
-        email: dto.email,
-        passwordHash,
-        tutorProfile: {
-          create: {
-            price: dto.price,
-            location: dto.location,
-            bio: dto.bio,
-            availability: dto.availability ?? undefined,
-            maxStudents: 3,
-
-            subjects: {
-              create: subjects.map((s) => ({
-                subject: { connect: { id: s.id } },
-              })),
-            },
-
-            formats: dto.formats?.length
-              ? {
-                  create: dto.formats.map((f) => ({
-                    format: f.toUpperCase() as LessonFormat,
-                  })),
-                }
-              : undefined,
-          },
-        },
-      },
-      select: { id: true, email: true, name: true },
-    });
-  }
-
-  async updateTutorProfile(tutorId: string, dto: UpdateTutorDto) {
-    await this.prisma.tutorProfile.update({
-      where: { id: tutorId },
-      data: {
-        price: dto.price,
-        location: dto.location,
-        bio: dto.bio,
-        availability: dto.availability ?? undefined,
-        maxStudents: dto.maxStudents,
-      },
-      include: tutorInclude(),
-    });
-
-    if (dto.subjects) {
       const subjects = await Promise.all(
-        dto.subjects.map((label) =>
-          this.prisma.subject.upsert({
+        (dto.subjects ?? []).map((label) =>
+          tx.subject.upsert({
             where: { label },
             update: {},
             create: { label },
@@ -129,24 +70,162 @@ export class TutorsService {
         ),
       );
 
-      await this.prisma.tutorSubject.deleteMany({ where: { tutorId } });
-      await this.prisma.tutorSubject.createMany({
-        data: subjects.map((s) => ({ tutorId, subjectId: s.id })),
+      const user = await tx.user.create({
+        data: {
+          name: dto.name,
+          email: dto.email,
+          passwordHash,
+          avatar: dto.avatar,
+          phone: dto.phone,
+          viber: dto.viber,
+          telegram: dto.telegram,
+          whatsapp: dto.whatsapp,
+          tutorProfile: {
+            create: {
+              price: dto.price,
+              location: dto.location,
+              bio: dto.bio,
+              availability: dto.availability,
+              maxStudents: 3,
+
+              subjects: {
+                create: subjects.map((s) => ({
+                  subjectId: s.id,
+                })),
+              },
+
+              formats: dto.formats?.length
+                ? {
+                    create: dto.formats.map((f) => ({
+                      format: f.toUpperCase() as LessonFormat,
+                    })),
+                  }
+                : undefined,
+            },
+          },
+        },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+        },
       });
-    }
 
-    if (dto.formats) {
-      await this.prisma.tutorFormat.deleteMany({ where: { tutorId } });
-      if (dto.formats.length) {
-        await this.prisma.tutorFormat.createMany({
-          data: dto.formats.map((f) => ({ tutorId, format: f })),
-        });
-      }
-    }
+      const payload = { sub: user.id, email: user.email, name: user.name };
 
-    return this.getTutorById(tutorId);
+      return {
+        access_token: await this.jwtService.signAsync(payload),
+      };
+    });
   }
 
+  async updateTutorProfile(userId: string, dto: UpdateTutorDto) {
+    return this.prisma.$transaction(async (tx) => {
+      const tutor = await tx.tutorProfile.findUnique({
+        where: { userId },
+        select: {
+          id: true,
+          userId: true,
+          user: {
+            select: { passwordHash: true },
+          },
+        },
+      });
+
+      if (!tutor) throw new NotFoundException("Tutor not found");
+
+      const userData: any = {};
+      if (dto.avatar !== undefined) userData.avatar = dto.avatar;
+      if (dto.name !== undefined) userData.name = dto.name;
+      if (dto.email !== undefined) userData.email = dto.email;
+      if (dto.phone !== undefined) userData.phone = dto.phone;
+      if (dto.viber !== undefined) userData.viber = dto.viber;
+      if (dto.telegram !== undefined) userData.telegram = dto.telegram;
+      if (dto.whatsapp !== undefined) userData.whatsapp = dto.whatsapp;
+
+      if (Object.keys(userData).length) {
+        await tx.user.update({
+          where: { id: userId },
+          data: userData,
+        });
+      }
+
+      const profileData: any = {};
+      if (dto.price !== undefined) profileData.price = dto.price;
+      if (dto.location !== undefined) profileData.location = dto.location;
+      if (dto.bio !== undefined) profileData.bio = dto.bio;
+      if (dto.availability !== undefined)
+        profileData.availability = dto.availability;
+
+      if (Object.keys(profileData).length) {
+        await tx.tutorProfile.update({
+          where: { userId },
+          data: profileData,
+        });
+      }
+
+      if (dto.subjects) {
+        const labels = dto.subjects;
+
+        const subjects = await Promise.all(
+          labels.map((label) =>
+            tx.subject.upsert({
+              where: { label },
+              update: {},
+              create: { label },
+            }),
+          ),
+        );
+
+        await tx.tutorSubject.deleteMany({ where: { tutorId: tutor.id } });
+
+        if (subjects.length) {
+          await tx.tutorSubject.createMany({
+            data: subjects.map((s) => ({ tutorId: tutor.id, subjectId: s.id })),
+            skipDuplicates: true,
+          });
+        }
+      }
+
+      if (dto.formats) {
+        await tx.tutorFormat.deleteMany({ where: { tutorId: tutor.id } });
+
+        if (dto.formats.length) {
+          await tx.tutorFormat.createMany({
+            data: dto.formats.map((f) => ({
+              tutorId: tutor.id,
+              format: f.toUpperCase() as LessonFormat,
+            })),
+            skipDuplicates: true,
+          });
+        }
+      }
+
+      if (dto.password) {
+        if (!dto.currentPassword) {
+          throw new BadRequestException("currentPassword is required");
+        }
+
+        const storedHash = tutor.user?.passwordHash;
+        if (!storedHash) {
+          throw new BadRequestException("Password is not set for this account");
+        }
+
+        const isCorrect = await bcrypt.compare(dto.currentPassword, storedHash);
+        if (!isCorrect) {
+          throw new BadRequestException("Current password is incorrect");
+        }
+
+        const newHash = await bcrypt.hash(dto.password, 10);
+        await tx.user.update({
+          where: { id: userId },
+          data: { passwordHash: newHash },
+        });
+      }
+
+      return this.getTutorById(userId);
+    });
+  }
   async getTutorsStudents(tutorId: string): Promise<StudentAsUserDto[]> {
     const students = await this.prisma.student.findMany({
       where: { tutorId },

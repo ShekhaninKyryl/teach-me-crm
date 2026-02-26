@@ -2,7 +2,7 @@ import type { Tutor } from "@shared/types/tutor";
 import { _ } from "@/translates";
 
 export const isValidTutorProfile = (profile: Partial<Tutor>): boolean => {
-  return Boolean(profile.name) && Array.isArray(profile.subjects) && Boolean(profile.format);
+  return Boolean(profile.name) && Array.isArray(profile.subjects) && Boolean(profile.formats);
 };
 
 export const getTutorData = (tutor: Partial<Tutor>) => {
@@ -10,7 +10,7 @@ export const getTutorData = (tutor: Partial<Tutor>) => {
     name: tutor.name || _("Unknown Tutor"),
     email: tutor.email || "",
     subjects: tutor.subjects || [],
-    format: tutor.format || [],
+    formats: tutor.formats || [],
     rating: tutor.rating || 0,
     price: tutor.price || 0,
     location: tutor.location,

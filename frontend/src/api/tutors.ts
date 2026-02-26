@@ -4,7 +4,7 @@ import { tutors as tutorsMock } from "api/mocks/tutors";
 import type { User } from "@shared/types/user";
 import type { Tutor, TutorWithPassword } from "@shared/types/tutor";
 import { FORMAT_OPTIONS } from "@shared/types/common";
-import type {Filter} from "@shared/types/filter";
+import type { Filter } from "@shared/types/filter";
 
 export interface TutorApi {
   getTopTutors(): Promise<Tutor[]>;
@@ -26,7 +26,7 @@ const tutorApiMock: TutorApi = {
             name: "John Doe",
             email: "j.doe@test.com",
             subjects: ["Math", "Physics"],
-            format: [FORMAT_OPTIONS.Online],
+            formats: [FORMAT_OPTIONS.Online],
             rating: 4.5,
             price: 20,
             location: "New York",
@@ -39,7 +39,7 @@ const tutorApiMock: TutorApi = {
             name: "Jane Smith",
             email: "j.smith@test.com",
             subjects: ["English", "History"],
-            format: [FORMAT_OPTIONS.Offline],
+            formats: [FORMAT_OPTIONS.Offline],
             rating: 4.8,
             price: 25,
             location: "Los Angeles",
@@ -59,7 +59,7 @@ const tutorApiMock: TutorApi = {
           name: "Mock Tutor",
           email: "m.tutor@test.com",
           subjects: ["Math"],
-          format: [FORMAT_OPTIONS.Online],
+          formats: [FORMAT_OPTIONS.Online],
           rating: 4.0,
           price: 30,
           location: "Mock City",
@@ -92,7 +92,7 @@ const tutorApiMock: TutorApi = {
           name: tutorData.name || "Updated Tutor",
           email: tutorData.email || "",
           subjects: tutorData.subjects || [],
-          format: tutorData.format || [],
+          formats: tutorData.formats || [],
           rating: tutorData.rating || 0,
           price: tutorData.price || 0,
           location: tutorData.location,
@@ -127,7 +127,7 @@ const tutorApiMock: TutorApi = {
           name: tutor.name || "New Tutor",
           email: tutor.email || "",
           subjects: tutor.subjects || [],
-          format: tutor.format || [],
+          formats: tutor.formats || [],
           rating: tutor.rating || 0,
           price: tutor.price || 0,
           location: tutor.location,
@@ -154,7 +154,7 @@ const tutorApi = {
     return response.data;
   },
   async updateTutorProfile(tutorId: string, tutorData: Partial<TutorWithPassword>): Promise<Tutor> {
-    const response = await axios.put(`/tutors/${tutorId}`, tutorData);
+    const response = await axios.patch(`/tutors/${tutorId}`, tutorData);
     return response.data;
   },
   async saveTutorsStudents(tutorId: string, students: User[]): Promise<void> {
