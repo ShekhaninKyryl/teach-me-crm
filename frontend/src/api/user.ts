@@ -6,6 +6,8 @@ export interface UserApi {
   getUserByEmail(email: string): Promise<User>;
   getUserById(id: string): Promise<User>;
   login(user: { email: string; password: string }): Promise<User>;
+  logout(): Promise<void>;
+  me(): Promise<User>;
 }
 
 const userApiMock: UserApi = {
@@ -30,6 +32,16 @@ const userApiMock: UserApi = {
       }, 500)
     );
   },
+  async logout(): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, 500));
+  },
+  async me(): Promise<User> {
+    return new Promise((resolve) =>
+      setTimeout(() => {
+        resolve({ id: "1", name: "Tom Smith", email: "some@email.com" });
+      }, 500)
+    );
+  },
 };
 
 const userApi: UserApi = {
@@ -44,7 +56,14 @@ const userApi: UserApi = {
     return response.data;
   },
   async login(user: { email: string; password: string }): Promise<User> {
-    const response = await axios.post<User>("/login", user);
+    await axios.post<User>("/login", user);
+    return this.me();
+  },
+  async logout(): Promise<void> {
+    await axios.post("/logout");
+  },
+  async me(): Promise<User> {
+    const response = await axios.get<User>("/me");
     return response.data;
   },
 };

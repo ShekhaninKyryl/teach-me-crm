@@ -16,7 +16,6 @@ import FormAvatar, { type TutorAvatarData } from "pages/landing-pagel/become-a-t
 import TutorPreview from "pages/landing-pagel/become-a-tutor/tutor-preview";
 import tutorsApi from "api/tutors";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
 
 export type TutorFormData = Partial<
   TutorStartFormData &
@@ -30,7 +29,6 @@ const BecomeATutor: FC = ({}) => {
   const [api, setApi] = useState<CarouselApi>();
   const [tutorData, setTutorData] = useState<TutorFormData>({});
   const { i18n } = useTranslation();
-  const navigate = useNavigate();
 
   const handleSubmit = (data: TutorFormData) => {
     if (api) api.scrollNext();
@@ -44,7 +42,7 @@ const BecomeATutor: FC = ({}) => {
   const handleCreateAccount = async () => {
     try {
       await tutorsApi.createTutorProfile(tutorData);
-      navigate(`/${i18n.language}/workspace`);
+      window.location.href = `/${i18n.language}/workspace`;
     } catch (error) {
       console.error(error);
     }
