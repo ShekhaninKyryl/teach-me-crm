@@ -22,20 +22,21 @@ export const SettingsPage = () => {
       setTutor(tutor);
       setLoading(false);
     });
-  });
+  }, [user?.id]);
 
-  const handleSubmit = (data: Partial<TutorWithPassword>) => {
+  const handleSubmit = async (data: Partial<TutorWithPassword>) => {
     if (!tutor) return;
-
-    setLoading(true);
-    tutorsApi
-      .updateTutorProfile(tutor.id, data)
-      .then((updatedTutor) => {
-        setTutor(updatedTutor);
-        setError(null);
-      })
-      .catch(() => setError("Failed to update profile"))
-      .finally(() => setLoading(false));
+    try {
+      setLoading(true);
+      const updatedTutor = await tutorsApi.updateTutorProfile(tutor.id, data);
+      setTutor(updatedTutor);
+      setError(null);
+    } catch {
+      setError("Failed to update profile");
+    } finally {
+      setLoading(false);
+      window.location.reload();
+    }
   };
 
   if (!tutor || loading) {

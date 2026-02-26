@@ -32,7 +32,7 @@ const schema = yup.object().shape({
   name: yup.string().required("Full Name is required"),
   email: yup.string().email("Invalid email").required("Email is required"),
   bio: yup.string().default(""),
-  format: yup
+  formats: yup
     .array()
     .of(
       yup
@@ -45,7 +45,7 @@ const schema = yup.object().shape({
     .default([]),
   location: yup
     .string()
-    .when("format", {
+    .when("formats", {
       is: (formats: Format[]) => formats?.includes(FORMAT_OPTIONS.Offline),
       then: (schema) => schema.required("Location is required for offline format"),
       otherwise: (schema) => schema.optional(),
@@ -93,12 +93,29 @@ type TutorEditFormProps = {
   onSubmit: (form: TutorFormData) => void;
 };
 
+const toFormValues = (t: Tutor): TutorFormData => ({
+  name: t.name ?? "",
+  email: t.email ?? "",
+  bio: t.bio ?? "",
+  formats: t.formats ?? [],
+  location: t.location ?? "",
+  subjects: t.subjects ?? [],
+  price: t.price ?? 0,
+  phone: t.phone ?? "",
+  viber: t.viber ?? "",
+  telegram: t.telegram ?? "",
+  whatsapp: t.whatsapp ?? "",
+  availability: t.availability ?? [],
+  avatar: t.avatar ?? "",
+  currentPassword: "",
+  password: "",
+  passwordConfirmation: "",
+});
+
 export const TutorEditForm: FC<TutorEditFormProps> = ({ tutorData, onSubmit }) => {
   const form = useForm<TutorFormData>({
     resolver: yupResolver(schema),
-    defaultValues: {
-      ...tutorData,
-    },
+    defaultValues: toFormValues(tutorData),
   });
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [isSubjectsLoading, setSubjectsLoading] = useState(false);
@@ -113,11 +130,11 @@ export const TutorEditForm: FC<TutorEditFormProps> = ({ tutorData, onSubmit }) =
 
   const selectedSubjects = form.watch("subjects");
   const filteredSubjects = useMemo(
-    () => subjects.filter((s) => !selectedSubjects.includes(s.id)),
+    () => subjects.filter((s) => !selectedSubjects.includes(s.label)),
     [selectedSubjects, subjects]
   );
 
-  const selectedFormats = form.watch("format");
+  const selectedFormats = form.watch("formats");
   const isOfflineSelected = selectedFormats.includes(FORMAT_OPTIONS.Offline);
 
   const phoneNumber = form.watch("phone");
@@ -201,7 +218,7 @@ export const TutorEditForm: FC<TutorEditFormProps> = ({ tutorData, onSubmit }) =
 
             <FormField
               control={form.control}
-              name="format"
+              name="formats"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="gap-0">{_("Format")}</FormLabel>
@@ -254,7 +271,7 @@ export const TutorEditForm: FC<TutorEditFormProps> = ({ tutorData, onSubmit }) =
                   <FormLabel className="gap-0">{_("Subjects")}</FormLabel>
                   <div className="flex flex-wrap gap-2">
                     {field.value?.map((val) => {
-                      const subj = subjects.find((o) => o.id === val);
+                      const subj = subjects.find((o) => o.label === val);
                       return (
                         <Badge key={subj?.id}>
                           {subj?.faIcon && <FontAwesomeIcon icon={subj.faIcon} className="mr-1" />}
@@ -280,7 +297,7 @@ export const TutorEditForm: FC<TutorEditFormProps> = ({ tutorData, onSubmit }) =
                       <div className="flex gap-2">
                         <SelectorInput
                           options={filteredSubjects.map((subject) => ({
-                            value: subject.id,
+                            value: subject.label,
                             label: subject.label,
                             icon: subject.faIcon as IconProp,
                           }))}

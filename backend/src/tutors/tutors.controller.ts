@@ -31,6 +31,7 @@ export class TutorsController {
     return this.tutors.searchTutors(filters);
   }
 
+  @UseGuards(AuthGuard)
   @Get(":id")
   getTutorById(@Param("id") id: string) {
     return this.tutors.getTutorById(id);

@@ -26,7 +26,10 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     userApi
       .me()
       .then((u) => setUser(u))
-      .catch(() => setUser(null))
+      .catch(() => {
+        setUser(null);
+        navigate("/");
+      })
       .finally(() => setLoading(false));
   }, []);
 

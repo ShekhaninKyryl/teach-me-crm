@@ -83,7 +83,7 @@ const FormExperience: FC<FormExperienceProps> = ({ onSubmit, onBack }) => {
   }, []);
   const selectedSubjects = form.watch("subjects");
   const filteredSubjects = useMemo(
-    () => subjects.filter((s) => !selectedSubjects.includes(s.id)),
+    () => subjects.filter((s) => !selectedSubjects.includes(s.label)),
     [selectedSubjects, subjects]
   );
 
@@ -161,7 +161,7 @@ const FormExperience: FC<FormExperienceProps> = ({ onSubmit, onBack }) => {
                 <FormLabel className="gap-0">{_("Subjects")}</FormLabel>
                 <div className="flex flex-wrap gap-2">
                   {field.value?.map((val) => {
-                    const subj = subjects.find((o) => o.id === val);
+                    const subj = subjects.find((o) => o.label === val);
                     return (
                       <Badge key={subj?.id}>
                         {subj?.faIcon && <FontAwesomeIcon icon={subj.faIcon} className="mr-1" />}
@@ -187,7 +187,7 @@ const FormExperience: FC<FormExperienceProps> = ({ onSubmit, onBack }) => {
                     <div className="flex items-center gap-2">
                       <SelectorInput
                         options={filteredSubjects.map((subject) => ({
-                          value: subject.id,
+                          value: subject.label,
                           label: subject.label,
                           icon: subject.faIcon as IconProp,
                         }))}
