@@ -17,10 +17,14 @@ import { Tutor } from "@shared/types/tutor";
 import { Filter } from "@shared/types/filter";
 import { PrismaService } from "prisma/prisma.service";
 import { LessonFormat } from "@prisma/client";
+import { AuthService } from "src/auth/auth.service";
 
 @Injectable()
 export class TutorsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly auth: AuthService,
+  ) {}
 
   async getTopTutors() {
     return this.prisma.tutorProfile.findMany({
@@ -56,8 +60,9 @@ export class TutorsService {
     const exists = await this.prisma.user.findUnique({
       where: { email: dto.email },
     });
-    if (exists)
+    if (exists) {
       throw new BadRequestException("User with this email already exists");
+    }
 
     const passwordHash = await bcrypt.hash(dto.password, 10);
 
@@ -72,7 +77,7 @@ export class TutorsService {
       ),
     );
 
-    return this.prisma.user.create({
+    await this.prisma.user.create({
       data: {
         name: dto.name,
         email: dto.email,
@@ -101,8 +106,9 @@ export class TutorsService {
           },
         },
       },
-      select: { id: true, email: true, name: true },
     });
+
+    return this.auth.login(dto.email, dto.password);
   }
 
   async updateTutorProfile(tutorId: string, dto: UpdateTutorDto) {
