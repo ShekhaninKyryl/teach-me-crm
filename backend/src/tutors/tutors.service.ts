@@ -18,6 +18,7 @@ import { Filter } from "@shared/types/filter";
 import { PrismaService } from "prisma/prisma.service";
 import { LessonFormat } from "@prisma/client";
 import { JwtService } from "@nestjs/jwt";
+import { FREE_STUDENTS_CAPACITY_LIMIT } from "@constants/index";
 
 @Injectable()
 export class TutorsService {
@@ -86,7 +87,7 @@ export class TutorsService {
               location: dto.location,
               bio: dto.bio,
               availability: dto.availability,
-              maxStudents: 3,
+              maxStudents: FREE_STUDENTS_CAPACITY_LIMIT,
 
               subjects: {
                 create: subjects.map((s) => ({
@@ -302,6 +303,22 @@ export class TutorsService {
           },
         });
       }
+    });
+  }
+
+  async getMaxStudents(tutorId: string): Promise<number> {
+    const tutor = await this.prisma.tutorProfile.findUnique({
+      where: { userId: tutorId },
+      select: { maxStudents: true },
+    });
+    if (!tutor) throw new NotFoundException("Tutor not found");
+    return tutor.maxStudents || FREE_STUDENTS_CAPACITY_LIMIT;
+  }
+
+  async updateMaxStudents(tutorId: string, maxStudents: number): Promise<void> {
+    await this.prisma.tutorProfile.update({
+      where: { userId: tutorId },
+      data: { maxStudents },
     });
   }
 }

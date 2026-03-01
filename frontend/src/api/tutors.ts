@@ -14,6 +14,8 @@ export interface TutorApi {
   updateTutorProfile(tutorId: string, tutorData: Partial<TutorWithPassword>): Promise<Tutor>;
   createTutorProfile(tutor: Partial<TutorWithPassword>): Promise<Tutor>;
   searchTutors(query: Filter[]): Promise<Tutor[]>;
+  getStudentsCount(tutorId: string): Promise<number>;
+  setMaxStudents(tutorId: string, maxStudents: number): Promise<void>;
 }
 
 const tutorApiMock: TutorApi = {
@@ -138,6 +140,22 @@ const tutorApiMock: TutorApi = {
       }, 500)
     );
   },
+  async getStudentsCount(tutorId: string): Promise<number> {
+    return new Promise((resolve) =>
+      setTimeout(() => {
+        console.log(`Getting students count for tutor ${tutorId}`);
+        resolve(5); // Mocked count of students
+      }, 300)
+    );
+  },
+  async setMaxStudents(tutorId: string, maxStudents: number): Promise<void> {
+    return new Promise((resolve) =>
+      setTimeout(() => {
+        console.log(`Set max students for tutor ${tutorId} to ${maxStudents}`);
+        resolve();
+      }, 300)
+    );
+  },
 };
 
 const tutorApi = {
@@ -167,6 +185,13 @@ const tutorApi = {
   async createTutorProfile(tutor: Partial<TutorWithPassword>): Promise<Tutor> {
     const response = await axios.post("/tutors", tutor);
     return response.data;
+  },
+  async getStudentsCount(tutorId: string): Promise<number> {
+    const response = await axios.get(`/tutors/${tutorId}/max-students`);
+    return response.data;
+  },
+  async setMaxStudents(tutorId: string, maxStudents: number): Promise<void> {
+    await axios.patch(`/tutors/${tutorId}/max-students`, { maxStudents });
   },
 };
 

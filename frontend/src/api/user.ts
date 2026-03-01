@@ -46,7 +46,7 @@ const userApiMock: UserApi = {
 
 const userApi: UserApi = {
   async getUserByEmail(email: string): Promise<User> {
-    const response = await axios.get<User>("/users", {
+    const response = await axios.get<User>("/users/by-email", {
       params: { email },
     });
     return response.data;

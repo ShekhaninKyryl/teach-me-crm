@@ -67,4 +67,19 @@ export class TutorsController {
     setAccessTokenCookie(res, access_token);
     return { success: true };
   }
+
+  @UseGuards(AuthGuard)
+  @Get(":id/max-students")
+  async getMaxStudents(@Param("id") tutorId: string) {
+    return this.tutors.getMaxStudents(tutorId);
+  }
+
+  @UseGuards(AuthGuard)
+  @Patch(":id/max-students")
+  async updateMaxStudents(
+    @Param("id") tutorId: string,
+    @Body("maxStudents") maxStudents: number,
+  ) {
+    return this.tutors.updateMaxStudents(tutorId, maxStudents);
+  }
 }

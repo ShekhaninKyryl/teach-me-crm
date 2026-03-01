@@ -18,19 +18,21 @@ const schema = yup.object().shape({
     .string()
     .default("")
     .email("Invalid email")
-    .test("email", "Email not found", (value, context) => {
-      if (!value || value.trim() === "") {
-        return true;
-      }
-      return new Promise((resolve) => {
-        emailApi.checkEmailExists(value).then((response) => {
-          if (response.exists) {
-            resolve(true);
-          } else {
-            resolve(context.createError({ message: "Email not found" }));
-          }
+    .test("email-exists", "Email not found", (value, context) => {
+      const v = (value ?? "").trim();
+      if (!v) return true;
+
+      return emailApi
+        .checkEmailExists(v)
+        .then((response) => {
+          if (response) return true;
+          return context.createError({ message: "Email not found" });
+        })
+        .catch((error) => {
+          return context.createError({
+            message: error.message,
+          });
         });
-      });
     }),
   name: yup
     .string()
@@ -51,11 +53,10 @@ interface AddStudentProps {
 export const AddStudent: FC<AddStudentProps> = ({ onChange }) => {
   const form = useForm<AddStudentFormData>({
     resolver: yupResolver(schema),
+    mode: "onBlur",
+    reValidateMode: "onBlur",
   });
   const [open, setOpen] = useState(false);
-  const email = form.watch("email");
-
-  const isValidating = form.formState.isValidating;
 
   const handleIsOpen = (isOpen: boolean) => {
     setOpen(isOpen);
@@ -63,7 +64,8 @@ export const AddStudent: FC<AddStudentProps> = ({ onChange }) => {
   };
 
   const handleSubmit = async (studentData: AddStudentFormData) => {
-    if (!email) {
+    const emailTrimmed = (studentData.email ?? "").trim();
+    if (!emailTrimmed) {
       onChange({
         id: "new-" + uuidv4(),
         email: "",
@@ -125,7 +127,7 @@ export const AddStudent: FC<AddStudentProps> = ({ onChange }) => {
 
             <Flex gap="3" mt="4" justify="center" className="mt-4">
               <PrimaryButton
-                disabled={isValidating}
+                disabled={form.formState.isSubmitting}
                 title={_("Add")}
                 type="submit"
                 className="w-full"

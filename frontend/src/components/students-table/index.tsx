@@ -9,6 +9,7 @@ import { PrimaryButton } from "components/common/button";
 import { AddStudent } from "components/students-table/add-student";
 import { Progress } from "components/ui/progress";
 import { UNLIMITED_STUDENTS_CAPACITY_THRESHOLD } from "@/constants";
+import { useAuth } from "@/contexts/auth-context";
 
 interface Props {
   maxStudents: number;
@@ -16,6 +17,7 @@ interface Props {
 
 export const StudentsTable: FC<Props> = ({ maxStudents }) => {
   const [students, setStudents] = useState<User[]>([]);
+  const { user } = useAuth();
   const [loading, setLoading] = useState<boolean>(true);
   const [isDirty, setDirty] = useState(false);
 
@@ -25,9 +27,10 @@ export const StudentsTable: FC<Props> = ({ maxStudents }) => {
       : (students.length / maxStudents) * 100;
 
   useEffect(() => {
+    if (!user) return;
     setLoading(true);
     tutors
-      .getTutorsStudents("some-tutor-id")
+      .getTutorsStudents(user.id)
       .then((fetchedStudents) => {
         setStudents(fetchedStudents);
       })
@@ -57,9 +60,10 @@ export const StudentsTable: FC<Props> = ({ maxStudents }) => {
   };
 
   const handleSubmit = async (students: User[]) => {
+    if (!user) return;
     setLoading(true);
     try {
-      await tutors.saveTutorsStudents("some-tutor-id", students);
+      await tutors.saveTutorsStudents(user.id, students);
     } catch (error) {
     } finally {
       setLoading(false);
