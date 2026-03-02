@@ -10,13 +10,14 @@ import { AddStudent } from "components/students-table/add-student";
 import { Progress } from "components/ui/progress";
 import { UNLIMITED_STUDENTS_CAPACITY_THRESHOLD } from "@/constants";
 import { useAuth } from "@/contexts/auth-context";
+import type { Student } from "@shared/types/students";
 
 interface Props {
   maxStudents: number;
 }
 
 export const StudentsTable: FC<Props> = ({ maxStudents }) => {
-  const [students, setStudents] = useState<User[]>([]);
+  const [students, setStudents] = useState<Student[]>([]);
   const { user } = useAuth();
   const [loading, setLoading] = useState<boolean>(true);
   const [isDirty, setDirty] = useState(false);
@@ -40,7 +41,7 @@ export const StudentsTable: FC<Props> = ({ maxStudents }) => {
       });
   }, []);
 
-  const handleAddStudent = (student: User) => {
+  const handleAddStudent = (student: Student) => {
     setStudents((prevStudents) => [...prevStudents, student]);
     setDirty(true);
   };

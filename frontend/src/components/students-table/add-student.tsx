@@ -8,10 +8,10 @@ import emailApi from "api/email";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Input } from "components/ui/input";
-import type { User } from "@shared/types/user";
 import user from "@/api/user";
 import { Dialog, DialogTrigger, DialogContent, DialogTitle } from "../ui/dialog";
 import { v4 as uuidv4 } from "uuid";
+import type { Student } from "@shared/types/students";
 
 const schema = yup.object().shape({
   email: yup
@@ -47,7 +47,7 @@ const schema = yup.object().shape({
 export type AddStudentFormData = yup.InferType<typeof schema>;
 
 interface AddStudentProps {
-  onChange: (student: User) => void;
+  onChange: (student: Student) => void;
 }
 
 export const AddStudent: FC<AddStudentProps> = ({ onChange }) => {
@@ -77,7 +77,8 @@ export const AddStudent: FC<AddStudentProps> = ({ onChange }) => {
 
     const foundStudent = await user.getUserByEmail(studentData.email);
     onChange({
-      id: foundStudent.id,
+      id: "new-" + uuidv4(),
+      userId: foundStudent.id,
       email: foundStudent.email,
       name: foundStudent.name,
     });

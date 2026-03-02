@@ -1,7 +1,6 @@
 import { Calendar } from "@/components/calendar";
 import { useEffect, useState } from "react";
 import { type Event, type EventsFilter, EventStatus } from "@shared/types/event";
-import type { User } from "@shared/types/user";
 import eventApi from "api/event";
 import tutorsApi from "api/tutors";
 import { useAuth } from "@/contexts/auth-context";
@@ -11,10 +10,11 @@ import { _ } from "@/translates";
 import { EventFilter } from "components/calendar/event-filter";
 import { Blockquote, Separator } from "@radix-ui/themes";
 import { filterEvents } from "pages/workspace/calendar/functions";
+import type { Student } from "@shared/types/students";
 
 export const CalendarPage = () => {
   const [events, setEvents] = useState<Event[]>([]);
-  const [students, setStudents] = useState<User[]>([]);
+  const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(true);
   const [isDirty, setDirty] = useState(false);
   const [filter, setFilter] = useState<EventsFilter>({ statuses: [], studentIds: [] });

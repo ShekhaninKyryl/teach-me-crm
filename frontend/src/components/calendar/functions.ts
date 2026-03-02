@@ -1,8 +1,8 @@
 import { type Event, EventStatus, type EventStatusType } from "@shared/types/event";
-import type { User } from "@shared/types/user";
 import type { EventInput } from "@fullcalendar/core";
+import type { Student } from "@shared/types/students";
 
-export const getFullCalendarEvents = (events: Event[], students: User[]): EventInput[] => {
+export const getFullCalendarEvents = (events: Event[], students: Student[]): EventInput[] => {
   return events.map((event) => {
     const baseEvent: EventInput = {
       id: event.id,

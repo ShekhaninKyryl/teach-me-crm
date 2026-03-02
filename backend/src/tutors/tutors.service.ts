@@ -6,7 +6,10 @@ import {
 import { CreateTutorDto } from "./dto/create-tutor.dto";
 import { UpdateTutorDto } from "./dto/update-tutor.dto";
 import * as bcrypt from "bcryptjs";
-import { StudentAsUserDto } from "./dto/student-as-user.dto";
+import {
+  CreateStudentAsUserDto,
+  StudentAsUserDto,
+} from "./dto/student-as-user.dto";
 import {
   mapFiltersToPrismaWhere,
   mapTutorProfileToDto,
@@ -16,7 +19,6 @@ import {
 import { Tutor } from "@shared/types/tutor";
 import { Filter } from "@shared/types/filter";
 import { PrismaService } from "prisma/prisma.service";
-import { LessonFormat } from "@prisma/client";
 import { JwtService } from "@nestjs/jwt";
 import { FREE_STUDENTS_CAPACITY_LIMIT } from "@constants/index";
 
@@ -95,13 +97,7 @@ export class TutorsService {
                 })),
               },
 
-              formats: dto.formats?.length
-                ? {
-                    create: dto.formats.map((f) => ({
-                      format: f.toUpperCase() as LessonFormat,
-                    })),
-                  }
-                : undefined,
+              formats: dto.formats ?? [],
             },
           },
         },
@@ -125,7 +121,6 @@ export class TutorsService {
       const tutor = await tx.tutorProfile.findUnique({
         where: { userId },
         select: {
-          id: true,
           userId: true,
           user: {
             select: { passwordHash: true },
@@ -178,28 +173,28 @@ export class TutorsService {
           ),
         );
 
-        await tx.tutorSubject.deleteMany({ where: { tutorId: tutor.id } });
+        await tx.tutorSubject.deleteMany({
+          where: { tutorUserId: tutor.userId },
+        });
 
         if (subjects.length) {
           await tx.tutorSubject.createMany({
-            data: subjects.map((s) => ({ tutorId: tutor.id, subjectId: s.id })),
+            data: subjects.map((s) => ({
+              tutorUserId: tutor.userId,
+              subjectId: s.id,
+            })),
             skipDuplicates: true,
           });
         }
       }
 
       if (dto.formats) {
-        await tx.tutorFormat.deleteMany({ where: { tutorId: tutor.id } });
-
-        if (dto.formats.length) {
-          await tx.tutorFormat.createMany({
-            data: dto.formats.map((f) => ({
-              tutorId: tutor.id,
-              format: f.toUpperCase() as LessonFormat,
-            })),
-            skipDuplicates: true,
-          });
-        }
+        await tx.tutorProfile.update({
+          where: { userId: tutor.userId },
+          data: {
+            formats: dto.formats.map((f) => f.toUpperCase()),
+          },
+        });
       }
 
       if (dto.password) {
@@ -227,73 +222,102 @@ export class TutorsService {
       return this.getTutorById(userId);
     });
   }
-  async getTutorsStudents(tutorId: string): Promise<StudentAsUserDto[]> {
+  async getTutorsStudents(userId: string): Promise<StudentAsUserDto[]> {
+    const tutorExists = await this.prisma.tutorProfile.findUnique({
+      where: { userId },
+      select: { userId: true },
+    });
+
+    if (!tutorExists) {
+      throw new BadRequestException(`Tutor not found for userId=${userId}`);
+    }
+
     const students = await this.prisma.student.findMany({
-      where: { tutorId },
-      include: { linkedUser: true },
+      where: { tutorUserId: userId },
+      include: { user: true },
       orderBy: { createdAt: "asc" },
     });
 
     return students.map((s) => ({
       id: s.id,
-      name: s.linkedUser?.name ?? s.name,
-      email: s.linkedUser?.email ?? null,
+      name: s.user?.name ?? s.name,
+      email: s.user?.email ?? null,
+      color: s.color ?? null,
 
-      avatar: s.linkedUser?.avatar ?? s.avatar ?? null,
-
-      phone: s.linkedUser?.phone ?? s.phone ?? null,
-      viber: s.linkedUser?.viber ?? s.viber ?? null,
-      telegram: s.linkedUser?.telegram ?? s.telegram ?? null,
-      whatsapp: s.linkedUser?.whatsapp ?? s.whatsapp ?? null,
+      avatar: s.user?.avatar ?? null,
+      phone: s.user?.phone ?? null,
+      viber: s.user?.viber ?? null,
+      telegram: s.user?.telegram ?? null,
+      whatsapp: s.user?.whatsapp ?? null,
     }));
   }
 
   async saveTutorsStudents(
-    tutorId: string,
-    students: StudentAsUserDto[],
+    tutorUserId: string,
+    students: CreateStudentAsUserDto[],
   ): Promise<void> {
     await this.prisma.$transaction(async (tx) => {
       const existing = await tx.student.findMany({
-        where: { tutorId },
+        where: { tutorUserId },
         select: { id: true },
       });
-      const existingIds = new Set(existing.map((x) => x.id));
+      const existingStudentIds = new Set(existing.map((x) => x.id));
 
-      const incomingIds = new Set<string>();
+      const possibleUserIds = Array.from(
+        new Set((students ?? []).map((s) => s?.userId).filter(Boolean)),
+      ) as string[];
+
+      const existingUsers = possibleUserIds.length
+        ? await tx.user.findMany({
+            where: { id: { in: possibleUserIds } },
+            select: { id: true },
+          })
+        : [];
+      const existingUserIds = new Set(existingUsers.map((u) => u.id));
+
+      const incomingStudentIds = new Set<string>();
 
       for (const st of students ?? []) {
-        if (st?.id && existingIds.has(st.id)) {
-          incomingIds.add(st.id);
+        if (!st) continue;
+
+        if (st.id && existingStudentIds.has(st.id)) {
+          incomingStudentIds.add(st.id);
 
           await tx.student.update({
             where: { id: st.id },
             data: {
               name: st.name,
-              avatar: st.avatar ?? undefined,
-              phone: st.phone ?? undefined,
-              viber: st.viber ?? undefined,
-              telegram: st.telegram ?? undefined,
-              whatsapp: st.whatsapp ?? undefined,
+              color: st.color,
+              ...(st.userId && existingUserIds.has(st.userId)
+                ? { userId: st.userId }
+                : st.userId === null
+                  ? { userId: null }
+                  : {}),
             },
           });
-        } else {
-          const created = await tx.student.create({
-            data: {
-              tutorId,
-              name: st.name,
-              avatar: st.avatar ?? undefined,
-              phone: st.phone ?? undefined,
-              viber: st.viber ?? undefined,
-              telegram: st.telegram ?? undefined,
-              whatsapp: st.whatsapp ?? undefined,
-            },
-            select: { id: true },
-          });
-          incomingIds.add(created.id);
+
+          continue;
         }
+
+        const userIdToLink =
+          st.userId && existingUserIds.has(st.userId) ? st.userId : null;
+
+        const created = await tx.student.create({
+          data: {
+            tutorUserId,
+            userId: userIdToLink,
+            name: st.name,
+            color: st.color,
+          },
+          select: { id: true },
+        });
+
+        incomingStudentIds.add(created.id);
       }
 
-      const toDelete = [...existingIds].filter((id) => !incomingIds.has(id));
+      const toDelete = [...existingStudentIds].filter(
+        (id) => !incomingStudentIds.has(id),
+      );
 
       if (toDelete.length) {
         await tx.student.deleteMany({

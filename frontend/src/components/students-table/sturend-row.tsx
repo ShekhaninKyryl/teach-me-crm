@@ -2,12 +2,12 @@ import { Popover, Table } from "@radix-ui/themes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Wheel } from "@uiw/react-color";
 import { type FC, useState } from "react";
-import type { User } from "@shared/types/user";
 import { RemoveStudent } from "components/students-table/remove-student";
+import type { Student } from "@shared/types/students";
 
 interface Props {
-  student: User;
-  updateStudent: (student: User) => void;
+  student: Student;
+  updateStudent: (student: Student) => void;
   removeStudent: (studentId: string) => void;
 }
 
