@@ -340,9 +340,21 @@ export class TutorsService {
   }
 
   async updateMaxStudents(tutorId: string, maxStudents: number): Promise<void> {
-    await this.prisma.tutorProfile.update({
-      where: { userId: tutorId },
-      data: { maxStudents },
+    await this.prisma.$transaction(async (tx) => {
+      const studentsCount = await tx.student.count({
+        where: { tutorUserId: tutorId },
+      });
+
+      if (maxStudents < studentsCount) {
+        throw new BadRequestException(
+          `Cannot reduce capacity to ${maxStudents}. Tutor already has ${studentsCount} students.`,
+        );
+      }
+
+      await tx.tutorProfile.update({
+        where: { userId: tutorId },
+        data: { maxStudents },
+      });
     });
   }
 }
