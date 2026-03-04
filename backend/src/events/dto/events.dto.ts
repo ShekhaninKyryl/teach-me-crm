@@ -26,7 +26,7 @@ export class TimeRangeDto {
   end!: Date;
 }
 
-export class UpsertEventDto {
+export class EventDto {
   @IsUUID()
   id!: string;
 

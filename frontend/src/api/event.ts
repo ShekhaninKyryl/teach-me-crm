@@ -5,7 +5,9 @@ import { MOCK_EVENTS } from "api/mocks/events";
 
 export interface EventApi {
   getEvents(userId: string): Promise<Event[]>;
-  setEvents(events: Event[]): Promise<void>;
+  createEvents(events: Event[]): Promise<void>;
+  updateEvents(events: Event[]): Promise<void>;
+  deleteEvent(eventId: string): Promise<void>;
 }
 
 const eventApiMock: EventApi = {
@@ -17,8 +19,16 @@ const eventApiMock: EventApi = {
       }, 1000)
     );
   },
-  async setEvents(events) {
+  async createEvents(events) {
+    console.log("Created events: ", events.length);
+  },
+
+  async updateEvents(events) {
     console.log("Updated events: ", events.length);
+  },
+
+  async deleteEvent(eventId: string) {
+    console.log("Deleted event: ", eventId);
   },
 };
 
@@ -29,8 +39,18 @@ const eventApi: EventApi = {
     });
     return response.data;
   },
-  async setEvents(events) {
+  async createEvents(events) {
     const response = await axios.post<void>("/events", events);
+    return response.data;
+  },
+
+  async updateEvents(events) {
+    const response = await axios.patch<void>("/events", events);
+    return response.data;
+  },
+
+  async deleteEvent(eventId: string) {
+    const response = await axios.delete<void>(`/events/${eventId}`);
     return response.data;
   },
 };

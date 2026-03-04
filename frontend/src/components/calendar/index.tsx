@@ -26,6 +26,10 @@ interface CalendarProps {
   events: Event[];
   students: Student[];
   onChange: (events: Event[]) => void;
+
+  onAdd: (event: Event) => void;
+  onEdit: (event: Event) => void;
+  onDelete: (eventId: string) => void;
 }
 
 export const Calendar: FC<CalendarProps> = ({ tutorId, events, students, onChange }) => {

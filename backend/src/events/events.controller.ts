@@ -1,15 +1,15 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
+  Patch,
   Post,
   UseGuards,
-  UsePipes,
-  ValidationPipe,
 } from "@nestjs/common";
 import { EventsService } from "./events.service";
-import { UpsertEventDto } from "./dto/events.dto";
+import { EventDto } from "./dto/events.dto";
 import { AuthGuard } from "src/auth/auth.guard";
 
 @UseGuards(AuthGuard)
@@ -23,14 +23,17 @@ export class EventsController {
   }
 
   @Post()
-  @UsePipes(
-    new ValidationPipe({
-      whitelist: true,
-      transform: true,
-      forbidNonWhitelisted: true,
-    }),
-  )
-  async setEvents(@Body() events: UpsertEventDto[]) {
-    await this.eventsService.upsertMany(events);
+  async setEvents(@Body() events: EventDto[]) {
+    await this.eventsService.createEvents(events);
+  }
+
+  @Patch()
+  async updateEvents(@Body() events: EventDto[]) {
+    await this.eventsService.updateEvents(events);
+  }
+
+  @Delete(":eventId")
+  async deleteEvent(@Param("eventId") eventId: string) {
+    await this.eventsService.deleteEvent(eventId);
   }
 }
