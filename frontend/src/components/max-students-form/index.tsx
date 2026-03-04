@@ -29,8 +29,6 @@ export const MaxStudentsForm: FC<Props> = ({ maxStudents, onSubmit }) => {
     },
   });
 
-  console.log("Form values:", form.getValues());
-
   const isDirty = form.formState.isDirty;
 
   const handleSubmit = (data: { maxStudents: number }) => {
