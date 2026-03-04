@@ -24,7 +24,7 @@ const eventApiMock: EventApi = {
 
 const eventApi: EventApi = {
   async getEvents(userId) {
-    const response = await axios.get<Event[]>("/events", {
+    const response = await axios.get<Event[]>(`/events/${userId}`, {
       params: { userId },
     });
     return response.data;

@@ -9,13 +9,16 @@ import { PrimaryButton } from "components/common/button";
 import { AddStudent } from "components/students-table/add-student";
 import { Progress } from "components/ui/progress";
 import { UNLIMITED_STUDENTS_CAPACITY_THRESHOLD } from "@/constants";
+import { useAuth } from "@/contexts/auth-context";
+import type { Student } from "@shared/types/students";
 
 interface Props {
   maxStudents: number;
 }
 
 export const StudentsTable: FC<Props> = ({ maxStudents }) => {
-  const [students, setStudents] = useState<User[]>([]);
+  const [students, setStudents] = useState<Student[]>([]);
+  const { user } = useAuth();
   const [loading, setLoading] = useState<boolean>(true);
   const [isDirty, setDirty] = useState(false);
 
@@ -25,9 +28,10 @@ export const StudentsTable: FC<Props> = ({ maxStudents }) => {
       : (students.length / maxStudents) * 100;
 
   useEffect(() => {
+    if (!user) return;
     setLoading(true);
     tutors
-      .getTutorsStudents("some-tutor-id")
+      .getTutorsStudents(user.id)
       .then((fetchedStudents) => {
         setStudents(fetchedStudents);
       })
@@ -37,7 +41,7 @@ export const StudentsTable: FC<Props> = ({ maxStudents }) => {
       });
   }, []);
 
-  const handleAddStudent = (student: User) => {
+  const handleAddStudent = (student: Student) => {
     setStudents((prevStudents) => [...prevStudents, student]);
     setDirty(true);
   };
@@ -57,9 +61,10 @@ export const StudentsTable: FC<Props> = ({ maxStudents }) => {
   };
 
   const handleSubmit = async (students: User[]) => {
+    if (!user) return;
     setLoading(true);
     try {
-      await tutors.saveTutorsStudents("some-tutor-id", students);
+      await tutors.saveTutorsStudents(user.id, students);
     } catch (error) {
     } finally {
       setLoading(false);

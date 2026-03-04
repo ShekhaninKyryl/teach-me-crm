@@ -12,6 +12,7 @@ import {
 import { TutorsService } from "./tutors.service";
 import { CreateTutorDto } from "./dto/create-tutor.dto";
 import { UpdateTutorDto } from "./dto/update-tutor.dto";
+import { CreateStudentAsUserDto } from "./dto/student-as-user.dto";
 import { Filter } from "@shared/types/filter";
 import { AuthGuard } from "../auth/auth.guard";
 import { setAccessTokenCookie } from "src/auth/cookies";
@@ -39,14 +40,17 @@ export class TutorsController {
 
   @UseGuards(AuthGuard)
   @Get(":id/students")
-  getTutorsStudents(@Param("id") tutorId: string) {
-    return this.tutors.getTutorsStudents(tutorId);
+  getTutorsStudents(@Param("id") userId: string) {
+    return this.tutors.getTutorsStudents(userId);
   }
 
   @UseGuards(AuthGuard)
   @Put(":id/students")
-  saveTutorsStudents(@Param("id") tutorId: string, @Body() students: any[]) {
-    return this.tutors.saveTutorsStudents(tutorId, students);
+  saveTutorsStudents(
+    @Param("id") userId: string,
+    @Body() students: CreateStudentAsUserDto[],
+  ) {
+    return this.tutors.saveTutorsStudents(userId, students);
   }
 
   @UseGuards(AuthGuard)
@@ -66,5 +70,20 @@ export class TutorsController {
     const { access_token } = await this.tutors.createTutorProfile(dto);
     setAccessTokenCookie(res, access_token);
     return { success: true };
+  }
+
+  @UseGuards(AuthGuard)
+  @Get(":id/max-students")
+  async getMaxStudents(@Param("id") tutorId: string) {
+    return this.tutors.getMaxStudents(tutorId);
+  }
+
+  @UseGuards(AuthGuard)
+  @Patch(":id/max-students")
+  async updateMaxStudents(
+    @Param("id") tutorId: string,
+    @Body("maxStudents") maxStudents: number,
+  ) {
+    return this.tutors.updateMaxStudents(tutorId, maxStudents);
   }
 }

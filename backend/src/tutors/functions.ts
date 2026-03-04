@@ -1,6 +1,7 @@
 import { Tutor } from "@shared/types/tutor";
 import { Filter, FilterType } from "@shared/types/filter";
-import { LessonFormat, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
+import type { Format } from "@shared/types/common";
 
 export type TutorProfileWithInclude = Prisma.TutorProfileGetPayload<{
   include: ReturnType<typeof tutorInclude>;
@@ -10,7 +11,6 @@ export function tutorInclude() {
   return {
     user: true,
     subjects: { include: { subject: true } },
-    formats: true,
   } satisfies Prisma.TutorProfileInclude;
 }
 
@@ -27,9 +27,9 @@ export function mapTutorProfileToDto(tp: TutorProfileWithInclude): Tutor {
     whatsapp: tp.user?.whatsapp ?? undefined,
 
     subjects: (tp.subjects ?? []).map((x: any) => x.subject.label),
-    formats: (tp.formats ?? []).map((x: any) => x.format.toLowerCase()),
+    formats: (tp.formats ?? []).map((f) => f.toLowerCase()) as Format[],
 
-    rating: tp.rating,
+    rating: tp.rating ?? null,
     price: tp.price,
     location: tp.location ?? undefined,
     bio: tp.bio ?? undefined,
@@ -83,11 +83,7 @@ export function mapFiltersToPrismaWhere(
 
   if (spread.format?.length) {
     where.formats = {
-      some: {
-        format: {
-          in: spread.format.map((f) => f.toUpperCase()) as LessonFormat[],
-        },
-      },
+      hasSome: spread.format.map((f) => f.toUpperCase()),
     };
   }
 

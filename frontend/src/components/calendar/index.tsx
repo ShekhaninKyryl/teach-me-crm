@@ -12,7 +12,6 @@ import type {
 import ukLocale from "@fullcalendar/core/locales/uk";
 import { useParams } from "react-router-dom";
 import { type Event } from "@shared/types/event";
-import type { User } from "@shared/types/user";
 import { type FC, useEffect, useMemo, useRef, useState } from "react";
 import { useSidebar } from "components/ui/sidebar";
 import { getFullCalendarEvents, isEditableEvent } from "components/calendar/functions";
@@ -20,11 +19,12 @@ import type { CustomEventContentArg } from "components/calendar/type";
 import { EventDisplay } from "components/calendar/event-display";
 import classNames from "classnames";
 import { EventDialog } from "components/calendar/event-dialog";
+import type { Student } from "@shared/types/students";
 
 interface CalendarProps {
   tutorId: string;
   events: Event[];
-  students: User[];
+  students: Student[];
   onChange: (events: Event[]) => void;
 }
 

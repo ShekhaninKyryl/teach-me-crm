@@ -1,15 +1,55 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+model User {
+  id           String  @id @default(uuid())
+  name         String
+  email        String? @unique
+  passwordHash String?
+
+  avatar String?
+
+  phone    String?
+  viber    String?
+  telegram String?
+  whatsapp String?
+
+  tutorProfile    TutorProfile?
+  createdSubjects Subject[]
+
+  studentsAsUser Student[] @relation("StudentUser")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model TutorProfile {
+  userId String @id
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  subjects     TutorSubject[]
+  formats      String[]
+  rating       Float?
+  price        Int
+  location     String?
+  bio          String?
+  availability Json?
+  maxStudents  Int?
+
+  students Student[] @relation("TutorStudents")
+  events   Event[]   @relation("TutorEvents")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("tutor_profiles")
 }
 
 model Subject {
@@ -29,103 +69,39 @@ model Subject {
 }
 
 model TutorSubject {
-  tutorId   String
-  subjectId String
+  tutorUserId String
+  subjectId   String
 
-  tutor   TutorProfile @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+  tutor   TutorProfile @relation(fields: [tutorUserId], references: [userId], onDelete: Cascade)
   subject Subject      @relation(fields: [subjectId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 
-  @@id([tutorId, subjectId])
+  @@id([tutorUserId, subjectId])
   @@index([subjectId])
   @@map("tutor_subjects")
-}
-
-model User {
-  id           String  @id @default(uuid())
-  name         String
-  email        String? @unique
-  passwordHash String?
-
-  avatar String?
-
-  phone    String?
-  viber    String?
-  telegram String?
-  whatsapp String?
-
-  tutorProfile    TutorProfile?
-  linkedStudents  Student[]
-  createdSubjects Subject[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("users")
-}
-
-enum LessonFormat {
-  ONLINE
-  OFFLINE
-}
-
-model TutorProfile {
-  id     String @id @default(uuid())
-  userId String @unique
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  subjects     TutorSubject[]
-  formats      TutorFormat[]
-  rating       Float?
-  price        Int
-  location     String?
-  bio          String?
-  availability Json?
-  maxStudents  Int?
-
-  students Student[]
-  events   Event[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("tutor_profiles")
-}
-
-model TutorFormat {
-  tutorId String
-  tutor   TutorProfile @relation(fields: [tutorId], references: [id], onDelete: Cascade)
-
-  format LessonFormat
-
-  @@id([tutorId, format])
-  @@map("tutor_formats")
 }
 
 model Student {
   id String @id @default(uuid())
 
-  tutorId String
-  tutor   TutorProfile @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+  tutorUserId String
+  tutor       TutorProfile @relation("TutorStudents", fields: [tutorUserId], references: [userId], onDelete: Cascade)
 
-  name   String
-  color  String?
-  avatar String?
+  userId String?
+  user   User?   @relation("StudentUser", fields: [userId], references: [id], onDelete: SetNull)
 
-  phone    String?
-  viber    String?
-  telegram String?
-  whatsapp String?
+  name  String
+  color String?
 
-  events       Event[]
-  linkedUserId String?
-  linkedUser   User?   @relation(fields: [linkedUserId], references: [id], onDelete: SetNull)
+  events Event[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([tutorId])
+  @@unique([tutorUserId, userId])
+  @@index([tutorUserId])
+  @@index([userId])
   @@map("students")
 }
 
@@ -140,8 +116,8 @@ enum EventStatus {
 model Event {
   id String @id @default(uuid())
 
-  tutorId String
-  tutor   TutorProfile @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+  tutorUserId String
+  tutor       TutorProfile @relation("TutorEvents", fields: [tutorUserId], references: [userId], onDelete: Cascade)
 
   studentId String
   student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
@@ -160,7 +136,7 @@ model Event {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([tutorId, startAt])
+  @@index([tutorUserId, startAt])
   @@index([studentId, startAt])
   @@map("events")
 }

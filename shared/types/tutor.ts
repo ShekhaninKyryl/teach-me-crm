@@ -4,7 +4,7 @@ import type {Format} from "./common";
 export type Tutor = User & {
   subjects: string[];
   formats: Format[];
-  rating: number;
+  rating: number | null;
   price: number;
   location?: string;
   bio?: string;

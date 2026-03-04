@@ -5,15 +5,18 @@ import type { User } from "@shared/types/user";
 import type { Tutor, TutorWithPassword } from "@shared/types/tutor";
 import { FORMAT_OPTIONS } from "@shared/types/common";
 import type { Filter } from "@shared/types/filter";
+import type { Student } from "@shared/types/students";
 
 export interface TutorApi {
   getTopTutors(): Promise<Tutor[]>;
   getTutorById(id: string): Promise<Tutor>;
-  getTutorsStudents(tutorId: string): Promise<User[]>;
-  saveTutorsStudents(tutorId: string, students: User[]): Promise<void>;
+  getTutorsStudents(tutorId: string): Promise<Student[]>;
+  saveTutorsStudents(tutorId: string, students: Student[]): Promise<Student[]>;
   updateTutorProfile(tutorId: string, tutorData: Partial<TutorWithPassword>): Promise<Tutor>;
   createTutorProfile(tutor: Partial<TutorWithPassword>): Promise<Tutor>;
   searchTutors(query: Filter[]): Promise<Tutor[]>;
+  getStudentsCount(tutorId: string): Promise<number>;
+  setMaxStudents(tutorId: string, maxStudents: number): Promise<void>;
 }
 
 const tutorApiMock: TutorApi = {
@@ -70,7 +73,7 @@ const tutorApiMock: TutorApi = {
       }, 500)
     );
   },
-  async getTutorsStudents(tutorId: string): Promise<User[]> {
+  async getTutorsStudents(tutorId: string): Promise<Student[]> {
     console.log("Getting students for tutor:", tutorId);
     return new Promise((resolve) =>
       setTimeout(() => {
@@ -104,11 +107,17 @@ const tutorApiMock: TutorApi = {
       }, 500)
     );
   },
-  async saveTutorsStudents(tutorId: string, students: User[]): Promise<void> {
+  async saveTutorsStudents(tutorId: string, students: User[]): Promise<Student[]> {
     return new Promise((resolve) =>
       setTimeout(() => {
         console.log(`Saved ${students.length} students for tutor ${tutorId}`);
-        resolve();
+        resolve([
+          { id: "1", name: "Alice", email: "alice@example.com", color: "#ff0000" },
+          { id: "2", name: "Bob", email: "bob@example.com", color: "#ff00ff" },
+          { id: "3", name: "Charlie", email: "charlie@example", color: "#ffff00" },
+          { id: "4", name: "User 1", email: "", color: "#00ff00" },
+          { id: "5", name: "User 2", email: "", color: "#0000ff" },
+        ]);
       }, 500)
     );
   },
@@ -138,6 +147,22 @@ const tutorApiMock: TutorApi = {
       }, 500)
     );
   },
+  async getStudentsCount(tutorId: string): Promise<number> {
+    return new Promise((resolve) =>
+      setTimeout(() => {
+        console.log(`Getting students count for tutor ${tutorId}`);
+        resolve(5); // Mocked count of students
+      }, 300)
+    );
+  },
+  async setMaxStudents(tutorId: string, maxStudents: number): Promise<void> {
+    return new Promise((resolve) =>
+      setTimeout(() => {
+        console.log(`Set max students for tutor ${tutorId} to ${maxStudents}`);
+        resolve();
+      }, 300)
+    );
+  },
 };
 
 const tutorApi = {
@@ -149,16 +174,17 @@ const tutorApi = {
     const response = await axios(`/tutors/${id}`);
     return response.data;
   },
-  async getTutorsStudents(tutorId: string): Promise<User[]> {
-    const response = await axios.get<User[]>(`/tutors/${tutorId}/students`);
+  async getTutorsStudents(tutorId: string): Promise<Student[]> {
+    const response = await axios.get<Student[]>(`/tutors/${tutorId}/students`);
     return response.data;
   },
   async updateTutorProfile(tutorId: string, tutorData: Partial<TutorWithPassword>): Promise<Tutor> {
     const response = await axios.patch(`/tutors/${tutorId}`, tutorData);
     return response.data;
   },
-  async saveTutorsStudents(tutorId: string, students: User[]): Promise<void> {
-    await axios.post(`/tutors/${tutorId}/students`, { students });
+  async saveTutorsStudents(tutorId: string, students: Student[]): Promise<Student[]> {
+    const response = await axios.put(`/tutors/${tutorId}/students`, students);
+    return response.data;
   },
   async searchTutors(query: Filter[]): Promise<Tutor[]> {
     const response = await axios.post(`/tutors/search`, query);
@@ -167,6 +193,13 @@ const tutorApi = {
   async createTutorProfile(tutor: Partial<TutorWithPassword>): Promise<Tutor> {
     const response = await axios.post("/tutors", tutor);
     return response.data;
+  },
+  async getStudentsCount(tutorId: string): Promise<number> {
+    const response = await axios.get(`/tutors/${tutorId}/max-students`);
+    return response.data;
+  },
+  async setMaxStudents(tutorId: string, maxStudents: number): Promise<void> {
+    await axios.patch(`/tutors/${tutorId}/max-students`, { maxStudents });
   },
 };
 

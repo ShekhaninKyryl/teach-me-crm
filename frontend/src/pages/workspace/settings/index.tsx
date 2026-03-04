@@ -31,11 +31,11 @@ export const SettingsPage = () => {
       const updatedTutor = await tutorsApi.updateTutorProfile(tutor.id, data);
       setTutor(updatedTutor);
       setError(null);
+      window.location.reload();
     } catch {
       setError("Failed to update profile");
     } finally {
       setLoading(false);
-      window.location.reload();
     }
   };
 

@@ -121,9 +121,9 @@ export const HowItWorks = () => {
             <CarouselContent className="px-6">
               {slides.map(({ title, description, Icon, imageSrc, imageAlt }, idx) => (
                 <CarouselItem key={idx}>
-                  <div className="px-5 py-5 sm:px-7 sm:py-6">
-                    <div className="grid gap-4 md:grid-cols-[1fr_320px] lg:grid-cols-[1fr_720px]">
-                      <div className="min-w-0">
+                  <div className="px-5 py-5 sm:px-7 sm:py-6 flex justify-center">
+                    <div className="grid gap-4 md:grid-cols-[1fr_320px] lg:grid-cols-[1fr_720px] xl:max-w-1/2  lg:max-w-lvw">
+                      <div className="min-w-xs">
                         <div className="flex items-center gap-3">
                           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
                             <Icon className="h-5 w-5" />

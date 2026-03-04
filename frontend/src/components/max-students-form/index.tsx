@@ -1,12 +1,12 @@
-import * as yup from 'yup';
-import { FREE_STUDENTS_CAPACITY_LIMIT, UNLIMITED_STUDENTS_CAPACITY_THRESHOLD } from '@/constants';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import type { FC } from 'react';
-import { Form, FormControl, FormField, FormItem, FormLabel } from 'components/ui/form';
-import { _ } from '@/translates';
-import { Slider } from 'components/ui/slider';
-import { PrimaryButton } from 'components/common/button';
+import * as yup from "yup";
+import { FREE_STUDENTS_CAPACITY_LIMIT, UNLIMITED_STUDENTS_CAPACITY_THRESHOLD } from "@/constants";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import type { FC } from "react";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "components/ui/form";
+import { _ } from "@/translates";
+import { Slider } from "components/ui/slider";
+import { PrimaryButton } from "components/common/button";
 
 const schema = yup.object().shape({
   maxStudents: yup
@@ -18,7 +18,7 @@ const schema = yup.object().shape({
 
 interface Props {
   maxStudents: number;
-  onSubmit: ({ maxStudents }: { maxStudents: number }) => void;
+  onSubmit: (maxStudents: number) => void;
 }
 
 export const MaxStudentsForm: FC<Props> = ({ maxStudents, onSubmit }) => {
@@ -31,20 +31,25 @@ export const MaxStudentsForm: FC<Props> = ({ maxStudents, onSubmit }) => {
 
   const isDirty = form.formState.isDirty;
 
+  const handleSubmit = (data: { maxStudents: number }) => {
+    onSubmit(data.maxStudents);
+    form.reset(data);
+  };
+
   return (
     <div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+        <form onSubmit={form.handleSubmit(handleSubmit)}>
           <FormField
             control={form.control}
             name="maxStudents"
             render={({ field }) => (
               <FormItem className="flex gap-2">
                 <FormLabel className="min-w-xs gap-0">
-                  {_('Maximum Number of Students')}:{' '}
+                  {_("Maximum Number of Students")}:{" "}
                   <span className="font-bold">
                     {field.value === UNLIMITED_STUDENTS_CAPACITY_THRESHOLD
-                      ? _('Unlimited')
+                      ? _("Unlimited")
                       : field.value}
                   </span>
                 </FormLabel>
@@ -61,7 +66,7 @@ export const MaxStudentsForm: FC<Props> = ({ maxStudents, onSubmit }) => {
             )}
           />
           <div className="flex justify-end mt-4">
-            <PrimaryButton disabled={!isDirty} className="w-xs" title={_('Save')} type="submit" />
+            <PrimaryButton disabled={!isDirty} className="w-xs" title={_("Save")} type="submit" />
           </div>
         </form>
       </Form>
