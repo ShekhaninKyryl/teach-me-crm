@@ -1,7 +1,7 @@
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import interactionPlugin from "@fullcalendar/interaction";
+import interactionPlugin, { type EventResizeDoneArg } from "@fullcalendar/interaction";
 import type {
   CustomContentGenerator,
   DateSelectArg,
@@ -146,6 +146,18 @@ export const Calendar: FC<CalendarProps> = ({
     setSelectedEventId(event.id);
   };
 
+  const handleResize = ({ event }: EventResizeDoneArg) => {
+    const selectedEvent = events.find((e) => e.id === event.id);
+    if (!selectedEvent) return;
+
+    const { start, end } = event;
+    if (!start || !end) {
+      throw new Error("Can't detect time range for event");
+    }
+
+    handleEventUpdate({ ...selectedEvent, timeRange: { start, end } });
+  };
+
   const handleCancel = () => {
     setIsEditModalOpen(false);
     setIsDragModalOpen(false);
@@ -157,8 +169,6 @@ export const Calendar: FC<CalendarProps> = ({
     <EventDisplay {...eventInfo} />
   );
   const lessons: EventInput[] = getFullCalendarEvents(events, students);
-
-  console.log(isDragModalOpen, timeRange);
 
   return (
     <>
@@ -211,6 +221,7 @@ export const Calendar: FC<CalendarProps> = ({
         select={handleSelect}
         eventClick={handleClick}
         eventDrop={handleDrop}
+        eventResize={handleResize}
       />
       {isEditModalOpen && (
         <EventDialog
