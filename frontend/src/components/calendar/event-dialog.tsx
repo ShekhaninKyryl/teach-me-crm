@@ -1,5 +1,5 @@
 import { Dialog, DialogContent, DialogTitle } from "components/ui/dialog";
-import { type FC } from "react";
+import { type FC, useEffect } from "react";
 import { _, _safe } from "@/translates";
 import { type Event, EventStatus, type EventStatusType } from "@shared/types/event";
 import type { User } from "@shared/types/user";
@@ -13,6 +13,7 @@ import { SelectorInput } from "components/common/selector/selector-input";
 import { Input } from "components/ui/input";
 import { Textarea } from "components/ui/textarea";
 import { DateTimePicker } from "components/date-time-picker";
+import { getLocalizedLessonTitle } from "components/calendar/functions";
 
 const schema = yup.object().shape({
   studentId: yup.string().required("Student is required"),
@@ -89,8 +90,8 @@ export const EventDialog: FC<Props> = ({
       ...selectedEvent,
       price: selectedEvent?.price?.toString(),
       timeRange: {
-        start: selectedEvent?.timeRange?.start || timeRange?.start,
-        end: selectedEvent?.timeRange?.end || timeRange?.end,
+        start: new Date(selectedEvent?.timeRange?.start || timeRange?.start || ""),
+        end: new Date(selectedEvent?.timeRange?.end || timeRange?.end || ""),
       },
       status: selectedEvent?.status || EventStatus.Pending,
     },
@@ -98,6 +99,15 @@ export const EventDialog: FC<Props> = ({
 
   const isNew = !selectedEvent;
   const isPaidStatus = form.watch("status") === EventStatus.Paid;
+  const studentId = form.watch("studentId");
+  const title = form.watch("title");
+
+  useEffect(() => {
+    if (studentId && !title) {
+      const selectedStudent = students.find((s) => s.id === studentId);
+      form.setValue("title", getLocalizedLessonTitle(selectedStudent?.name));
+    }
+  }, [studentId]);
 
   const handleSubmit = (data: EventFormData) => {
     const event: Event = {

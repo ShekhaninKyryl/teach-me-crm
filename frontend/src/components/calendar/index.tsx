@@ -32,7 +32,14 @@ interface CalendarProps {
   onDelete: (eventId: string) => void;
 }
 
-export const Calendar: FC<CalendarProps> = ({ tutorId, events, students, onChange }) => {
+export const Calendar: FC<CalendarProps> = ({
+  tutorId,
+  events,
+  students,
+  onChange,
+  onAdd,
+  onEdit,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedEventId, setSelectedEventId] = useState("");
   const [timeRange, setTimeRange] = useState<{ start: Date; end: Date }>();
@@ -59,10 +66,12 @@ export const Calendar: FC<CalendarProps> = ({ tutorId, events, students, onChang
     const updatedEvents = events.map((event) =>
       event.id === updatedEvent.id ? updatedEvent : event
     );
+    onEdit(updatedEvent);
     onChange(updatedEvents);
   };
 
   const handleEventCreate = (newEvent: Event) => {
+    onAdd(newEvent);
     onChange([...events, newEvent]);
   };
 

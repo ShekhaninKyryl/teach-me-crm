@@ -1,3 +1,4 @@
+import i18n from "i18next";
 import { type Event, EventStatus, type EventStatusType } from "@shared/types/event";
 import type { EventInput } from "@fullcalendar/core";
 import type { Student } from "@shared/types/students";
@@ -44,4 +45,16 @@ export const getFullCalendarEvents = (events: Event[], students: Student[]): Eve
 export const isEditableEvent = (status: EventStatusType): boolean => {
   const editableStatuses: EventStatusType[] = [EventStatus.Pending];
   return editableStatuses.includes(status);
+};
+
+export const getLocalizedLessonTitle = (studentName?: string) => {
+  const name = studentName || "unnamed";
+
+  switch (i18n.language) {
+    case "ua":
+      return `Урок з ${name}`;
+    case "en":
+    default:
+      return `Lesson with ${name}`;
+  }
 };

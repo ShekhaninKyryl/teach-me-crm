@@ -64,7 +64,7 @@ export class EventsService {
         endAt,
 
         weekly: e.weekly ?? false,
-        status: (e.status as any) ?? undefined,
+        status: e.status,
         price: e.price ?? null,
       };
     });

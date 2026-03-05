@@ -1,9 +1,9 @@
 export const EventStatus = {
-  Pending: "pending",
-  Rescheduled: "rescheduled",
-  Cancelled: "cancelled",
-  Completed: "completed",
-  Paid: "paid",
+  Pending: "PENDING",
+  Rescheduled: "RESCHEDULED",
+  Cancelled: "CANCELLED",
+  Completed: "COMPLETED",
+  Paid: "PAID",
 } as const;
 
 export type EventStatusType = (typeof EventStatus)[keyof typeof EventStatus];
