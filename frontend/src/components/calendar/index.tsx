@@ -11,15 +11,17 @@ import type {
 } from "@fullcalendar/core";
 import ukLocale from "@fullcalendar/core/locales/uk";
 import { useParams } from "react-router-dom";
-import { type Event } from "@shared/types/event";
+import { type Event, EventStatus } from "@shared/types/event";
 import { type FC, useEffect, useMemo, useRef, useState } from "react";
 import { useSidebar } from "components/ui/sidebar";
 import { getFullCalendarEvents, isEditableEvent } from "components/calendar/functions";
-import type { CustomEventContentArg } from "components/calendar/type";
+import type { CustomEventContentArg, DragEventVariantType } from "components/calendar/type";
 import { EventDisplay } from "components/calendar/event-display";
 import classNames from "classnames";
 import { EventDialog } from "components/calendar/event-dialog";
 import type { Student } from "@shared/types/students";
+import { EventDragDialog } from "components/calendar/event-drag-dialog";
+import { v4 as uuidv4 } from "uuid";
 
 interface CalendarProps {
   tutorId: string;
@@ -40,7 +42,8 @@ export const Calendar: FC<CalendarProps> = ({
   onAdd,
   onEdit,
 }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDragModalOpen, setIsDragModalOpen] = useState(false);
   const [selectedEventId, setSelectedEventId] = useState("");
   const [timeRange, setTimeRange] = useState<{ start: Date; end: Date }>();
   const { lng } = useParams();
@@ -81,29 +84,71 @@ export const Calendar: FC<CalendarProps> = ({
     } else {
       handleEventCreate(event);
     }
-    setIsModalOpen(false);
-    setSelectedEventId("");
-    setTimeRange(undefined);
+
+    handleCancel();
+  };
+
+  const handleDragComplete = ({
+    variant,
+    event,
+    oldEvent,
+  }: {
+    variant: DragEventVariantType;
+    event: Event;
+    oldEvent: Event;
+  }) => {
+    switch (variant) {
+      case "MOVE": {
+        handleEventUpdate(event);
+        break;
+      }
+      case "RESCHEDULE": {
+        const rescheduledOld: Event = { ...oldEvent, status: EventStatus.Rescheduled };
+        const createdNew: Event = { ...event, id: uuidv4() };
+
+        onEdit(rescheduledOld);
+        onAdd(createdNew);
+
+        const nextEvents = [
+          ...events.map((e) => (e.id === rescheduledOld.id ? rescheduledOld : e)),
+          createdNew,
+        ];
+
+        onChange(nextEvents);
+        break;
+      }
+      default:
+        throw new Error("Handle drag complete with unknown event variant");
+    }
+
+    handleCancel();
   };
 
   const handleSelect = ({ start, end }: DateSelectArg) => {
-    setIsModalOpen(true);
+    setIsEditModalOpen(true);
     setSelectedEventId("");
     setTimeRange({ start, end });
   };
 
   const handleClick = ({ event }: EventClickArg) => {
-    setIsModalOpen(true);
+    setIsEditModalOpen(true);
     setSelectedEventId(event.id);
   };
 
   const handleDrop = ({ event }: EventDropArg) => {
-    //TODO implement event time update after drag-and-drop
+    const { start, end } = event;
+    if (!start || !end) {
+      throw new Error("Can't detect time range for event");
+    }
+
+    setIsDragModalOpen(true);
+    setTimeRange({ start, end });
     setSelectedEventId(event.id);
   };
 
   const handleCancel = () => {
-    setIsModalOpen(false);
+    setIsEditModalOpen(false);
+    setIsDragModalOpen(false);
     setSelectedEventId("");
     setTimeRange(undefined);
   };
@@ -112,6 +157,8 @@ export const Calendar: FC<CalendarProps> = ({
     <EventDisplay {...eventInfo} />
   );
   const lessons: EventInput[] = getFullCalendarEvents(events, students);
+
+  console.log(isDragModalOpen, timeRange);
 
   return (
     <>
@@ -165,15 +212,24 @@ export const Calendar: FC<CalendarProps> = ({
         eventClick={handleClick}
         eventDrop={handleDrop}
       />
-      {isModalOpen && (
+      {isEditModalOpen && (
         <EventDialog
-          open={isModalOpen}
+          open={isEditModalOpen}
           tutorId={tutorId}
           selectedEvent={selectedEvent}
           students={students}
           timeRange={timeRange}
           onSubmit={handleSubmit}
           onCancel={handleCancel}
+        />
+      )}
+      {isDragModalOpen && timeRange && selectedEvent && (
+        <EventDragDialog
+          open={isDragModalOpen}
+          selectedEvent={selectedEvent}
+          timeRange={timeRange}
+          onCancel={handleCancel}
+          onSubmit={handleDragComplete}
         />
       )}
     </>

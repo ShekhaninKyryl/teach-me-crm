@@ -8,8 +8,7 @@ export const getFullCalendarEvents = (events: Event[], students: Student[]): Eve
     const baseEvent: EventInput = {
       id: event.id,
       title: event.title,
-      // TODO: Update when drag-and-drop will be implemented
-      editable: false,
+      editable: isEditableEvent(event.status),
       extendedProps: {
         studentId: event.studentId,
         tutorId: event.tutorId,

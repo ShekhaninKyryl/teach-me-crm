@@ -212,5 +212,10 @@
   "Reuse content across students": "Використовуйте матеріали повторно для різних учнів",
   "Work in progress - analytics UI coming soon": "У розробці — аналітика скоро буде доступна",
   "Work in progress - integrations UI coming soon": "У розробці — інтеграції скоро будуть доступні",
-  "Work in progress - asset management UI coming soon": "У розробці — керування матеріалами скоро буде доступне"
+  "Work in progress - asset management UI coming soon": "У розробці — керування матеріалами скоро буде доступне",
+  "Select move option": "Оберіть спосіб перенесення",
+  "RESCHEDULE": "Перенести",
+  "MOVE": "Пересунути",
+  "RESCHEDULE-description": "Перенести: створити нову подію на обраний час, а статус попередньої змінити на «Перенесено».",
+  "MOVE-description": "Пересунути: просто змінити час проведення обраної події."
 }

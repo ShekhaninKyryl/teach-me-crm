@@ -214,5 +214,10 @@
   "Reuse content across students": "Reuse content across students",
   "Work in progress - analytics UI coming soon": "Work in progress - analytics UI coming soon",
   "Work in progress - integrations UI coming soon": "Work in progress - integrations UI coming soon",
-  "Work in progress - asset management UI coming soon": "Work in progress - asset management UI coming soon"
+  "Work in progress - asset management UI coming soon": "Work in progress - asset management UI coming soon",
+  "Select move option": "",
+  "RESCHEDULE":  "Reschedule",
+  "MOVE": "Move",
+  "RESCHEDULE-description": "Reschedule: Create a new event at the selected time and update the status of the previous one to 'Rescheduled'.",
+  "MOVE-description": "Move: Shift the selected event to a new time."
 }
