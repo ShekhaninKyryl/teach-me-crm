@@ -8,7 +8,7 @@ export const getFullCalendarEvents = (events: Event[], students: Student[]): Eve
     const baseEvent: EventInput = {
       id: event.id,
       title: event.title,
-      editable: isEditableEvent(event.status),
+      editable: isEditableEvent(event),
       extendedProps: {
         studentId: event.studentId,
         tutorId: event.tutorId,
@@ -41,9 +41,9 @@ export const getFullCalendarEvents = (events: Event[], students: Student[]): Eve
   });
 };
 
-export const isEditableEvent = (status: EventStatusType): boolean => {
+export const isEditableEvent = (event: Event): boolean => {
   const editableStatuses: EventStatusType[] = [EventStatus.Pending];
-  return editableStatuses.includes(status);
+  return editableStatuses.includes(event.status) && !!event.studentId;
 };
 
 export const getLocalizedLessonTitle = (studentName?: string) => {

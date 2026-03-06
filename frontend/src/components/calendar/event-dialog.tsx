@@ -102,12 +102,17 @@ export const EventDialog: FC<Props> = ({
   const studentId = form.watch("studentId");
   const title = form.watch("title");
 
+  const isActiveLesson = isNew || selectedEvent?.studentId;
+
   useEffect(() => {
     if (studentId && !title) {
       const selectedStudent = students.find((s) => s.id === studentId);
       form.setValue("title", getLocalizedLessonTitle(selectedStudent?.name));
     }
   }, [studentId]);
+  useEffect(() => {
+    if (!isActiveLesson) form.setValue("studentId", "deleted");
+  }, [isActiveLesson]);
 
   const handleSubmit = (data: EventFormData) => {
     const event: Event = {
@@ -129,7 +134,13 @@ export const EventDialog: FC<Props> = ({
   return (
     <Dialog open={open} onOpenChange={handleCancel}>
       <DialogContent>
-        <DialogTitle>{isNew ? _("Create a New Lesson") : _("Update Lesson")}</DialogTitle>
+        <DialogTitle>
+          {isActiveLesson
+            ? isNew
+              ? _("Create a New Lesson")
+              : _("Update Lesson")
+            : _("Archived Lesson")}
+        </DialogTitle>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
             <FormField
@@ -141,10 +152,15 @@ export const EventDialog: FC<Props> = ({
                   <FormControl>
                     <SelectorInput
                       placeholder={_("Select a student")}
-                      options={students.map((s) => ({
-                        value: s.id,
-                        label: s.name,
-                      }))}
+                      disabled={!isActiveLesson}
+                      options={
+                        isActiveLesson
+                          ? students.map((s) => ({
+                              value: s.id,
+                              label: s.name,
+                            }))
+                          : [{ value: "deleted", label: _("Deleted Student") }]
+                      }
                       value={field.value}
                       onChange={field.onChange}
                     />
@@ -160,7 +176,11 @@ export const EventDialog: FC<Props> = ({
                 <FormItem>
                   <FormLabel className="gap-0">{_("Title")}</FormLabel>
                   <FormControl>
-                    <Input placeholder={_("Name your event")} {...field} />
+                    <Input
+                      disabled={!isActiveLesson}
+                      placeholder={_("Name your event")}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -174,7 +194,11 @@ export const EventDialog: FC<Props> = ({
                 <FormItem>
                   <FormLabel className="gap-0">{_("Description")}</FormLabel>
                   <FormControl>
-                    <Textarea placeholder={_("Add additional information")} {...field} />
+                    <Textarea
+                      disabled={!isActiveLesson}
+                      placeholder={_("Add additional information")}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -189,6 +213,7 @@ export const EventDialog: FC<Props> = ({
                   <FormLabel>{_("Lesson date")}</FormLabel>
                   <FormControl>
                     <DateTimePicker
+                      disabled={!isActiveLesson}
                       startDate={field.value.start}
                       endDate={field.value.end}
                       errors={{
@@ -219,6 +244,7 @@ export const EventDialog: FC<Props> = ({
                   <FormLabel>{_("Lessons Status")}</FormLabel>
                   <FormControl>
                     <SelectorInput
+                      disabled={!isActiveLesson}
                       placeholder={_("Change a lesson`s status")}
                       options={Object.values(EventStatus).map((s) => ({
                         value: s,
@@ -252,12 +278,13 @@ export const EventDialog: FC<Props> = ({
                 )}
               />
             )}
-
-            <div className="flex justify-end">
-              <Button type="submit" className="cursor-pointer">
-                {isNew ? _("Create") : _("Update")}
-              </Button>
-            </div>
+            {isActiveLesson && (
+              <div className="flex justify-end">
+                <Button type="submit" className="cursor-pointer">
+                  {isNew ? _("Create") : _("Update")}
+                </Button>
+              </div>
+            )}
           </form>
         </Form>
       </DialogContent>

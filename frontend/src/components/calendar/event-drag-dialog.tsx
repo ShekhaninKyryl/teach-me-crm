@@ -1,4 +1,4 @@
-import type { FC } from "react";
+import { type FC, useEffect } from "react";
 import { Dialog, DialogContent, DialogTitle } from "components/ui/dialog";
 import type { Event } from "@shared/types/event";
 import { DragEventVariant, type DragEventVariantType } from "components/calendar/type";
@@ -37,6 +37,10 @@ export const EventDragDialog: FC<Props> = ({
     if (!selectedEvent) return;
     onSubmit({ variant, event: { ...selectedEvent, timeRange }, oldEvent: { ...selectedEvent } });
   };
+
+  useEffect(() => {
+    if (!selectedEvent?.studentId) onCancel();
+  }, [selectedEvent]);
 
   return (
     <Dialog open={open} onOpenChange={onCancel}>

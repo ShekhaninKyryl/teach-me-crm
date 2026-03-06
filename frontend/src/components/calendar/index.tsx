@@ -14,7 +14,7 @@ import { useParams } from "react-router-dom";
 import { type Event, EventStatus } from "@shared/types/event";
 import { type FC, useEffect, useMemo, useRef, useState } from "react";
 import { useSidebar } from "components/ui/sidebar";
-import { getFullCalendarEvents, isEditableEvent } from "components/calendar/functions";
+import { getFullCalendarEvents } from "components/calendar/functions";
 import type { CustomEventContentArg, DragEventVariantType } from "components/calendar/type";
 import { EventDisplay } from "components/calendar/event-display";
 import classNames from "classnames";
@@ -148,7 +148,7 @@ export const Calendar: FC<CalendarProps> = ({
 
   const handleResize = ({ event }: EventResizeDoneArg) => {
     const selectedEvent = events.find((e) => e.id === event.id);
-    if (!selectedEvent) return;
+    if (!selectedEvent || !selectedEvent.studentId) return;
 
     const { start, end } = event;
     if (!start || !end) {
@@ -174,6 +174,8 @@ export const Calendar: FC<CalendarProps> = ({
     <>
       <FullCalendar
         ref={calendarRef}
+        handleWindowResize={true}
+        windowResizeDelay={200}
         events={lessons}
         locales={[ukLocale]}
         locale={lng === "ua" ? "uk" : "en"}
@@ -199,17 +201,28 @@ export const Calendar: FC<CalendarProps> = ({
         eventContent={renderEventContent}
         eventClassNames={(arg) => {
           const status = arg.event.extendedProps.status;
-          const isEditable = isEditableEvent(status);
+          const isEditable = EventStatus.Pending === status;
+          const isArchived = !arg.event.extendedProps.studentId;
 
-          return classNames(isEditable ? "cursor-pointer" : "cursor-zoom-in", "m-0! p-0! pr-2!");
+          const cursor = isArchived
+            ? "cursor-default"
+            : isEditable
+              ? "cursor-pointer"
+              : "cursor-zoom-in";
+
+          return classNames(cursor);
         }}
         eventDidMount={(info) => {
           const color = info.event.extendedProps.color;
-          if (color) {
-            info.el.style.border = "0";
-            info.el.style.borderLeft = `3px solid ${color}`;
-            info.el.style.borderTopLeftRadius = "0";
-            info.el.style.borderBottomLeftRadius = "0";
+
+          info.el.style.border = "0";
+          info.el.style.borderLeft = `3px solid ${color || "gray"}`;
+          info.el.style.borderTopLeftRadius = "0";
+          info.el.style.borderBottomLeftRadius = "0";
+          info.el.style.overflow = "hidden";
+
+          if (!info.event.extendedProps.studentId) {
+            info.el.style.opacity = "50%";
           }
         }}
         eventTimeFormat={{
