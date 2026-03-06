@@ -1,18 +1,18 @@
-import { type FC, useMemo, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
-import { Input } from '@/components/ui/input';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { format } from 'date-fns';
-import { uk } from 'date-fns/locale';
-import { ChevronDownIcon } from 'lucide-react';
-import { useParams } from 'react-router-dom';
-import { enUS } from 'react-day-picker/locale';
-import { _ } from '@/translates';
-import { Text } from '@radix-ui/themes';
-import { TIME_FORMAT } from 'constants/format';
-import { debounce } from 'utils/throttle-debounce';
-import classNames from 'classnames';
+import { type FC, useMemo, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Input } from "@/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { format } from "date-fns";
+import { uk } from "date-fns/locale";
+import { ChevronDownIcon } from "lucide-react";
+import { useParams } from "react-router-dom";
+import { enUS } from "react-day-picker/locale";
+import { _ } from "@/translates";
+import { Text } from "@radix-ui/themes";
+import { TIME_FORMAT } from "constants/format";
+import { debounce } from "utils/throttle-debounce";
+import classNames from "classnames";
 
 type Props = {
   startDate: Date;
@@ -21,17 +21,18 @@ type Props = {
     start?: string;
     end?: string;
   };
+  disabled?: boolean;
   onChange: ([startDate, endDate]: Date[]) => void;
 };
 
-export const DateTimePicker: FC<Props> = ({ startDate, endDate, errors, onChange }) => {
+export const DateTimePicker: FC<Props> = ({ startDate, endDate, errors, disabled, onChange }) => {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>(() => startDate);
   const { lng } = useParams();
   const [startTime, setStartTime] = useState(() => startDate?.toLocaleTimeString(lng, TIME_FORMAT));
   const [endTime, setEndTime] = useState(() => endDate?.toLocaleTimeString(lng, TIME_FORMAT));
 
-  const locale = lng === 'ua' ? uk : enUS;
+  const locale = lng === "ua" ? uk : enUS;
 
   const handleDateChange = (newSelectedDate: Date | undefined) => {
     if (!newSelectedDate || !onChange) return;
@@ -64,7 +65,7 @@ export const DateTimePicker: FC<Props> = ({ startDate, endDate, errors, onChange
 
       debounce(() => {
         const baseDate = startDate;
-        const [hours, minutes, seconds] = timeString.split(':').map(Number);
+        const [hours, minutes, seconds] = timeString.split(":").map(Number);
 
         baseDate.setHours(hours || 0);
         baseDate.setMinutes(minutes || 0);
@@ -83,7 +84,7 @@ export const DateTimePicker: FC<Props> = ({ startDate, endDate, errors, onChange
 
       debounce(() => {
         const baseDate = endDate;
-        const [hours, minutes, seconds] = timeString.split(':').map(Number);
+        const [hours, minutes, seconds] = timeString.split(":").map(Number);
 
         baseDate.setHours(hours || 0);
         baseDate.setMinutes(minutes || 0);
@@ -99,8 +100,8 @@ export const DateTimePicker: FC<Props> = ({ startDate, endDate, errors, onChange
       <div className="flex-1">
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
-            <Button variant="outline" className="w-full truncate font-normal">
-              {date ? format(date, 'PPP', { locale: locale }) : 'Select date'}
+            <Button disabled={disabled} variant="outline" className="w-full truncate font-normal">
+              {date ? format(date, "PPP", { locale: locale }) : "Select date"}
               <ChevronDownIcon />
             </Button>
           </PopoverTrigger>
@@ -117,22 +118,24 @@ export const DateTimePicker: FC<Props> = ({ startDate, endDate, errors, onChange
         </Popover>
       </div>
       <div className="flex items-center gap-2">
-        <Text size="2">{_('From')}</Text>
+        <Text size="2">{_("From")}</Text>
         <Input
+          disabled={disabled}
           className={classNames(
-            errors?.start && 'border-destructive',
-            'bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none w-fit'
+            errors?.start && "border-destructive",
+            "bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none w-fit"
           )}
           type="time"
           step="1"
           value={startTime}
           onChange={(e) => handleStartChange(e.target.value)}
         />
-        <Text size="2">{_('To')}</Text>
+        <Text size="2">{_("To")}</Text>
         <Input
+          disabled={disabled}
           className={classNames(
-            errors?.end && 'border-destructive',
-            'bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none w-fit'
+            errors?.end && "border-destructive",
+            "bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none w-fit"
           )}
           type="time"
           step="1"

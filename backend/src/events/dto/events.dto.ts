@@ -11,11 +11,11 @@ import {
 } from "class-validator";
 
 export enum EventStatusType {
-  Pending = "pending",
-  Rescheduled = "rescheduled",
-  Cancelled = "cancelled",
-  Completed = "completed",
-  Paid = "paid",
+  Pending = "PENDING",
+  Rescheduled = "RESCHEDULED",
+  Cancelled = "CANCELLED",
+  Completed = "COMPLETED",
+  Paid = "PAID",
 }
 
 export class TimeRangeDto {
@@ -26,7 +26,7 @@ export class TimeRangeDto {
   end!: Date;
 }
 
-export class UpsertEventDto {
+export class EventDto {
   @IsUUID()
   id!: string;
 

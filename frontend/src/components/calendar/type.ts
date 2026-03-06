@@ -14,3 +14,10 @@ export type CustomEventContentArg = Omit<EventContentArg, "event"> & {
     extendedProps: EventExtendedProps;
   };
 };
+
+export const DragEventVariant = {
+  Reschedule: "RESCHEDULE",
+  Move: "MOVE",
+} as const;
+
+export type DragEventVariantType = (typeof DragEventVariant)[keyof typeof DragEventVariant];

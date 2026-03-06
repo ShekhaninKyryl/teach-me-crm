@@ -21,6 +21,7 @@ import { Filter } from "@shared/types/filter";
 import { PrismaService } from "prisma/prisma.service";
 import { JwtService } from "@nestjs/jwt";
 import { FREE_STUDENTS_CAPACITY_LIMIT } from "@constants/index";
+import { EventStatus } from "@prisma/client";
 
 @Injectable()
 export class TutorsService {
@@ -273,8 +274,8 @@ export class TutorsService {
             select: { id: true },
           })
         : [];
-      const existingUserIds = new Set(existingUsers.map((u) => u.id));
 
+      const existingUserIds = new Set(existingUsers.map((u) => u.id));
       const incomingStudentIds = new Set<string>();
 
       for (const st of students ?? []) {
@@ -319,17 +320,48 @@ export class TutorsService {
         (id) => !incomingStudentIds.has(id),
       );
 
-      if (toDelete.length) {
+      if (!toDelete.length) {
+        return;
+      }
+
+      const blockedStudents = await tx.student.findMany({
+        where: {
+          id: { in: toDelete },
+          events: {
+            some: {
+              status: {
+                in: [EventStatus.PENDING, EventStatus.COMPLETED],
+              },
+            },
+          },
+        },
+        select: {
+          id: true,
+          name: true,
+        },
+      });
+
+      if (blockedStudents.length) {
+        throw new BadRequestException(
+          `Students can be deleted while they have active lessons: ${blockedStudents
+            .map((s) => s.name)
+            .join(", ")}`,
+        );
+      }
+
+      const blockedIds = new Set(blockedStudents.map((s) => s.id));
+
+      const deletableIds = toDelete.filter((id) => !blockedIds.has(id));
+
+      if (deletableIds.length) {
         await tx.student.deleteMany({
           where: {
-            id: { in: toDelete },
-            events: { none: {} },
+            id: { in: deletableIds },
           },
         });
       }
     });
   }
-
   async getMaxStudents(tutorId: string): Promise<number> {
     const tutor = await this.prisma.tutorProfile.findUnique({
       where: { userId: tutorId },

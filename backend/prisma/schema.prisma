@@ -119,8 +119,8 @@ model Event {
   tutorUserId String
   tutor       TutorProfile @relation("TutorEvents", fields: [tutorUserId], references: [userId], onDelete: Cascade)
 
-  studentId String
-  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId String?
+  student   Student? @relation(fields: [studentId], references: [id], onDelete: SetNull)
 
   title       String
   description String?

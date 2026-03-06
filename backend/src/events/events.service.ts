@@ -1,6 +1,12 @@
-import { Injectable, BadRequestException } from "@nestjs/common";
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from "@nestjs/common";
 import { PrismaService } from "prisma/prisma.service";
-import { EventStatusType, UpsertEventDto } from "./dto/events.dto";
+import { Prisma } from "@prisma/client";
+import { EventStatusType, EventDto } from "./dto/events.dto";
+import { buildUpdateData, mapTimeRange } from "src/events/functions";
 
 function mapDbToApi(e: any) {
   return {
@@ -30,98 +36,78 @@ export class EventsService {
     return items.map(mapDbToApi);
   }
 
-  async upsertMany(events: UpsertEventDto[]) {
-    if (!Array.isArray(events)) {
-      throw new BadRequestException("Body must be an array of events");
-    }
+  async createEvents(events: EventDto[]) {
+    if (!Array.isArray(events) || events.length === 0) return;
 
-    for (const e of events) {
-      const start = e.timeRange?.start;
-      const end = e.timeRange?.end;
-      if (start && end && start > end) {
-        throw new BadRequestException(
-          `Invalid timeRange for event ${e.id}: start > end`,
-        );
+    if (events.length === 0) return;
+
+    const data: Prisma.EventCreateManyInput[] = events.map((e) => {
+      if (!e.timeRange) {
+        throw new BadRequestException("start and end date are required");
       }
+
+      if (!e.tutorId || !e.studentId) {
+        throw new BadRequestException("tutorId and studentId is required");
+      }
+      if (!e.title?.trim()) {
+        throw new BadRequestException("title is required");
+      }
+
+      const { startAt, endAt } = mapTimeRange(e.timeRange);
+
+      return {
+        tutorUserId: e.tutorId,
+        studentId: e.studentId,
+        title: e.title.trim(),
+        description: e.description?.trim() ?? null,
+        startAt,
+        endAt,
+
+        weekly: e.weekly ?? false,
+        status: e.status,
+        price: e.price ?? null,
+      };
+    });
+
+    await this.prisma.event.createMany({
+      data,
+    });
+  }
+
+  async updateEvents(events: EventDto[]) {
+    if (!Array.isArray(events) || events.length === 0) return;
+
+    const missingId = events.find((e) => !e.id);
+    if (missingId) {
+      throw new BadRequestException("Event Id was not find");
     }
 
     await this.prisma.$transaction(
       events.map((e) => {
-        const startAt = e.timeRange?.start ?? null;
-        const endAt = e.timeRange?.end ?? null;
+        const data = buildUpdateData(e);
 
-        return this.prisma.event.upsert({
-          where: { id: e.id },
-          create: {
-            id: e.id,
-            tutorUserId: e.tutorId,
-            studentId: e.studentId,
-            title: e.title,
-            description: e.description ?? null,
-            startAt,
-            endAt,
-            weekly: e.weekly ?? false,
-            status: e.status as any,
-            price: e.price ?? null,
-          },
-          update: {
-            tutorUserId: e.tutorId,
-            studentId: e.studentId,
-            title: e.title,
-            description: e.description ?? null,
-            startAt,
-            endAt,
-            weekly: e.weekly ?? false,
-            status: e.status as any,
-            price: e.price ?? null,
-          },
+        if (Object.keys(data).length === 0) {
+          return this.prisma.event.findUnique({ where: { id: e.id! } });
+        }
+
+        return this.prisma.event.update({
+          where: { id: e.id! },
+          data,
         });
       }),
     );
   }
 
-  async syncTutorEvents(tutorUserId: string, events: UpsertEventDto[]) {
-    const incomingIds = new Set(events.map((e) => e.id));
+  async deleteEvent(eventId: string) {
+    if (!eventId) throw new BadRequestException("eventId is required");
 
-    await this.prisma.$transaction(async (tx) => {
-      await tx.event.deleteMany({
-        where: {
-          tutorUserId,
-          id: { notIn: Array.from(incomingIds) },
-        },
-      });
-
-      for (const e of events) {
-        const startAt = e.timeRange?.start ?? null;
-        const endAt = e.timeRange?.end ?? null;
-
-        await tx.event.upsert({
-          where: { id: e.id },
-          create: {
-            id: e.id,
-            tutorUserId: e.tutorId,
-            studentId: e.studentId,
-            title: e.title,
-            description: e.description ?? null,
-            startAt,
-            endAt,
-            weekly: e.weekly ?? false,
-            status: e.status as any,
-            price: e.price ?? null,
-          },
-          update: {
-            tutorUserId: e.tutorId,
-            studentId: e.studentId,
-            title: e.title,
-            description: e.description ?? null,
-            startAt,
-            endAt,
-            weekly: e.weekly ?? false,
-            status: e.status as any,
-            price: e.price ?? null,
-          },
-        });
+    try {
+      await this.prisma.event.delete({ where: { id: eventId } });
+    } catch (err: any) {
+      if (err?.code === "P2025") {
+        throw new NotFoundException("Event not found");
       }
-    });
+      throw err;
+    }
   }
 }

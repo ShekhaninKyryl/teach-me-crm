@@ -24,10 +24,17 @@ interface SelectorInputProps {
   options: Option[];
   value?: string;
   placeholder?: string;
+  disabled?: boolean;
   onChange?: (val: string) => void;
 }
 
-export function SelectorInput({ options, value, placeholder, onChange }: SelectorInputProps) {
+export function SelectorInput({
+  options,
+  value,
+  placeholder,
+  disabled,
+  onChange,
+}: SelectorInputProps) {
   const [open, setOpen] = React.useState(false);
   const [inputValue, setInputValue] = React.useState("");
   const [popoverWidth, setPopoverWidth] = React.useState<number | undefined>(undefined);
@@ -54,6 +61,7 @@ export function SelectorInput({ options, value, placeholder, onChange }: Selecto
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
+            disabled={disabled}
             ref={triggerRef}
             variant="outline"
             role="combobox"
