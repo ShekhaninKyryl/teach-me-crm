@@ -26,4 +26,5 @@ export type Event = {
 export type EventsFilter = {
   studentIds: string[];
   statuses: string[];
+  showArchived: boolean;
 };

@@ -22,10 +22,12 @@ import { EventDialog } from "components/calendar/event-dialog";
 import type { Student } from "@shared/types/students";
 import { EventDragDialog } from "components/calendar/event-drag-dialog";
 import { v4 as uuidv4 } from "uuid";
+import { _ } from "@/translates";
 
 interface CalendarProps {
   tutorId: string;
   events: Event[];
+  unresolvedEvents: Event[];
   students: Student[];
   onChange: (events: Event[]) => void;
 
@@ -37,6 +39,7 @@ interface CalendarProps {
 export const Calendar: FC<CalendarProps> = ({
   tutorId,
   events,
+  unresolvedEvents,
   students,
   onChange,
   onAdd,
@@ -165,14 +168,29 @@ export const Calendar: FC<CalendarProps> = ({
     setTimeRange(undefined);
   };
 
+  const handleGoToUnresolvedEvent = () => {
+    if (!unresolvedEvents.length) return;
+
+    const date = unresolvedEvents[0].timeRange?.start;
+    if (!date) throw new Error("Event without date");
+
+    const calendarApi = calendarRef.current?.getApi();
+
+    if (calendarApi) calendarApi.gotoDate(date);
+  };
+
   const renderEventContent: CustomContentGenerator<CustomEventContentArg> = (eventInfo) => (
-    <EventDisplay {...eventInfo} />
+    <EventDisplay
+      {...eventInfo}
+      unresolved={!!unresolvedEvents.find((e) => e.id === eventInfo.event.id)}
+    />
   );
   const lessons: EventInput[] = getFullCalendarEvents(events, students);
 
   return (
     <>
       <FullCalendar
+        themeSystem="bootstrap5"
         ref={calendarRef}
         handleWindowResize={true}
         windowResizeDelay={200}
@@ -183,7 +201,7 @@ export const Calendar: FC<CalendarProps> = ({
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView="timeGridWeek"
         headerToolbar={{
-          left: "prev today next",
+          left: `prev today next${unresolvedEvents.length ? " warning" : ""}`,
           center: "title",
           right: "dayGridMonth,timeGridWeek",
         }}
@@ -235,6 +253,12 @@ export const Calendar: FC<CalendarProps> = ({
         eventClick={handleClick}
         eventDrop={handleDrop}
         eventResize={handleResize}
+        customButtons={{
+          warning: {
+            text: _(`⚠️ Unresolved Events - {LENGTH}`, { LENGTH: unresolvedEvents.length }),
+            click: handleGoToUnresolvedEvent,
+          },
+        }}
       />
       {isEditModalOpen && (
         <EventDialog

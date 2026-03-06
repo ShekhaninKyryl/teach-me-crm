@@ -1,6 +1,11 @@
 import { Calendar } from "@/components/calendar";
 import { useEffect, useState } from "react";
-import { type Event, type EventsFilter, EventStatus } from "@shared/types/event";
+import {
+  type Event,
+  type EventsFilter,
+  EventStatus,
+  type EventStatusType,
+} from "@shared/types/event";
 import eventApi from "api/event";
 import tutorsApi from "api/tutors";
 import { useAuth } from "@/contexts/auth-context";
@@ -28,7 +33,11 @@ export const CalendarPage = () => {
   const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(true);
   const [isDirty, setDirty] = useState(false);
-  const [filter, setFilter] = useState<EventsFilter>({ statuses: [], studentIds: [] });
+  const [filter, setFilter] = useState<EventsFilter>({
+    statuses: [],
+    studentIds: [],
+    showArchived: false,
+  });
   const { user } = useAuth();
 
   useEffect(() => {
@@ -135,6 +144,13 @@ export const CalendarPage = () => {
   if (!user || loading) return <Loading size={20} />;
 
   const filteredEvents = filterEvents(events, filter);
+  const now = new Date();
+  const unresolvedEvents = events.filter((e) => {
+    const unresolvedStatuses: EventStatusType[] = [EventStatus.Pending, EventStatus.Completed];
+    const end = e.timeRange?.end;
+
+    return end ? end < now && unresolvedStatuses.includes(e.status) : false;
+  });
 
   return (
     <div className="flex flex-col gap-4">
@@ -149,6 +165,7 @@ export const CalendarPage = () => {
       <Calendar
         tutorId={user.id}
         events={filteredEvents}
+        unresolvedEvents={unresolvedEvents}
         students={students}
         onChange={handleEventsChange}
         onAdd={trackCreatedEvent}

@@ -33,12 +33,22 @@ const eventApiMock: EventApi = {
 };
 
 const eventApi: EventApi = {
-  async getEvents(userId) {
+  async getEvents(userId): Promise<Event[]> {
     const response = await axios.get<Event[]>(`/events/${userId}`, {
       params: { userId },
     });
-    return response.data;
+
+    return response.data.map((event) => ({
+      ...event,
+      timeRange: event.timeRange
+        ? {
+            start: new Date(event.timeRange.start),
+            end: new Date(event.timeRange.end),
+          }
+        : undefined,
+    }));
   },
+
   async createEvents(events) {
     const response = await axios.post<void>("/events", events);
     return response.data;
