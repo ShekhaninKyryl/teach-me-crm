@@ -221,5 +221,17 @@
   "Archived Lesson": "Архівний Урок",
   "Deleted Student": "Видалений Студент",
   "Show Archived lessons": "Показати Архівні уроки",
-  "⚠️ Unresolved Events - {LENGTH}": "⚠\uFE0F Події, що потребують уваги — {LENGTH}"
+  "⚠️ Unresolved Events - {LENGTH}": "⚠\uFE0F Події, що потребують уваги — {LENGTH}",
+  "Something went wrong!": "Щось пішло не так!",
+  "Failed to load events. Please try again.": "Не вдалося завантажити події. Спробуйте ще раз.",
+  "Successfully updated events!": "Події успішно оновлено!",
+  "Failed to update events! Please try again": "Не вдалося оновити події! Спробуйте ще раз",
+  "Successfully created events!": "Події успішно створено!",
+  "Failed to create events! Please try again": "Не вдалося створити події! Спробуйте ще раз",
+  "Successfully created subject!": "Предмет успішно створено!",
+  "Found {LENGTH} tutors!": "Знайдено репетиторів: {LENGTH}.",
+  "Successfully updated tutor profile!": "Профіль репетитора успішно оновлено!",
+  "Successfully updated students!": "Список студентів успішно оновлено!",
+  "Successfully created tutor profile!": "Профіль репетитора успішно створено!",
+  "Successfully updated students capacity!": "Ліміт студентів успішно змінено!"
 }

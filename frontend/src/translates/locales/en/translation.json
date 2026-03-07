@@ -223,5 +223,18 @@
   "Archived Lesson": "",
   "Deleted Student": "",
   "Show Archived lessons": "",
-  "⚠️ Unresolved Events - {LENGTH}": ""
+  "⚠️ Unresolved Events - {LENGTH}": "",
+  "Something went wrong!": "",
+  "Failed to load events. Please try again.": "",
+  "Successfully updated events!": "",
+  "Failed to update events! Please try again": "",
+  "Successfully created events!": "",
+  "Failed to create events! Please try again": "",
+  "Successfully created subject!": "",
+  "Found {LENGTH} tutors!": "",
+  "Successfully updated tutor profile!": "",
+  "Successfully updated students!": "",
+  "Successfully created tutor profile!": "",
+  "Successfully updated students capacity!": ""
+
 }

@@ -1,5 +1,6 @@
-import axios from 'api/axios';
-import { getConfig } from '@/configs';
+import axios from "api/axios";
+import { getConfig } from "@/configs";
+import { withToast } from "api/with-toast";
 
 export interface PriceApi {
   getPriceRange(): Promise<number[]>;
@@ -12,10 +13,10 @@ const priceApiMock: PriceApi = {
 
 const priceApi: PriceApi = {
   getPriceRange: async (): Promise<number[]> => {
-    const response = await axios.get<number[]>('/price/range');
+    const response = await axios.get<number[]>("/price/range");
     return response.data;
   },
 };
 
-const api = getConfig().isMock ? priceApiMock : priceApi;
+const api = getConfig().isMock ? priceApiMock : withToast(priceApi);
 export default api;

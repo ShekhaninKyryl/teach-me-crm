@@ -1,6 +1,7 @@
 import axios from "./axios";
 import type { User } from "@shared/types/user";
 import { getConfig } from "@/configs";
+import { withToast } from "api/with-toast";
 
 export interface UserApi {
   getUserByEmail(email: string): Promise<User>;
@@ -68,5 +69,5 @@ const userApi: UserApi = {
   },
 };
 
-const api = getConfig().isMock ? userApiMock : userApi;
+const api = getConfig().isMock ? userApiMock : withToast(userApi);
 export default api;

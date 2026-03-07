@@ -2,6 +2,9 @@ import axios from "./axios";
 import { getConfig } from "@/configs";
 import type { Event } from "@shared/types/event";
 import { MOCK_EVENTS } from "api/mocks/events";
+import { type ToastMapType, withToast } from "api/with-toast";
+import { toast } from "sonner";
+import { _ } from "@/translates";
 
 export interface EventApi {
   getEvents(userId: string): Promise<Event[]>;
@@ -65,5 +68,19 @@ const eventApi: EventApi = {
   },
 };
 
-const api = getConfig().isMock ? eventApiMock : eventApi;
+const toastMap: ToastMapType<EventApi> = {
+  getEvents: {
+    error: () => toast.error(_("Failed to load events. Please try again.")),
+  },
+  updateEvents: {
+    success: () => toast.success(_("Successfully updated events!")),
+    error: () => toast.error(_("Failed to update events! Please try again")),
+  },
+  createEvents: {
+    success: () => toast.success(_("Successfully created events!")),
+    error: () => toast.error(_("Failed to create events! Please try again")),
+  },
+};
+
+const api = getConfig().isMock ? eventApiMock : withToast(eventApi, toastMap);
 export default api;

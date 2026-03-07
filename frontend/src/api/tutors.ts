@@ -6,6 +6,9 @@ import type { Tutor, TutorWithPassword } from "@shared/types/tutor";
 import { FORMAT_OPTIONS } from "@shared/types/common";
 import type { Filter } from "@shared/types/filter";
 import type { Student } from "@shared/types/students";
+import { type ToastMapType, withToast } from "api/with-toast";
+import { toast } from "sonner";
+import { _ } from "@/translates";
 
 export interface TutorApi {
   getTopTutors(): Promise<Tutor[]>;
@@ -203,5 +206,23 @@ const tutorApi = {
   },
 };
 
-const api = getConfig().isMock ? tutorApiMock : tutorApi;
+const toastMap: ToastMapType<TutorApi> = {
+  searchTutors: {
+    success: (result) => toast.success(_("Found {LENGTH} tutors!", { LENGTH: result.length })),
+  },
+  updateTutorProfile: {
+    success: () => toast.success(_("Successfully updated tutor profile!")),
+  },
+  saveTutorsStudents: {
+    success: () => toast.success(_("Successfully updated students!")),
+  },
+  createTutorProfile: {
+    success: () => toast.success(_("Successfully created tutor profile!")),
+  },
+  setMaxStudents: {
+    success: () => toast.success(_("Successfully updated students capacity!")),
+  },
+};
+
+const api = getConfig().isMock ? tutorApiMock : withToast(tutorApi, toastMap);
 export default api;

@@ -1,5 +1,6 @@
 import axios from "./axios";
 import { getConfig } from "@/configs";
+import { withToast } from "api/with-toast";
 
 export interface EmailApi {
   checkEmailExists(email: string): Promise<boolean>;
@@ -25,5 +26,5 @@ const emailApi: EmailApi = {
   },
 };
 
-const api = getConfig().isMock ? emailApiMock : emailApi;
+const api = getConfig().isMock ? emailApiMock : withToast(emailApi);
 export default api;
