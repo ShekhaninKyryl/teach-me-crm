@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { AuthProvider } from "@/contexts/auth-context";
 import { AppearanceProvider } from "@/contexts/appearance-context";
 import ThemeWrapper from "@/theme-wrapper";
+import { Toaster } from "@/components/ui/sonner";
 
 export const AppRouter = () => {
   return useRoutes([...landingRoutes]);
@@ -17,6 +18,7 @@ export const AppRouterWithProvider = () => {
         <AppearanceProvider>
           <ThemeWrapper>
             <AppRouter key={i18n.language} />
+            <Toaster />
           </ThemeWrapper>
         </AppearanceProvider>
       </AuthProvider>

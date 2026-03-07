@@ -1,6 +1,9 @@
 import axios from "api/axios";
 import { getConfig } from "@/configs";
 import type { Subject } from "@shared/types/subject";
+import { type ToastMapType, withToast } from "api/with-toast";
+import { toast } from "sonner";
+import { _ } from "@/translates";
 
 export interface SubjectApi {
   getSubjects(): Promise<Subject[]>;
@@ -44,5 +47,11 @@ const subjectApi: SubjectApi = {
   },
 };
 
-const api = getConfig().isMock ? subjectApiMock : subjectApi;
+const toastMap: ToastMapType<SubjectApi> = {
+  addSubject: {
+    success: () => toast.success(_("Successfully created subject!")),
+  },
+};
+
+const api = getConfig().isMock ? subjectApiMock : withToast(subjectApi, toastMap);
 export default api;
