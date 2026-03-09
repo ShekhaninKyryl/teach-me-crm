@@ -213,11 +213,11 @@ const toastMap: ToastMapType<TutorApi> = {
   updateTutorProfile: {
     success: () => toast.success(_("Successfully updated tutor profile!")),
   },
-  saveTutorsStudents: {
-    success: () => toast.success(_("Successfully updated students!")),
-  },
   createTutorProfile: {
     success: () => toast.success(_("Successfully created tutor profile!")),
+  },
+  saveTutorsStudents: {
+    success: () => toast.success(_("Successfully updated students!")),
   },
   setMaxStudents: {
     success: () => toast.success(_("Successfully updated students capacity!")),

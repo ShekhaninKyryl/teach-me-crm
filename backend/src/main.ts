@@ -10,10 +10,16 @@ async function bootstrap() {
   const cp = (cookieParser as any).default ?? cookieParser;
   app.use(cp());
 
+  const corsOrigins = (process.env.CORS_ORIGINS ?? "")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
   app.enableCors({
-    origin: [process.env.CORS_ORIGIN],
+    origin: corsOrigins,
     credentials: true,
   });
+
   await app.listen(process.env.PORT ?? 3000);
 }
 
