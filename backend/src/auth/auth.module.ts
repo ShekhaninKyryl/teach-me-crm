@@ -5,6 +5,7 @@ import { JwtModule } from "@nestjs/jwt";
 import { AuthController } from "./auth.controller";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { AuthGuard } from "src/auth/auth.guard";
+import { NotificationsModule } from "../notifications/notifications.module";
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { AuthGuard } from "src/auth/auth.guard";
         },
       }),
     }),
+    NotificationsModule,
   ],
   providers: [AuthService, AuthGuard],
   controllers: [AuthController],

@@ -4,12 +4,16 @@ import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
 import { JwtPayload } from "./types/jst";
 import * as crypto from "crypto";
+import { ConfigService } from "@nestjs/config";
+import { NotificationsService } from "../notifications/notifications.service";
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
+    private readonly configService: ConfigService,
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   async login(email: string, pass: string): Promise<{ access_token: string }> {
@@ -41,6 +45,14 @@ export class AuthService {
     const expires = new Date(Date.now() + 1000 * 60 * 60);
 
     await this.usersService.setPasswordResetToken(user.id, token, expires);
+
+    const frontendUrl = this.configService.getOrThrow<string>("FRONTEND_URL");
+    const resetLink = `${frontendUrl}/reset-password?token=${encodeURIComponent(token)}`;
+
+    await this.notificationsService.sendPasswordResetEmail(
+      user.email ?? email,
+      resetLink,
+    );
   }
 
   async resetPassword(token: string, newPassword: string) {
