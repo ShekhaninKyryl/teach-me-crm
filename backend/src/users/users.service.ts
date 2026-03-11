@@ -105,4 +105,39 @@ export class UsersService {
       },
     });
   }
+
+  async getUserWithPreferenceByEmail(email: string) {
+    const rows = await this.prisma.$queryRaw<
+      Array<{
+        id: string;
+        name: string;
+        email: string | null;
+        language: string | null;
+      }>
+    >(
+      Prisma.sql`
+        SELECT
+          u.id,
+          u.name,
+          u.email,
+          p.language
+        FROM users u
+        LEFT JOIN preferences p ON p."userId" = u.id
+        WHERE u.email = ${email}
+        LIMIT 1
+      `,
+    );
+
+    const user = rows[0];
+    if (!user) {
+      throw new NotFoundException("User not found");
+    }
+
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email ?? undefined,
+      language: user.language ?? "ua",
+    };
+  }
 }

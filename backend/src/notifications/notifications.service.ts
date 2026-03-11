@@ -12,10 +12,12 @@ export class NotificationsService {
     to: string,
     resetPasswordLink: string,
     userName?: string,
+    language: string = "en",
   ): Promise<void> {
     const { subject, html, text } = buildResetPasswordEmailTemplate(
       resetPasswordLink,
       userName,
+      language,
     );
     await this.emailNotificationsService.sendEmail({
       to,
