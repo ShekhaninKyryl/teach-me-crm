@@ -11,6 +11,7 @@ export interface UserApi {
   me(): Promise<User>;
   forgotPassword(email: string): Promise<void>;
   resetPassword(payload: { token: string; newPassword: string }): Promise<void>;
+  updateLanguage(language: string): Promise<void>;
 }
 
 const userApiMock: UserApi = {
@@ -41,7 +42,7 @@ const userApiMock: UserApi = {
   async me(): Promise<User> {
     return new Promise((resolve) =>
       setTimeout(() => {
-        resolve({ id: "1", name: "Tom Smith", email: "some@email.com" });
+        resolve({ id: "1", name: "Tom Smith", email: "some@email.com", language: "ua" });
       }, 500)
     );
   },
@@ -49,6 +50,9 @@ const userApiMock: UserApi = {
     return new Promise((resolve) => setTimeout(resolve, 500));
   },
   async resetPassword(): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, 500));
+  },
+  async updateLanguage(): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, 500));
   },
 };
@@ -80,6 +84,9 @@ const userApi: UserApi = {
   },
   async resetPassword(payload: { token: string; newPassword: string }): Promise<void> {
     await axios.post("/reset-password", payload);
+  },
+  async updateLanguage(language: string): Promise<void> {
+    await axios.patch("/me/language", { language });
   },
 };
 

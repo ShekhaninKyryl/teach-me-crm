@@ -22,6 +22,8 @@ model User {
   telegram String?
   whatsapp String?
 
+  preference Preference?
+
   tutorProfile    TutorProfile?
   createdSubjects Subject[]
 
@@ -142,4 +144,16 @@ model Event {
   @@index([tutorUserId, startAt])
   @@index([studentId, startAt])
   @@map("events")
+}
+
+model Preference {
+  userId String @id
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  language String @default("ua")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("preferences")
 }
