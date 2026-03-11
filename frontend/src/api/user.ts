@@ -9,6 +9,7 @@ export interface UserApi {
   login(user: { email: string; password: string }): Promise<User>;
   logout(): Promise<void>;
   me(): Promise<User>;
+  forgotPassword(email: string): Promise<void>;
 }
 
 const userApiMock: UserApi = {
@@ -43,6 +44,9 @@ const userApiMock: UserApi = {
       }, 500)
     );
   },
+  async forgotPassword(): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, 500));
+  },
 };
 
 const userApi: UserApi = {
@@ -66,6 +70,9 @@ const userApi: UserApi = {
   async me(): Promise<User> {
     const response = await axios.get<User>("/me");
     return response.data;
+  },
+  async forgotPassword(email: string): Promise<void> {
+    await axios.post("/forgot-password", { email });
   },
 };
 

@@ -7,6 +7,7 @@ import { Logo } from "components/logo";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "components/ui/form";
 import { Input } from "components/ui/input";
 import { useAuth } from "@/contexts/auth-context";
+import { Link } from "react-router-dom";
 
 const loginSchema = yup.object({
   email: yup.string().email(_("Invalid email")).required("Email is required"),
@@ -74,6 +75,10 @@ export const LoginPage = () => {
                 </FormItem>
               )}
             />
+
+            <Link to="../forgot-password" className="text-sm text-chart-2 hover:underline self-end">
+              {_("Forgot password?")}
+            </Link>
           </div>
 
           <SubmitButton title={_("Login")} className="w-full" />
