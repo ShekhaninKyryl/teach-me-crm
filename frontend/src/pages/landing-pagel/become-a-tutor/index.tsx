@@ -41,7 +41,10 @@ const BecomeATutor: FC = ({}) => {
 
   const handleCreateAccount = async () => {
     try {
-      await tutorsApi.createTutorProfile(tutorData);
+      await tutorsApi.createTutorProfile({
+        ...tutorData,
+        language: i18n.language,
+      });
       window.location.href = `/${i18n.language}/workspace`;
     } catch (error) {
       console.error(error);

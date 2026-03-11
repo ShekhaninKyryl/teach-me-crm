@@ -21,13 +21,17 @@ import { Filter } from "@shared/types/filter";
 import { PrismaService } from "prisma/prisma.service";
 import { JwtService } from "@nestjs/jwt";
 import { FREE_STUDENTS_CAPACITY_LIMIT } from "@constants/index";
-import { EventStatus } from "@prisma/client";
+import { Prisma, EventStatus } from "@prisma/client";
+import { NotificationsService } from "src/notifications/notifications.service";
+import { ConfigService } from "@nestjs/config";
 
 @Injectable()
 export class TutorsService {
   constructor(
     private readonly prisma: PrismaService,
     private jwtService: JwtService,
+    private readonly notificationsService: NotificationsService,
+    private readonly configService: ConfigService,
   ) {}
 
   async getTopTutors() {
@@ -61,7 +65,9 @@ export class TutorsService {
   }
 
   async createTutorProfile(dto: CreateTutorDto) {
-    return this.prisma.$transaction(async (tx) => {
+    const language = dto.language === "en" ? "en" : "ua";
+
+    const created = await this.prisma.$transaction(async (tx) => {
       const passwordHash = await bcrypt.hash(dto.password, 10);
 
       const subjects = await Promise.all(
@@ -109,12 +115,42 @@ export class TutorsService {
         },
       });
 
+      await tx.$executeRaw(
+        Prisma.sql`
+          INSERT INTO preferences ("userId", language, "createdAt", "updatedAt")
+          VALUES (${user.id}, ${language}, NOW(), NOW())
+          ON CONFLICT ("userId")
+          DO UPDATE SET language = EXCLUDED.language, "updatedAt" = NOW()
+        `,
+      );
+
       const payload = { sub: user.id, email: user.email, name: user.name };
 
       return {
         access_token: await this.jwtService.signAsync(payload),
+        user,
       };
     });
+
+    const frontendUrl = this.configService.getOrThrow<string>("FRONTEND_URL");
+    const workspaceLink = `${frontendUrl}/${language}/workspace`;
+
+    try {
+      if (created.user.email) {
+        await this.notificationsService.sendTutorWelcomeEmail(
+          created.user.email,
+          workspaceLink,
+          created.user.name,
+          language,
+        );
+      }
+    } catch {
+      // Registration should succeed even if email provider is temporarily unavailable.
+    }
+
+    return {
+      access_token: created.access_token,
+    };
   }
 
   async updateTutorProfile(userId: string, dto: UpdateTutorDto) {
