@@ -10,6 +10,7 @@ export interface UserApi {
   logout(): Promise<void>;
   me(): Promise<User>;
   forgotPassword(email: string): Promise<void>;
+  resetPassword(payload: { token: string; newPassword: string }): Promise<void>;
 }
 
 const userApiMock: UserApi = {
@@ -47,6 +48,9 @@ const userApiMock: UserApi = {
   async forgotPassword(): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, 500));
   },
+  async resetPassword(): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, 500));
+  },
 };
 
 const userApi: UserApi = {
@@ -73,6 +77,9 @@ const userApi: UserApi = {
   },
   async forgotPassword(email: string): Promise<void> {
     await axios.post("/forgot-password", { email });
+  },
+  async resetPassword(payload: { token: string; newPassword: string }): Promise<void> {
+    await axios.post("/reset-password", payload);
   },
 };
 

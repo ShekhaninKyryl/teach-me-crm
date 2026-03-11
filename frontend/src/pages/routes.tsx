@@ -7,6 +7,7 @@ import BecomeATutor from "pages/landing-pagel/become-a-tutor";
 import Workspace from "pages/workspace";
 import { LoginPage } from "pages/login";
 import { ForgotPasswordPage } from "pages/forgot-password";
+import { ResetPasswordPage } from "pages/reset-password";
 import { StudentsPage } from "pages/workspace/students";
 import { CalendarPage } from "pages/workspace/calendar";
 import { ReportsPage } from "pages/workspace/reports";
@@ -28,6 +29,10 @@ export const routes = [
       {
         path: "forgot-password",
         element: <ForgotPasswordPage />,
+      },
+      {
+        path: "reset-password",
+        element: <ResetPasswordPage />,
       },
       {
         path: "",

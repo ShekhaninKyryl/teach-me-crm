@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState, type FC, type ReactNode, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import type { User } from "@shared/types/user";
 import userApi from "../api/user";
 
@@ -17,8 +17,16 @@ const AuthContext = createContext<AuthContextType>({
   logout: async () => {},
 });
 
+const getLngFromPathname = (pathname: string) => {
+  const [lng] = pathname.split("/").filter(Boolean);
+  return lng || "ua";
+};
+
+const isWorkspacePath = (pathname: string) => /^\/[^/]+\/workspace(\/|$)/.test(pathname);
+
 export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -28,7 +36,11 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
       .then((u) => setUser(u))
       .catch(() => {
         setUser(null);
-        navigate("/");
+
+        // Keep users on public pages (login/forgot/reset), redirect only from protected workspace.
+        if (isWorkspacePath(location.pathname)) {
+          navigate(`/${getLngFromPathname(location.pathname)}/login`, { replace: true });
+        }
       })
       .finally(() => setLoading(false));
   }, []);
