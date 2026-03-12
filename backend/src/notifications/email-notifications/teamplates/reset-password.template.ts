@@ -1,3 +1,5 @@
+import { escapeHtml } from "./html-escape.util";
+
 type ResetPasswordTemplateLocale = {
   subject: string;
   greeting: (userName?: string) => string;
@@ -55,8 +57,10 @@ export const buildResetPasswordEmailTemplate = (
     template.teamName,
   ].join("\n");
 
+  const safeUserName = userName !== undefined ? escapeHtml(userName) : undefined;
+
   const html = `
-  <p>${template.greeting(userName)}</p>
+  <p>${template.greeting(safeUserName)}</p>
   <p>${template.resetMessage}</p>
   <p><a href="${resetPasswordLink}">${template.ctaLabel}</a></p>
   <p>${template.ignoreMessage}</p>
