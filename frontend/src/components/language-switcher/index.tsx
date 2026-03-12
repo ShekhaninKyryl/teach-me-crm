@@ -2,6 +2,7 @@ import { Separator } from "@radix-ui/themes";
 import { useLocation } from "react-router-dom";
 import { LanguageButton } from "components/language-switcher/language-button";
 import { useAuth } from "@/contexts/auth-context";
+import { AppLanguage } from "@/constants/language";
 
 const LanguageSwitcher = () => {
   const location = useLocation();
@@ -9,7 +10,7 @@ const LanguageSwitcher = () => {
 
   const currentLanguage = location.pathname.split("/")[1];
 
-  const handleLanguageChange = async (newLng: "ua" | "en") => {
+  const handleLanguageChange = async (newLng: AppLanguage) => {
     await setLanguage(newLng);
   };
 
