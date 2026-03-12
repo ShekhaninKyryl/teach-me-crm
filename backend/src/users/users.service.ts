@@ -69,14 +69,14 @@ export class UsersService {
   }
 
   async setLanguage(userId: string, language: string) {
-    await this.prisma.$executeRaw(
-      Prisma.sql`
-        INSERT INTO preferences ("userId", language, "createdAt", "updatedAt")
-        VALUES (${userId}, ${language}, NOW(), NOW())
-        ON CONFLICT ("userId")
-        DO UPDATE SET language = EXCLUDED.language, "updatedAt" = NOW()
-      `,
-    );
+    await this.prisma.preference.upsert({
+      where: { userId },
+      update: { language },
+      create: {
+        userId,
+        language,
+      },
+    });
   }
 
   async getUserByResetToken(token: string) {
