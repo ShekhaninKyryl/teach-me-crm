@@ -27,6 +27,15 @@ export class UsersService {
     return user;
   }
 
+  async getUserByEmailForAuth(email: string) {
+    // Returns null (not throws) so AuthService can respond with UnauthorizedException
+    // for both missing users and wrong passwords, avoiding user enumeration.
+    // Includes all fields (passwordHash) — for auth flows only.
+    return this.prisma.user.findUnique({
+      where: { email },
+    });
+  }
+
   async getUserById(id: string) {
     const user = await this.prisma.user.findUnique({
       where: { id },
