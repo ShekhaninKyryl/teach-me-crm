@@ -14,6 +14,31 @@ const USER_PUBLIC_SELECT = {
   updatedAt: true,
 } as const;
 
+type UserPublicRecord = {
+  id: string;
+  name: string;
+  email: string | null;
+  avatar: string | null;
+  phone: string | null;
+  viber: string | null;
+  telegram: string | null;
+  whatsapp: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+function normalizeUserPublic(user: UserPublicRecord) {
+  return {
+    ...user,
+    email: user.email ?? undefined,
+    avatar: user.avatar ?? undefined,
+    phone: user.phone ?? undefined,
+    viber: user.viber ?? undefined,
+    telegram: user.telegram ?? undefined,
+    whatsapp: user.whatsapp ?? undefined,
+  };
+}
+
 @Injectable()
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
@@ -24,7 +49,7 @@ export class UsersService {
       select: USER_PUBLIC_SELECT,
     });
     if (!user) throw new NotFoundException("User not found");
-    return user;
+    return normalizeUserPublic(user);
   }
 
   async getUserByEmailForAuth(email: string) {
@@ -42,7 +67,7 @@ export class UsersService {
       select: USER_PUBLIC_SELECT,
     });
     if (!user) throw new NotFoundException("User not found");
-    return user;
+    return normalizeUserPublic(user);
   }
 
   async getUserWithPreferenceById(id: string) {
