@@ -12,7 +12,7 @@ model User {
   email        String? @unique
   passwordHash String?
 
-  resetPasswordToken String?
+  resetPasswordToken String? @unique
   resetPasswordExpires DateTime?
 
   avatar String?
