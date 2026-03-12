@@ -41,11 +41,15 @@ export const ResetPasswordPage = () => {
       return;
     }
 
-    await userApi.resetPassword({
-      token,
-      newPassword: data.newPassword,
-    });
-    setIsReset(true);
+    try {
+      await userApi.resetPassword({
+        token,
+        newPassword: data.newPassword,
+      });
+      setIsReset(true);
+    } catch {
+      // error is already shown via toast in the API layer
+    }
   };
 
   return (
