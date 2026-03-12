@@ -1,3 +1,5 @@
+import { escapeHtml } from "./html-escape.util";
+
 type WelcomeTutorTemplateLocale = {
   subject: string;
   greeting: (userName?: string) => string;
@@ -51,8 +53,10 @@ export const buildWelcomeTutorEmailTemplate = (
     template.teamName,
   ].join("\n");
 
+  const safeUserName = userName !== undefined ? escapeHtml(userName) : undefined;
+
   const html = `
-  <p>${template.greeting(userName)}</p>
+  <p>${template.greeting(safeUserName)}</p>
   <p>${template.intro}</p>
   <p><a href="${workspaceLink}">${template.ctaLabel}</a></p>
   <p>${template.helpText}</p>
