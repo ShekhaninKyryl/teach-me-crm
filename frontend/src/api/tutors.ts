@@ -9,6 +9,7 @@ import type { Student } from "@shared/types/students";
 import { type ToastMapType, withToast } from "api/with-toast";
 import { toast } from "sonner";
 import { _ } from "@/translates";
+import type { AppLanguage } from "@/constants/language";
 
 export interface TutorApi {
   getTopTutors(): Promise<Tutor[]>;
@@ -16,7 +17,7 @@ export interface TutorApi {
   getTutorsStudents(tutorId: string): Promise<Student[]>;
   saveTutorsStudents(tutorId: string, students: Student[]): Promise<Student[]>;
   updateTutorProfile(tutorId: string, tutorData: Partial<TutorWithPassword>): Promise<Tutor>;
-  createTutorProfile(tutor: Partial<TutorWithPassword> & { language?: string }): Promise<Tutor>;
+  createTutorProfile(tutor: Partial<TutorWithPassword> & { language?: AppLanguage }): Promise<Tutor>;
   searchTutors(query: Filter[]): Promise<Tutor[]>;
   getStudentsCount(tutorId: string): Promise<number>;
   setMaxStudents(tutorId: string, maxStudents: number): Promise<void>;
@@ -132,7 +133,7 @@ const tutorApiMock: TutorApi = {
     );
   },
   async createTutorProfile(
-    tutor: Partial<TutorWithPassword> & { language?: string }
+    tutor: Partial<TutorWithPassword> & { language?: AppLanguage }
   ): Promise<Tutor> {
     return new Promise((resolve) =>
       setTimeout(() => {
@@ -196,7 +197,7 @@ const tutorApi = {
     return response.data;
   },
   async createTutorProfile(
-    tutor: Partial<TutorWithPassword> & { language?: string }
+    tutor: Partial<TutorWithPassword> & { language?: AppLanguage }
   ): Promise<Tutor> {
     const response = await axios.post("/tutors", tutor);
     return response.data;
