@@ -4,8 +4,10 @@ import { LandingPage } from "pages/landing-pagel/LandingPage";
 import LanguageWrapper from "pages/language-wrapper";
 import { FindTutor } from "pages/landing-pagel/find-tutor";
 import BecomeATutor from "pages/landing-pagel/become-a-tutor";
-import { LoginPage } from "pages/login/LoginPage";
 import Workspace from "pages/workspace";
+import { LoginPage } from "pages/login";
+import { ForgotPasswordPage } from "pages/forgot-password";
+import { ResetPasswordPage } from "pages/reset-password";
 import { StudentsPage } from "pages/workspace/students";
 import { CalendarPage } from "pages/workspace/calendar";
 import { ReportsPage } from "pages/workspace/reports";
@@ -23,6 +25,14 @@ export const routes = [
       {
         path: "login",
         element: <LoginPage />,
+      },
+      {
+        path: "forgot-password",
+        element: <ForgotPasswordPage />,
+      },
+      {
+        path: "reset-password",
+        element: <ResetPasswordPage />,
       },
       {
         path: "",

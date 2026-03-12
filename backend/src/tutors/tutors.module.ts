@@ -2,9 +2,10 @@ import { Module } from "@nestjs/common";
 import { TutorsController } from "./tutors.controller";
 import { TutorsService } from "./tutors.service";
 import { AuthModule } from "src/auth/auth.module";
+import { NotificationsModule } from "src/notifications/notifications.module";
 
 @Module({
-  imports: [AuthModule],
+  imports: [AuthModule, NotificationsModule],
   controllers: [TutorsController],
   providers: [TutorsService],
   exports: [TutorsService],

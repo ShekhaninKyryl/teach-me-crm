@@ -1,24 +1,26 @@
-import { Module } from "@nestjs/common";
+import { forwardRef, Module } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { UsersModule } from "../users/users.module";
 import { JwtModule } from "@nestjs/jwt";
 import { AuthController } from "./auth.controller";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { AuthGuard } from "src/auth/auth.guard";
+import { NotificationsModule } from "../notifications/notifications.module";
 
 @Module({
   imports: [
-    UsersModule,
+    forwardRef(() => UsersModule),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({
+      useFactory: (configService: ConfigService) => ({
         secret: configService.get("JWT_SECRET"),
         signOptions: {
           expiresIn: configService.get("JWT_EXPIRES_IN") || "1h",
         },
       }),
     }),
+    NotificationsModule,
   ],
   providers: [AuthService, AuthGuard],
   controllers: [AuthController],

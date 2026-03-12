@@ -1,18 +1,25 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { Injectable, Logger, UnauthorizedException } from "@nestjs/common";
 import { UsersService } from "../users/users.service";
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
 import { JwtPayload } from "./types/jst";
+import * as crypto from "crypto";
+import { ConfigService } from "@nestjs/config";
+import { NotificationsService } from "../notifications/notifications.service";
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
+    private readonly configService: ConfigService,
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   async login(email: string, pass: string): Promise<{ access_token: string }> {
-    const user = await this.usersService.getUserByEmail(email);
+    const user = await this.usersService.getUserByEmailForAuth(email);
 
     if (!user || !user.passwordHash) {
       throw new UnauthorizedException("Invalid credentials");
@@ -28,5 +35,51 @@ export class AuthService {
     return {
       access_token: await this.jwtService.signAsync<JwtPayload>(payload),
     };
+  }
+
+  async forgotPassword(email: string) {
+    const user = await this.usersService
+      .getUserWithPreferenceByEmail(email)
+      .catch(() => null);
+    if (!user) {
+      return;
+    }
+
+    const token = crypto.randomBytes(32).toString("hex");
+    const expires = new Date(Date.now() + 1000 * 60 * 60);
+
+    await this.usersService.setPasswordResetToken(user.id, token, expires);
+
+    const language = user.language === "en" ? "en" : "ua";
+
+    try {
+      const frontendUrl = this.configService.getOrThrow<string>("FRONTEND_URL");
+      const resetLink = `${frontendUrl}/${language}/reset-password?token=${encodeURIComponent(token)}`;
+      await this.notificationsService.sendPasswordResetEmail(
+        user.email ?? email,
+        resetLink,
+        user.name,
+        language,
+      );
+    } catch (err) {
+      this.logger.error(
+        `Failed to send password reset email for user ${user.id}`,
+        err instanceof Error ? err.stack : err,
+      );
+    }
+  }
+
+  async resetPassword(token: string, newPassword: string) {
+    const user = await this.usersService.getUserByResetToken(token);
+    if (
+      !user ||
+      !user.resetPasswordExpires ||
+      user.resetPasswordExpires < new Date()
+    ) {
+      throw new UnauthorizedException("Invalid or expired token");
+    }
+
+    const passwordHash = await bcrypt.hash(newPassword, 10);
+    await this.usersService.updatePassword(user.id, passwordHash);
   }
 }
