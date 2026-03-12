@@ -124,8 +124,7 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   const login = async (email: string, password: string) => {
     try {
-      await userApi.login({ email, password });
-      const u = await userApi.me();
+      const u = await userApi.login({ email, password });
       setUser(u);
 
       const userLanguage =
