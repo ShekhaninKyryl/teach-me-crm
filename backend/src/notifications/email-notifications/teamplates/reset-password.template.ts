@@ -1,3 +1,23 @@
+const escapeHtml = (value: string): string =>
+  value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+
+const sanitizeUrl = (url: string): string => {
+  try {
+    const parsed = new URL(url);
+    if (parsed.protocol !== "https:" && parsed.protocol !== "http:") {
+      return "#";
+    }
+    return url;
+  } catch {
+    return "#";
+  }
+};
+
 type ResetPasswordTemplateLocale = {
   subject: string;
   greeting: (userName?: string) => string;
@@ -44,6 +64,9 @@ export const buildResetPasswordEmailTemplate = (
 ) => {
   const template = resolveTemplate(language);
 
+  const safeUserName = userName ? escapeHtml(userName) : undefined;
+  const safeResetPasswordLink = sanitizeUrl(resetPasswordLink);
+
   const text = [
     template.greeting(userName),
     "",
@@ -56,9 +79,9 @@ export const buildResetPasswordEmailTemplate = (
   ].join("\n");
 
   const html = `
-  <p>${template.greeting(userName)}</p>
+  <p>${template.greeting(safeUserName)}</p>
   <p>${template.resetMessage}</p>
-  <p><a href="${resetPasswordLink}">${template.ctaLabel}</a></p>
+  <p><a href="${safeResetPasswordLink}">${template.ctaLabel}</a></p>
   <p>${template.ignoreMessage}</p>
   <p>${template.regards}<br>${template.teamName}</p>
   `;
