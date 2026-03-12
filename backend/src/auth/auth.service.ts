@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { Injectable, Logger, UnauthorizedException } from "@nestjs/common";
 import { UsersService } from "../users/users.service";
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
@@ -9,6 +9,8 @@ import { NotificationsService } from "../notifications/notifications.service";
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
@@ -52,12 +54,19 @@ export class AuthService {
     const frontendUrl = this.configService.getOrThrow<string>("FRONTEND_URL");
     const resetLink = `${frontendUrl}/${language}/reset-password?token=${encodeURIComponent(token)}`;
 
-    await this.notificationsService.sendPasswordResetEmail(
-      user.email ?? email,
-      resetLink,
-      user.name,
-      language,
-    );
+    try {
+      await this.notificationsService.sendPasswordResetEmail(
+        user.email ?? email,
+        resetLink,
+        user.name,
+        language,
+      );
+    } catch (err) {
+      this.logger.error(
+        `Failed to send password reset email for user ${user.id}`,
+        err instanceof Error ? err.stack : err,
+      );
+    }
   }
 
   async resetPassword(token: string, newPassword: string) {
