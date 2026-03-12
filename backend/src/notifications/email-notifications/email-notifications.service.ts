@@ -6,25 +6,51 @@ import { SendEmailNotificationInput } from "./email-notifications.types";
 @Injectable()
 export class EmailNotificationsService {
   private readonly logger = new Logger(EmailNotificationsService.name);
-  private readonly client: SESv2Client;
-  private readonly fromEmail: string;
+  private client: SESv2Client | null = null;
 
-  constructor(private readonly configService: ConfigService) {
-    this.client = new SESv2Client({
-      region: this.configService.getOrThrow<string>("AWS_REGION"),
-      credentials: {
-        accessKeyId: this.configService.getOrThrow<string>("AWS_ACCESS_KEY_ID"),
-        secretAccessKey: this.configService.getOrThrow<string>(
-          "AWS_SECRET_ACCESS_KEY",
-        ),
-      },
-    });
-    this.fromEmail = this.configService.getOrThrow<string>("NO_REPLY_EMAIL");
+  constructor(private readonly configService: ConfigService) {}
+
+  private isEmailEnabled(): boolean {
+    return this.configService.get<string>("EMAIL_ENABLED") === "true";
+  }
+
+  private getClient(): SESv2Client {
+    if (!this.client) {
+      const region = this.configService.getOrThrow<string>("AWS_REGION");
+      const accessKeyId = this.configService.get<string>("AWS_ACCESS_KEY_ID");
+      const secretAccessKey = this.configService.get<string>(
+        "AWS_SECRET_ACCESS_KEY",
+      );
+
+      if (Boolean(accessKeyId) !== Boolean(secretAccessKey)) {
+        this.logger.warn(
+          "Only one of AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY is set. " +
+            "Provide both for explicit credentials or neither to use the default credential provider chain.",
+        );
+      }
+
+      this.client = new SESv2Client({
+        region,
+        ...(accessKeyId && secretAccessKey
+          ? { credentials: { accessKeyId, secretAccessKey } }
+          : {}),
+      });
+    }
+    return this.client;
   }
 
   async sendEmail(params: SendEmailNotificationInput): Promise<void> {
+    if (!this.isEmailEnabled()) {
+      this.logger.warn(
+        `Email sending is disabled (EMAIL_ENABLED is not "true"). Skipping email to ${params.to}.`,
+      );
+      return;
+    }
+
+    const fromEmail = this.configService.getOrThrow<string>("NO_REPLY_EMAIL");
+
     const command = new SendEmailCommand({
-      FromEmailAddress: this.fromEmail,
+      FromEmailAddress: fromEmail,
       Destination: {
         ToAddresses: [params.to],
       },
@@ -49,7 +75,7 @@ export class EmailNotificationsService {
     });
 
     try {
-      await this.client.send(command);
+      await this.getClient().send(command);
       this.logger.log(
         `Email sent to ${params.to} with subject "${params.subject}"`,
       );
