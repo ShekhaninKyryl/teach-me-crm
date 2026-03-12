@@ -16,6 +16,7 @@ import FormAvatar, { type TutorAvatarData } from "pages/landing-pagel/become-a-t
 import TutorPreview from "pages/landing-pagel/become-a-tutor/tutor-preview";
 import tutorsApi from "api/tutors";
 import { useTranslation } from "react-i18next";
+import { isSupportedLanguage } from "@/constants/language";
 
 export type TutorFormData = Partial<
   TutorStartFormData &
@@ -43,7 +44,7 @@ const BecomeATutor: FC = ({}) => {
     try {
       await tutorsApi.createTutorProfile({
         ...tutorData,
-        language: i18n.language,
+        language: isSupportedLanguage(i18n.language) ? i18n.language : undefined,
       });
       window.location.href = `/${i18n.language}/workspace`;
     } catch (error) {

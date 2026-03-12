@@ -105,7 +105,7 @@ export class UsersService {
   }
 
   async getUserByResetToken(token: string) {
-    return this.prisma.user.findUnique({
+    return this.prisma.user.findFirst({
       where: { resetPasswordToken: token },
     });
   }

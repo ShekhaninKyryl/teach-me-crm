@@ -2,7 +2,7 @@ import { Separator } from "@radix-ui/themes";
 import { useLocation } from "react-router-dom";
 import { LanguageButton } from "components/language-switcher/language-button";
 import { useAuth } from "@/contexts/auth-context";
-import { AppLanguage } from "@/constants/language";
+import type { AppLanguage } from "@/constants/language";
 
 const LanguageSwitcher = () => {
   const location = useLocation();
