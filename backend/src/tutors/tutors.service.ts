@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  Logger,
   NotFoundException,
 } from "@nestjs/common";
 import { CreateTutorDto } from "./dto/create-tutor.dto";
@@ -27,6 +28,8 @@ import { ConfigService } from "@nestjs/config";
 
 @Injectable()
 export class TutorsService {
+  private readonly logger = new Logger(TutorsService.name);
+
   constructor(
     private readonly prisma: PrismaService,
     private jwtService: JwtService,
@@ -144,8 +147,10 @@ export class TutorsService {
           language,
         );
       }
-    } catch {
-      // Registration should succeed even if email provider is temporarily unavailable.
+    } catch (error) {
+      this.logger.warn(
+        `Failed to send welcome email to ${created.user.email}: ${error instanceof Error ? error.message : String(error)}`,
+      );
     }
 
     return {
