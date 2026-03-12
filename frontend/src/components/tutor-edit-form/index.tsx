@@ -27,11 +27,7 @@ import { PrimaryButton } from "components/common/button";
 import { getTutorData } from "components/tutor-card/functions";
 import TutorCardDialog from "components/tutor-card/tutor-card-dialog";
 import { AddSubject } from "components/add-subject";
-
-// Helper function to convert format value to translation key
-const getFormatTranslationKey = (format: Format): string => {
-  return format === "online" ? "Online" : format === "offline" ? "Offline" : format;
-};
+import { getFormatTranslationKey } from "utils/format-helpers";
 
 const schema = yup.object().shape({
   name: yup.string().required("Full Name is required"),
