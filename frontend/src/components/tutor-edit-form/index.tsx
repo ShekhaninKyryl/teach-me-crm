@@ -28,6 +28,11 @@ import { getTutorData } from "components/tutor-card/functions";
 import TutorCardDialog from "components/tutor-card/tutor-card-dialog";
 import { AddSubject } from "components/add-subject";
 
+// Helper function to convert format value to translation key
+const getFormatTranslationKey = (format: Format): string => {
+  return format === "online" ? "Online" : format === "offline" ? "Offline" : format;
+};
+
 const schema = yup.object().shape({
   name: yup.string().required("Full Name is required"),
   email: yup.string().email("Invalid email").required("Email is required"),
@@ -238,7 +243,7 @@ export const TutorEditForm: FC<TutorEditFormProps> = ({ tutorData, onSubmit }) =
                             }
                           }}
                         />
-                        <Label>{_(option)}</Label>
+                        <Label>{_(getFormatTranslationKey(option))}</Label>
                       </label>
                     ))}
                   </div>

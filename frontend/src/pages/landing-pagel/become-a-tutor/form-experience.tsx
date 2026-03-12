@@ -28,11 +28,16 @@ import { Badge } from "components/ui/badge";
 import { Loading } from "components/common/loading";
 import { Tooltip, TooltipContent, TooltipTrigger } from "components/ui/tooltip";
 
+// Helper function to convert format value to translation key
+const getFormatTranslationKey = (format: Format): string => {
+  return format === "online" ? "Online" : format === "offline" ? "Offline" : format;
+};
+
 const schema = yup
   .object({
     bio: yup.string().default(""),
 
-    format: yup
+    formats: yup
       .array()
       .of(
         yup
@@ -46,7 +51,7 @@ const schema = yup
 
     location: yup
       .string()
-      .when("format", {
+      .when("formats", {
         is: (formats: Format[]) => formats?.includes(FORMAT_OPTIONS.Offline),
         then: (schema) => schema.required("Location is required for offline format"),
         otherwise: (schema) => schema.optional(),
@@ -87,7 +92,7 @@ const FormExperience: FC<FormExperienceProps> = ({ onSubmit, onBack }) => {
     [selectedSubjects, subjects]
   );
 
-  const selectedFormats = form.watch("format");
+  const selectedFormats = form.watch("formats");
 
   const isOfflineSelected = selectedFormats.includes(FORMAT_OPTIONS.Offline);
 
@@ -103,7 +108,7 @@ const FormExperience: FC<FormExperienceProps> = ({ onSubmit, onBack }) => {
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
           <FormField
             control={form.control}
-            name="format"
+            name="formats"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="gap-0">
@@ -124,7 +129,7 @@ const FormExperience: FC<FormExperienceProps> = ({ onSubmit, onBack }) => {
                           }
                         }}
                       />
-                      <Label>{_(option)}</Label>
+                      <Label>{_(getFormatTranslationKey(option))}</Label>
                     </label>
                   ))}
                 </div>
