@@ -26,8 +26,12 @@ export const ForgotPasswordPage = () => {
   });
 
   const onSubmit = async (data: ForgotPasswordFormData) => {
-    await userApi.forgotPassword(data.email);
-    setIsSent(true);
+    try {
+      await userApi.forgotPassword(data.email);
+      setIsSent(true);
+    } catch {
+      // error is already shown via toast in the API layer
+    }
   };
 
   return (
