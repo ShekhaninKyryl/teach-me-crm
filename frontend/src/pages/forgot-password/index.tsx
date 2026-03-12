@@ -52,7 +52,7 @@ export const ForgotPasswordPage = () => {
                     <span>*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input type="email" autoComplete="email" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
