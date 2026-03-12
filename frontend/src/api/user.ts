@@ -2,6 +2,7 @@ import axios from "./axios";
 import type { User } from "@shared/types/user";
 import { getConfig } from "@/configs";
 import { withToast } from "api/with-toast";
+import type { AppLanguage } from "@/constants/language";
 
 export interface UserApi {
   getUserByEmail(email: string): Promise<User>;
@@ -11,7 +12,7 @@ export interface UserApi {
   me(): Promise<User>;
   forgotPassword(email: string): Promise<void>;
   resetPassword(payload: { token: string; newPassword: string }): Promise<void>;
-  updateLanguage(language: string): Promise<void>;
+  updateLanguage(language: AppLanguage): Promise<void>;
 }
 
 const userApiMock: UserApi = {
@@ -85,7 +86,7 @@ const userApi: UserApi = {
   async resetPassword(payload: { token: string; newPassword: string }): Promise<void> {
     await axios.post("/reset-password", payload);
   },
-  async updateLanguage(language: string): Promise<void> {
+  async updateLanguage(language: AppLanguage): Promise<void> {
     await axios.patch("/me/language", { language });
   },
 };
