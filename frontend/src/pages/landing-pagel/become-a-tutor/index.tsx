@@ -42,7 +42,6 @@ const BecomeATutor: FC = ({}) => {
 
   const handleCreateAccount = async () => {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { passwordConfirmation: _passwordConfirmation, ...rest } = tutorData;
       await tutorsApi.createTutorProfile({
         ...rest,
