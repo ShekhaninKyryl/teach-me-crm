@@ -22,7 +22,7 @@ i18n.use(initReactI18next).init({
   fallbackLng: DEFAULT_LANGUAGE,
   debug: false,
   interpolation: {
-    escapeValue: true, // not needed for react as it escapes by default
+    escapeValue: false, // not needed for react as it escapes by default
   },
   saveMissing: false,
   lng: getInitialLanguage(),
