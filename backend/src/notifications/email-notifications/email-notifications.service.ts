@@ -79,11 +79,17 @@ export class EmailNotificationsService {
       this.logger.log(
         `Email sent to ${params.to} with subject "${params.subject}"`,
       );
-    } catch (error) {
-      this.logger.error(
-        `Failed to send email to ${params.to}: ${error.message}`,
-        error.stack,
-      );
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        this.logger.error(
+          `Failed to send email to ${params.to}: ${error.message}`,
+          error.stack,
+        );
+      } else {
+        this.logger.error(
+          `Failed to send email to ${params.to}: ${String(error)}`,
+        );
+      }
       throw error;
     }
   }
