@@ -27,6 +27,7 @@ import { PrimaryButton } from "components/common/button";
 import { getTutorData } from "components/tutor-card/functions";
 import TutorCardDialog from "components/tutor-card/tutor-card-dialog";
 import { AddSubject } from "components/add-subject";
+import { getFormatTranslationKey } from "utils/format-helpers";
 
 const schema = yup.object().shape({
   name: yup.string().required("Full Name is required"),
@@ -238,7 +239,7 @@ export const TutorEditForm: FC<TutorEditFormProps> = ({ tutorData, onSubmit }) =
                             }
                           }}
                         />
-                        <Label>{_(option)}</Label>
+                        <Label>{_(getFormatTranslationKey(option))}</Label>
                       </label>
                     ))}
                   </div>
