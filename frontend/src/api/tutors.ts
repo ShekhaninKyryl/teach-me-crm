@@ -9,6 +9,7 @@ import type { Student } from "@shared/types/students";
 import { type ToastMapType, withToast } from "api/with-toast";
 import { toast } from "sonner";
 import { _ } from "@/translates";
+import type { AppLanguage } from "@/constants/language";
 
 export interface TutorApi {
   getTopTutors(): Promise<Tutor[]>;
@@ -16,7 +17,7 @@ export interface TutorApi {
   getTutorsStudents(tutorId: string): Promise<Student[]>;
   saveTutorsStudents(tutorId: string, students: Student[]): Promise<Student[]>;
   updateTutorProfile(tutorId: string, tutorData: Partial<TutorWithPassword>): Promise<Tutor>;
-  createTutorProfile(tutor: Partial<TutorWithPassword>): Promise<Tutor>;
+  createTutorProfile(tutor: Partial<TutorWithPassword> & { language?: AppLanguage }): Promise<{ success: true }>;
   searchTutors(query: Filter[]): Promise<Tutor[]>;
   getStudentsCount(tutorId: string): Promise<number>;
   setMaxStudents(tutorId: string, maxStudents: number): Promise<void>;
@@ -131,22 +132,12 @@ const tutorApiMock: TutorApi = {
       }, 500)
     );
   },
-  async createTutorProfile(tutor: Partial<TutorWithPassword>): Promise<Tutor> {
+  async createTutorProfile(
+    _tutor: Partial<TutorWithPassword> & { language?: AppLanguage }
+  ): Promise<{ success: true }> {
     return new Promise((resolve) =>
       setTimeout(() => {
-        resolve({
-          id: "new-id",
-          name: tutor.name || "New Tutor",
-          email: tutor.email || "",
-          subjects: tutor.subjects || [],
-          formats: tutor.formats || [],
-          rating: tutor.rating || 0,
-          price: tutor.price || 0,
-          location: tutor.location,
-          bio: tutor.bio || "",
-          avatar: tutor.avatar || "",
-          availability: [],
-        });
+        resolve({ success: true });
       }, 500)
     );
   },
@@ -193,7 +184,9 @@ const tutorApi = {
     const response = await axios.post(`/tutors/search`, query);
     return response.data;
   },
-  async createTutorProfile(tutor: Partial<TutorWithPassword>): Promise<Tutor> {
+  async createTutorProfile(
+    tutor: Partial<TutorWithPassword> & { language?: AppLanguage }
+  ): Promise<{ success: true }> {
     const response = await axios.post("/tutors", tutor);
     return response.data;
   },

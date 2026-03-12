@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma, EventStatus } from "@prisma/client";
 import { EventDto } from "./dto/events.dto";
 import { BadRequestException } from "@nestjs/common";
 
@@ -24,7 +24,8 @@ export function buildUpdateData(e: EventDto): Prisma.EventUpdateInput {
 
   data.student = { connect: { id: e.studentId } };
 
-  if (typeof e.status === "string") data.status = e.status as any;
+  if (typeof e.status === "string")
+    data.status = e.status as unknown as EventStatus;
 
   return data;
 }

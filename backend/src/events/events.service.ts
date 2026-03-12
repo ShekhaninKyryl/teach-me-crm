@@ -4,11 +4,11 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { PrismaService } from "prisma/prisma.service";
-import { Prisma } from "@prisma/client";
+import { Prisma, Event as PrismaEvent } from "@prisma/client";
 import { EventStatusType, EventDto } from "./dto/events.dto";
 import { buildUpdateData, mapTimeRange } from "src/events/functions";
 
-function mapDbToApi(e: any) {
+function mapDbToApi(e: PrismaEvent) {
   return {
     id: e.id,
     tutorId: e.tutorUserId,
@@ -87,11 +87,11 @@ export class EventsService {
         const data = buildUpdateData(e);
 
         if (Object.keys(data).length === 0) {
-          return this.prisma.event.findUnique({ where: { id: e.id! } });
+          return this.prisma.event.findUnique({ where: { id: e.id } });
         }
 
         return this.prisma.event.update({
-          where: { id: e.id! },
+          where: { id: e.id },
           data,
         });
       }),
@@ -103,8 +103,11 @@ export class EventsService {
 
     try {
       await this.prisma.event.delete({ where: { id: eventId } });
-    } catch (err: any) {
-      if (err?.code === "P2025") {
+    } catch (err: unknown) {
+      if (
+        err instanceof Prisma.PrismaClientKnownRequestError &&
+        err.code === "P2025"
+      ) {
         throw new NotFoundException("Event not found");
       }
       throw err;

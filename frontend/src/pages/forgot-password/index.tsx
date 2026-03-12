@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -6,27 +7,31 @@ import { _ } from "@/translates";
 import { Logo } from "components/logo";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "components/ui/form";
 import { Input } from "components/ui/input";
-import { useAuth } from "@/contexts/auth-context";
+import userApi from "@/api/user";
 
-const loginSchema = yup.object({
+const forgotPasswordSchema = yup.object({
   email: yup.string().email(_("Invalid email")).required("Email is required"),
-  password: yup.string().required("Password is required"),
 });
 
-type LoginFormData = yup.InferType<typeof loginSchema>;
+type ForgotPasswordFormData = yup.InferType<typeof forgotPasswordSchema>;
 
-export const LoginPage = () => {
-  const { login } = useAuth();
-  const form = useForm<LoginFormData>({
-    resolver: yupResolver(loginSchema),
+export const ForgotPasswordPage = () => {
+  const [isSent, setIsSent] = useState(false);
+
+  const form = useForm<ForgotPasswordFormData>({
+    resolver: yupResolver(forgotPasswordSchema),
     defaultValues: {
       email: "",
-      password: "",
     },
   });
 
-  const onSubmit = (data: LoginFormData) => {
-    login(data.email, data.password);
+  const onSubmit = async (data: ForgotPasswordFormData) => {
+    try {
+      await userApi.forgotPassword(data.email);
+      setIsSent(true);
+    } catch {
+      // error is already shown via toast in the API layer
+    }
   };
 
   return (
@@ -51,32 +56,21 @@ export const LoginPage = () => {
                     <span>*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input type="email" autoComplete="email" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            <FormField
-              control={form.control}
-              name={"password"}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="gap-0">
-                    {_("Password")}
-                    <span>*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input type="password" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {isSent ? (
+              <p className="text-sm text-muted-foreground">
+                {_("If this email exists, password reset instructions have been sent.")}
+              </p>
+            ) : null}
           </div>
 
-          <SubmitButton title={_("Login")} className="w-full" />
+          <SubmitButton title={_("Send reset link")} className="w-full" />
         </form>
       </Form>
     </div>

@@ -1,30 +1,35 @@
-import { Separator } from '@radix-ui/themes';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { LanguageButton } from 'components/language-switcher/language-button';
+import { Separator } from "@radix-ui/themes";
+import { useLocation } from "react-router-dom";
+import { LanguageButton } from "components/language-switcher/language-button";
+import { useAuth } from "@/contexts/auth-context";
+import type { AppLanguage } from "@/constants/language";
 
 const LanguageSwitcher = () => {
-  const navigate = useNavigate();
   const location = useLocation();
+  const { setLanguage } = useAuth();
 
-  const currentLanguage = location.pathname.split('/')[1];
+  const currentLanguage = location.pathname.split("/")[1];
 
-  const handleLanguageChange = (newLng: string) => {
-    const currentPath = window.location.pathname.split('/').slice(2).join('/');
-    navigate(`/${newLng}/${currentPath}`);
+  const handleLanguageChange = async (newLng: AppLanguage) => {
+    try {
+      await setLanguage(newLng);
+    } catch {
+      // error is already shown via toast
+    }
   };
 
   return (
     <div className="flex gap-2">
       <LanguageButton
-        label={'Укр'}
-        isActive={currentLanguage === 'ua'}
-        onClick={() => handleLanguageChange('ua')}
+        label={"Укр"}
+        isActive={currentLanguage === "ua"}
+        onClick={() => void handleLanguageChange("ua")}
       />
       <Separator orientation="vertical" />
       <LanguageButton
-        label={'En'}
-        isActive={currentLanguage === 'en'}
-        onClick={() => handleLanguageChange('en')}
+        label={"En"}
+        isActive={currentLanguage === "en"}
+        onClick={() => void handleLanguageChange("en")}
       />
     </div>
   );

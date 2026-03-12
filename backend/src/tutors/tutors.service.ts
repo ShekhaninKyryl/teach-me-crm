@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  Logger,
   NotFoundException,
 } from "@nestjs/common";
 import { CreateTutorDto } from "./dto/create-tutor.dto";
@@ -21,13 +22,19 @@ import { Filter } from "@shared/types/filter";
 import { PrismaService } from "prisma/prisma.service";
 import { JwtService } from "@nestjs/jwt";
 import { FREE_STUDENTS_CAPACITY_LIMIT } from "@constants/index";
-import { EventStatus } from "@prisma/client";
+import { EventStatus, Prisma } from "@prisma/client";
+import { NotificationsService } from "src/notifications/notifications.service";
+import { ConfigService } from "@nestjs/config";
 
 @Injectable()
 export class TutorsService {
+  private readonly logger = new Logger(TutorsService.name);
+
   constructor(
     private readonly prisma: PrismaService,
     private jwtService: JwtService,
+    private readonly notificationsService: NotificationsService,
+    private readonly configService: ConfigService,
   ) {}
 
   async getTopTutors() {
@@ -61,7 +68,9 @@ export class TutorsService {
   }
 
   async createTutorProfile(dto: CreateTutorDto) {
-    return this.prisma.$transaction(async (tx) => {
+    const language = dto.language === "en" ? "en" : "ua";
+
+    const created = await this.prisma.$transaction(async (tx) => {
       const passwordHash = await bcrypt.hash(dto.password, 10);
 
       const subjects = await Promise.all(
@@ -109,12 +118,53 @@ export class TutorsService {
         },
       });
 
-      const payload = { sub: user.id, email: user.email, name: user.name };
+      await tx.preference.upsert({
+        where: { userId: user.id },
+        create: {
+          userId: user.id,
+          language,
+        },
+        update: {
+          language,
+        },
+      });
+
+      const payload = { id: user.id, email: user.email, name: user.name };
 
       return {
         access_token: await this.jwtService.signAsync(payload),
+        user,
       };
     });
+
+    const frontendUrl = this.configService.get<string>("FRONTEND_URL");
+
+    if (!frontendUrl) {
+      this.logger.warn(
+        `FRONTEND_URL is not configured; skipping tutor welcome email for user ${created.user.id}`,
+      );
+    } else {
+      const workspaceLink = `${frontendUrl}/${language}/workspace`;
+
+      try {
+        if (created.user.email) {
+          await this.notificationsService.sendTutorWelcomeEmail(
+            created.user.email,
+            workspaceLink,
+            created.user.name,
+            language,
+          );
+        }
+      } catch (error) {
+        this.logger.warn(
+          `Failed to send welcome email for user ${created.user.id}: ${error instanceof Error ? error.message : String(error)}`,
+        );
+      }
+    }
+
+    return {
+      access_token: created.access_token,
+    };
   }
 
   async updateTutorProfile(userId: string, dto: UpdateTutorDto) {
@@ -131,7 +181,7 @@ export class TutorsService {
 
       if (!tutor) throw new NotFoundException("Tutor not found");
 
-      const userData: any = {};
+      const userData: Prisma.UserUpdateInput = {};
       if (dto.avatar !== undefined) userData.avatar = dto.avatar;
       if (dto.name !== undefined) userData.name = dto.name;
       if (dto.email !== undefined) userData.email = dto.email;
@@ -147,7 +197,7 @@ export class TutorsService {
         });
       }
 
-      const profileData: any = {};
+      const profileData: Prisma.TutorProfileUpdateInput = {};
       if (dto.price !== undefined) profileData.price = dto.price;
       if (dto.location !== undefined) profileData.location = dto.location;
       if (dto.bio !== undefined) profileData.bio = dto.bio;

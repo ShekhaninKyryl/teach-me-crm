@@ -1,0 +1,76 @@
+import { escapeHtml } from "./html-escape.util";
+
+type ResetPasswordTemplateLocale = {
+  subject: string;
+  greeting: (userName?: string) => string;
+  resetMessage: string;
+  ignoreMessage: string;
+  regards: string;
+  teamName: string;
+  ctaLabel: string;
+};
+
+const emailTemplates: Record<string, ResetPasswordTemplateLocale> = {
+  en: {
+    subject: "Password Reset Request",
+    greeting: (userName?: string) =>
+      userName ? `Hello ${userName},` : "Hello,",
+    resetMessage:
+      "You have requested to reset your password. Please use the following link to set a new password:",
+    ignoreMessage: "If you did not request this, please ignore this email.",
+    regards: "Best regards,",
+    teamName: "The TeachMe Team",
+    ctaLabel: "Reset Password",
+  },
+  ua: {
+    subject: "Запит на скидання пароля",
+    greeting: (userName?: string) =>
+      userName ? `Вітаємо, ${userName}!` : "Вітаємо!",
+    resetMessage:
+      "Ви надіслали запит на скидання пароля. Перейдіть за посиланням, щоб встановити новий пароль:",
+    ignoreMessage: "Якщо це були не ви, просто проігноруйте цей лист.",
+    regards: "З повагою,",
+    teamName: "Команда TeachMe",
+    ctaLabel: "Скинути пароль",
+  },
+};
+
+const resolveTemplate = (language: string): ResetPasswordTemplateLocale => {
+  return emailTemplates[language] ?? emailTemplates.en;
+};
+
+export const buildResetPasswordEmailTemplate = (
+  resetPasswordLink: string,
+  userName?: string,
+  language: string = "en",
+) => {
+  const template = resolveTemplate(language);
+
+  const text = [
+    template.greeting(userName),
+    "",
+    template.resetMessage,
+    resetPasswordLink,
+    template.ignoreMessage,
+    "",
+    template.regards,
+    template.teamName,
+  ].join("\n");
+
+  const safeUserName =
+    userName !== undefined ? escapeHtml(userName) : undefined;
+
+  const html = `
+  <p>${template.greeting(safeUserName)}</p>
+  <p>${template.resetMessage}</p>
+  <p><a href="${resetPasswordLink}">${template.ctaLabel}</a></p>
+  <p>${template.ignoreMessage}</p>
+  <p>${template.regards}<br>${template.teamName}</p>
+  `;
+
+  return {
+    subject: template.subject,
+    text,
+    html,
+  };
+};

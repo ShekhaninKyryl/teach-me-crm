@@ -63,4 +63,8 @@ export class CreateTutorDto {
   @IsOptional()
   @IsString()
   whatsapp?: string;
+
+  @IsOptional()
+  @IsString()
+  language?: string;
 }
