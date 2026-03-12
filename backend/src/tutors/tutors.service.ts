@@ -115,14 +115,16 @@ export class TutorsService {
         },
       });
 
-      await tx.$executeRaw(
-        Prisma.sql`
-          INSERT INTO preferences ("userId", language, "createdAt", "updatedAt")
-          VALUES (${user.id}, ${language}, NOW(), NOW())
-          ON CONFLICT ("userId")
-          DO UPDATE SET language = EXCLUDED.language, "updatedAt" = NOW()
-        `,
-      );
+      await tx.preference.upsert({
+        where: { userId: user.id },
+        create: {
+          userId: user.id,
+          language,
+        },
+        update: {
+          language,
+        },
+      });
 
       const payload = { id: user.id, email: user.email, name: user.name };
 
