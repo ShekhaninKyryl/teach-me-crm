@@ -22,7 +22,7 @@ import { Filter } from "@shared/types/filter";
 import { PrismaService } from "prisma/prisma.service";
 import { JwtService } from "@nestjs/jwt";
 import { FREE_STUDENTS_CAPACITY_LIMIT } from "@constants/index";
-import { Prisma, EventStatus } from "@prisma/client";
+import { EventStatus } from "@prisma/client";
 import { NotificationsService } from "src/notifications/notifications.service";
 import { ConfigService } from "@nestjs/config";
 
