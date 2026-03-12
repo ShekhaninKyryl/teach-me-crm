@@ -243,7 +243,7 @@ export class TutorsService {
         await tx.tutorProfile.update({
           where: { userId: tutor.userId },
           data: {
-            formats: dto.formats.map((f) => f.toUpperCase()),
+            formats: dto.formats,
           },
         });
       }

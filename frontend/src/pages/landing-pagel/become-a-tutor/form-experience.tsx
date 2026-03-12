@@ -27,11 +27,7 @@ import { X } from "lucide-react";
 import { Badge } from "components/ui/badge";
 import { Loading } from "components/common/loading";
 import { Tooltip, TooltipContent, TooltipTrigger } from "components/ui/tooltip";
-
-// Helper function to convert format value to translation key
-const getFormatTranslationKey = (format: Format): string => {
-  return format === "online" ? "Online" : format === "offline" ? "Offline" : format;
-};
+import { getFormatTranslationKey } from "utils/format-helpers";
 
 const schema = yup
   .object({
