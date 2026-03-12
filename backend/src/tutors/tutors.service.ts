@@ -137,22 +137,29 @@ export class TutorsService {
       };
     });
 
-    const frontendUrl = this.configService.getOrThrow<string>("FRONTEND_URL");
-    const workspaceLink = `${frontendUrl}/${language}/workspace`;
+    const frontendUrl = this.configService.get<string>("FRONTEND_URL");
 
-    try {
-      if (created.user.email) {
-        await this.notificationsService.sendTutorWelcomeEmail(
-          created.user.email,
-          workspaceLink,
-          created.user.name,
-          language,
+    if (!frontendUrl) {
+      this.logger.warn(
+        `FRONTEND_URL is not configured; skipping tutor welcome email for user ${created.user.id}`,
+      );
+    } else {
+      const workspaceLink = `${frontendUrl}/${language}/workspace`;
+
+      try {
+        if (created.user.email) {
+          await this.notificationsService.sendTutorWelcomeEmail(
+            created.user.email,
+            workspaceLink,
+            created.user.name,
+            language,
+          );
+        }
+      } catch (error) {
+        this.logger.warn(
+          `Failed to send welcome email for user ${created.user.id}: ${error instanceof Error ? error.message : String(error)}`,
         );
       }
-    } catch (error) {
-      this.logger.warn(
-        `Failed to send welcome email for user ${created.user.id}: ${error instanceof Error ? error.message : String(error)}`,
-      );
     }
 
     return {

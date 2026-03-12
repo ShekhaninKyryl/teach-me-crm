@@ -51,10 +51,10 @@ export class AuthService {
     await this.usersService.setPasswordResetToken(user.id, token, expires);
 
     const language = user.language === "en" ? "en" : "ua";
-    const frontendUrl = this.configService.getOrThrow<string>("FRONTEND_URL");
-    const resetLink = `${frontendUrl}/${language}/reset-password?token=${encodeURIComponent(token)}`;
 
     try {
+      const frontendUrl = this.configService.getOrThrow<string>("FRONTEND_URL");
+      const resetLink = `${frontendUrl}/${language}/reset-password?token=${encodeURIComponent(token)}`;
       await this.notificationsService.sendPasswordResetEmail(
         user.email ?? email,
         resetLink,
