@@ -63,7 +63,7 @@ export class AuthService {
       );
     } catch (err) {
       this.logger.error(
-        `Failed to send password reset email to ${user.email ?? email}`,
+        `Failed to send password reset email for user ${user.id}`,
         err instanceof Error ? err.stack : err,
       );
     }
