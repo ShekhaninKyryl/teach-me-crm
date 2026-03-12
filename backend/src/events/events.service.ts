@@ -87,11 +87,11 @@ export class EventsService {
         const data = buildUpdateData(e);
 
         if (Object.keys(data).length === 0) {
-          return this.prisma.event.findUnique({ where: { id: e.id! } });
+          return this.prisma.event.findUnique({ where: { id: e.id } });
         }
 
         return this.prisma.event.update({
-          where: { id: e.id! },
+          where: { id: e.id },
           data,
         });
       }),

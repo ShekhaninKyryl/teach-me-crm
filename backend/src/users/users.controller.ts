@@ -3,15 +3,15 @@ import { UsersService } from "./users.service";
 
 @Controller("users")
 export class UsersController {
-    constructor(private readonly users: UsersService) {}
+  constructor(private readonly users: UsersService) {}
 
-    @Get("by-email")
-    getByEmail(@Query("email") email: string) {
-        return this.users.getUserByEmail(email);
-    }
+  @Get("by-email")
+  getByEmail(@Query("email") email: string) {
+    return this.users.getUserByEmail(email);
+  }
 
-    @Get(":id")
-    getById(@Param("id") id: string) {
-        return this.users.getUserById(id);
-    }
+  @Get(":id")
+  getById(@Param("id") id: string) {
+    return this.users.getUserById(id);
+  }
 }
