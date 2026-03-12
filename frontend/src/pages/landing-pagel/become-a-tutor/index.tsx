@@ -42,8 +42,10 @@ const BecomeATutor: FC = ({}) => {
 
   const handleCreateAccount = async () => {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { passwordConfirmation: _passwordConfirmation, ...rest } = tutorData;
       await tutorsApi.createTutorProfile({
-        ...tutorData,
+        ...rest,
         language: isSupportedLanguage(i18n.language) ? i18n.language : undefined,
       });
       window.location.href = `/${i18n.language}/workspace`;
