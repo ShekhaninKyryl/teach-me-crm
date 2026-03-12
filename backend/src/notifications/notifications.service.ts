@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { EmailNotificationsService } from "./email-notifications/email-notifications.service";
-import { buildResetPasswordEmailTemplate } from "./email-notifications/teamplates/reset-password.template";
-import { buildWelcomeTutorEmailTemplate } from "./email-notifications/teamplates/welcome-tutor.template";
+import { buildResetPasswordEmailTemplate } from "./email-notifications/templates/reset-password.template";
+import { buildWelcomeTutorEmailTemplate } from "./email-notifications/templates/welcome-tutor.template";
 
 @Injectable()
 export class NotificationsService {
