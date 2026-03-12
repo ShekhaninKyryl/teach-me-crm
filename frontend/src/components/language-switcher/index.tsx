@@ -11,7 +11,11 @@ const LanguageSwitcher = () => {
   const currentLanguage = location.pathname.split("/")[1];
 
   const handleLanguageChange = async (newLng: AppLanguage) => {
-    await setLanguage(newLng);
+    try {
+      await setLanguage(newLng);
+    } catch {
+      // error is already shown via toast
+    }
   };
 
   return (
