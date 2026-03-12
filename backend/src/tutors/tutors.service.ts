@@ -22,7 +22,7 @@ import { Filter } from "@shared/types/filter";
 import { PrismaService } from "prisma/prisma.service";
 import { JwtService } from "@nestjs/jwt";
 import { FREE_STUDENTS_CAPACITY_LIMIT } from "@constants/index";
-import { EventStatus } from "@prisma/client";
+import { EventStatus, Prisma } from "@prisma/client";
 import { NotificationsService } from "src/notifications/notifications.service";
 import { ConfigService } from "@nestjs/config";
 
@@ -174,7 +174,7 @@ export class TutorsService {
 
       if (!tutor) throw new NotFoundException("Tutor not found");
 
-      const userData: any = {};
+      const userData: Prisma.UserUpdateInput = {};
       if (dto.avatar !== undefined) userData.avatar = dto.avatar;
       if (dto.name !== undefined) userData.name = dto.name;
       if (dto.email !== undefined) userData.email = dto.email;
@@ -190,7 +190,7 @@ export class TutorsService {
         });
       }
 
-      const profileData: any = {};
+      const profileData: Prisma.TutorProfileUpdateInput = {};
       if (dto.price !== undefined) profileData.price = dto.price;
       if (dto.location !== undefined) profileData.location = dto.location;
       if (dto.bio !== undefined) profileData.bio = dto.bio;

@@ -57,7 +57,8 @@ export const buildResetPasswordEmailTemplate = (
     template.teamName,
   ].join("\n");
 
-  const safeUserName = userName !== undefined ? escapeHtml(userName) : undefined;
+  const safeUserName =
+    userName !== undefined ? escapeHtml(userName) : undefined;
 
   const html = `
   <p>${template.greeting(safeUserName)}</p>

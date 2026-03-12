@@ -13,8 +13,10 @@ type WelcomeTutorTemplateLocale = {
 const emailTemplates: Record<string, WelcomeTutorTemplateLocale> = {
   en: {
     subject: "Welcome to TeachMe!",
-    greeting: (userName?: string) => (userName ? `Hello ${userName},` : "Hello,"),
-    intro: "Your tutor profile has been created successfully. You can now manage students, calendar, and settings in your workspace.",
+    greeting: (userName?: string) =>
+      userName ? `Hello ${userName},` : "Hello,",
+    intro:
+      "Your tutor profile has been created successfully. You can now manage students, calendar, and settings in your workspace.",
     ctaLabel: "Open Workspace",
     helpText: "If you have any questions, just reply to this email.",
     regards: "Best regards,",
@@ -22,8 +24,10 @@ const emailTemplates: Record<string, WelcomeTutorTemplateLocale> = {
   },
   ua: {
     subject: "Ласкаво просимо до TeachMe!",
-    greeting: (userName?: string) => (userName ? `Вітаємо, ${userName}!` : "Вітаємо!"),
-    intro: "Ваш профіль викладача успішно створено. Тепер ви можете керувати учнями, календарем та налаштуваннями у своєму workspace.",
+    greeting: (userName?: string) =>
+      userName ? `Вітаємо, ${userName}!` : "Вітаємо!",
+    intro:
+      "Ваш профіль викладача успішно створено. Тепер ви можете керувати учнями, календарем та налаштуваннями у своєму workspace.",
     ctaLabel: "Відкрити Workspace",
     helpText: "Якщо у вас є запитання, просто дайте відповідь на цей лист.",
     regards: "З повагою,",
@@ -53,7 +57,8 @@ export const buildWelcomeTutorEmailTemplate = (
     template.teamName,
   ].join("\n");
 
-  const safeUserName = userName !== undefined ? escapeHtml(userName) : undefined;
+  const safeUserName =
+    userName !== undefined ? escapeHtml(userName) : undefined;
 
   const html = `
   <p>${template.greeting(safeUserName)}</p>
@@ -69,4 +74,3 @@ export const buildWelcomeTutorEmailTemplate = (
     html,
   };
 };
-
