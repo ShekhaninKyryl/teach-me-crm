@@ -149,7 +149,7 @@ export class TutorsService {
       }
     } catch (error) {
       this.logger.warn(
-        `Failed to send welcome email to ${created.user.email}: ${error instanceof Error ? error.message : String(error)}`,
+        `Failed to send welcome email for user ${created.user.id}: ${error instanceof Error ? error.message : String(error)}`,
       );
     }
 
