@@ -40,7 +40,7 @@ export class AuthService {
   async forgotPassword(email: string) {
     const user = await this.usersService
       .getUserWithPreferenceByEmail(email)
-      .catch((_) => null);
+      .catch(() => null);
     if (!user) {
       return;
     }

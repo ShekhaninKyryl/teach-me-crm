@@ -26,7 +26,7 @@ export function mapTutorProfileToDto(tp: TutorProfileWithInclude): Tutor {
     telegram: tp.user?.telegram ?? undefined,
     whatsapp: tp.user?.whatsapp ?? undefined,
 
-    subjects: (tp.subjects ?? []).map((x: any) => x.subject.label),
+    subjects: (tp.subjects ?? []).map((x) => x.subject.label),
     formats: (tp.formats ?? []).map((f) => f.toLowerCase()) as Format[],
 
     rating: tp.rating ?? null,
@@ -39,13 +39,13 @@ export function mapTutorProfileToDto(tp: TutorProfileWithInclude): Tutor {
   };
 }
 
-function safeParseAvailability(value: any): string[] {
-  if (Array.isArray(value)) return value;
+function safeParseAvailability(value: unknown): string[] {
+  if (Array.isArray(value)) return value as string[];
 
   if (typeof value === "string") {
     try {
-      const parsed = JSON.parse(value);
-      return Array.isArray(parsed) ? parsed : [];
+      const parsed: unknown = JSON.parse(value);
+      return Array.isArray(parsed) ? (parsed as string[]) : [];
     } catch {
       return [];
     }
