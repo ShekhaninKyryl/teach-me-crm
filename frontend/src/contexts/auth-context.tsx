@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState, type FC, type ReactNode, useContext } from "react";
+import { createContext, useEffect, useRef, useState, type FC, type ReactNode, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import type { User } from "@shared/types/user";
 import userApi from "../api/user";
@@ -56,8 +56,13 @@ const savePreferredLanguage = (language: AppLanguage) => {
 export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const locationRef = useRef(location);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    locationRef.current = location;
+  }, [location]);
 
   useEffect(() => {
     userApi
@@ -74,10 +79,11 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
           await i18n.changeLanguage(userLanguage);
         }
 
-        const currentLanguage = getLngFromPathname(location.pathname);
+        const { pathname, search, hash } = locationRef.current;
+        const currentLanguage = getLngFromPathname(pathname);
         if (currentLanguage !== userLanguage) {
           navigate(
-            `${replaceLanguageInPath(location.pathname, userLanguage)}${location.search}${location.hash}`,
+            `${replaceLanguageInPath(pathname, userLanguage)}${search}${hash}`,
             {
               replace: true,
             }
@@ -87,11 +93,13 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
       .catch(() => {
         setUser(null);
 
-        if (isWorkspacePath(location.pathname)) {
-          navigate(`/${getLngFromPathname(location.pathname)}/login`, { replace: true });
+        const { pathname } = locationRef.current;
+        if (isWorkspacePath(pathname)) {
+          navigate(`/${getLngFromPathname(pathname)}/login`, { replace: true });
         }
       })
       .finally(() => setLoading(false));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const setLanguage = async (language: AppLanguage) => {
