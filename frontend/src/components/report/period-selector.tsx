@@ -25,6 +25,7 @@ export const PeriodSelector = ({ value, onChange, rangeLabel, onPrev, onToday, o
             <button
               key={type}
               type="button"
+              aria-pressed={value === type}
               onClick={() => onChange(type)}
               className={cn(
                 "px-5 py-1.5 text-sm font-medium transition-colors cursor-pointer",

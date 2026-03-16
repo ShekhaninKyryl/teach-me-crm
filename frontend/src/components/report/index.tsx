@@ -48,14 +48,11 @@ export const ReportsSection = () => {
 
   const shiftPeriod = (direction: -1 | 1) => {
     setAnchorDate((prev) => {
-      const next = new Date(prev);
-
       if (periodType === "month") {
-        next.setUTCMonth(next.getUTCMonth() + direction);
-      } else {
-        next.setUTCDate(next.getUTCDate() + direction * 7);
+        return new Date(Date.UTC(prev.getUTCFullYear(), prev.getUTCMonth() + direction, 1));
       }
-
+      const next = new Date(prev);
+      next.setUTCDate(next.getUTCDate() + direction * 7);
       return next;
     });
   };
@@ -69,6 +66,7 @@ export const ReportsSection = () => {
 
     const fetchReport = async () => {
       setLoading(true);
+      setData(null);
       try {
         const result = await reportsApi.getTutorReportsSummary(user.id, {
           periodType,
@@ -86,7 +84,7 @@ export const ReportsSection = () => {
     void fetchReport();
   }, [user?.id, periodType, fromIso, toIso]);
 
-  if (!user || (loading && !data)) return <Loading size={20} />;
+  if (!user) return <Loading size={20} />;
 
   return (
     <div className="flex flex-col gap-6">
