@@ -83,7 +83,7 @@ export function mapFiltersToPrismaWhere(
 
   if (spread.format?.length) {
     where.formats = {
-      hasSome: spread.format.map((f) => f.toUpperCase()),
+      hasSome: spread.format,
     };
   }
 

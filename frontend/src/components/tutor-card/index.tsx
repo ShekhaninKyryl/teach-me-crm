@@ -72,10 +72,10 @@ export const TutorCard = ({
                 <span key={value} className="font-bold">
                   <span
                     className={classNames(
-                      value.includes(FORMAT_OPTIONS.Online) ? "text-chart-2" : "text-chart-5"
+                      value === FORMAT_OPTIONS.Online ? "text-chart-2" : "text-chart-5"
                     )}
                   >
-                    {value.includes(FORMAT_OPTIONS.Online) ? _("Online") : `${location}`}
+                    {value === FORMAT_OPTIONS.Online ? _("Online") : `${location}`}
                   </span>
                   {index !== formats.length - 1 && <span className="font-bold mr-1">{","}</span>}
                 </span>

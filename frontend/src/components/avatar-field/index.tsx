@@ -2,16 +2,21 @@ import { Input } from "components/ui/input";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Avatar, AvatarFallback, AvatarImage } from "components/ui/avatar";
 import { CameraIcon } from "lucide-react";
-import { type ChangeEvent, type FC, useRef, useState } from "react";
+import { type ChangeEvent, type FC, useEffect, useRef, useState } from "react";
+import { _ } from "@/translates";
 
 type AvatarFieldProps = {
-  onImageChange: (image: string) => void;
+  onImageChange: (payload: { previewUrl: string; file: File | null }) => void;
   initialImage?: string;
 };
 
 export const AvatarField: FC<AvatarFieldProps> = ({ initialImage, onImageChange }) => {
   const [imageSrc, setImageSrc] = useState<string | undefined>(() => initialImage);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setImageSrc(initialImage);
+  }, [initialImage]);
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -20,8 +25,7 @@ export const AvatarField: FC<AvatarFieldProps> = ({ initialImage, onImageChange 
       reader.onloadend = () => {
         const stringImage = reader.result as string;
         setImageSrc(stringImage);
-        onImageChange(stringImage);
-        onImageChange(stringImage);
+        onImageChange({ previewUrl: stringImage, file });
       };
       reader.readAsDataURL(file);
     }
@@ -29,7 +33,10 @@ export const AvatarField: FC<AvatarFieldProps> = ({ initialImage, onImageChange 
 
   const handleClearImage = () => {
     setImageSrc(undefined);
-    onImageChange("");
+    onImageChange({ previewUrl: "", file: null });
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   const triggerFileUpload = () => {
@@ -42,7 +49,7 @@ export const AvatarField: FC<AvatarFieldProps> = ({ initialImage, onImageChange 
         type="file"
         ref={fileInputRef}
         onChange={handleFileChange}
-        accept="image/*"
+        accept="image/jpeg,image/png"
         style={{ display: "none" }}
       />
       <div className="relative w-32 h-32 mx-auto">
@@ -54,7 +61,7 @@ export const AvatarField: FC<AvatarFieldProps> = ({ initialImage, onImageChange 
           />
         ) : null}
         <Avatar className="w-32 h-32 mx-auto cursor-pointer" onClick={triggerFileUpload}>
-          <AvatarImage className="object-cover" src={imageSrc} alt="User Avatar" />
+          <AvatarImage className="object-cover" src={imageSrc} alt={_("User Avatar")} />
           <AvatarFallback delayMs={600}>
             {imageSrc ? null : <CameraIcon width={24} height={24} />}{" "}
           </AvatarFallback>

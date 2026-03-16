@@ -31,6 +31,42 @@
 $ npm install
 ```
 
+## Environment variables (S3 avatars)
+
+Add these variables for avatar uploads:
+
+```bash
+AWS_REGION=eu-central-1
+S3_AVATARS_BUCKET=your-bucket
+
+# Optional public URL base (CloudFront/custom domain)
+# S3_PUBLIC_BASE_URL=https://cdn.example.com
+
+# Optional dedicated S3 IAM credentials (separate from SES credentials)
+# If one is set, both must be set
+# S3_ACCESS_KEY_ID=...
+# S3_SECRET_ACCESS_KEY=...
+# S3_SESSION_TOKEN=... # optional
+```
+
+## Environment variables (SES email)
+
+Email sending supports dedicated SES credentials (recommended) with fallback to `AWS_*`:
+
+```bash
+EMAIL_ENABLED=true
+NO_REPLY_EMAIL=no-reply@example.com
+
+# Optional dedicated SES region (falls back to AWS_REGION)
+# SES_REGION=eu-central-1
+
+# Optional dedicated SES IAM credentials
+# If one is set, both must be set
+# SES_ACCESS_KEY_ID=...
+# SES_SECRET_ACCESS_KEY=...
+# SES_SESSION_TOKEN=... # optional
+```
+
 ## Compile and run the project
 
 ```bash

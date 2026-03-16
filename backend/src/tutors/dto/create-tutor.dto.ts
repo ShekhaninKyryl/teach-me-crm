@@ -1,6 +1,7 @@
 import {
   IsArray,
   IsEmail,
+  IsIn,
   IsInt,
   IsOptional,
   IsString,
@@ -45,8 +46,8 @@ export class CreateTutorDto {
 
   @IsOptional()
   @IsArray()
-  @IsString({ each: true })
-  formats?: ("ONLINE" | "OFFLINE")[];
+  @IsIn(["online", "offline"], { each: true })
+  formats?: ("online" | "offline")[];
 
   @IsOptional()
   @IsString()

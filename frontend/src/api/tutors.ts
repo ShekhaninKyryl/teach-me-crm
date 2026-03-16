@@ -17,11 +17,30 @@ export interface TutorApi {
   getTutorsStudents(tutorId: string): Promise<Student[]>;
   saveTutorsStudents(tutorId: string, students: Student[]): Promise<Student[]>;
   updateTutorProfile(tutorId: string, tutorData: Partial<TutorWithPassword>): Promise<Tutor>;
-  createTutorProfile(tutor: Partial<TutorWithPassword> & { language?: AppLanguage }): Promise<{ success: true }>;
+  createTutorProfile(
+    tutor: Partial<TutorWithPassword> & { language?: AppLanguage }
+  ): Promise<{ success: true; userId: string }>;
+  createAvatarUploadUrl(
+    tutorId: string,
+    payload: AvatarUploadPresignRequest
+  ): Promise<AvatarUploadPresignResponse>;
   searchTutors(query: Filter[]): Promise<Tutor[]>;
   getStudentsCount(tutorId: string): Promise<number>;
   setMaxStudents(tutorId: string, maxStudents: number): Promise<void>;
 }
+
+export type AvatarUploadPresignRequest = {
+  contentType: "image/jpeg" | "image/png";
+  sizeBytes: number;
+};
+
+export type AvatarUploadPresignResponse = {
+  uploadUrl: string;
+  key: string;
+  avatarUrl: string;
+  expiresIn: number;
+  headers: Record<string, string>;
+};
 
 const tutorApiMock: TutorApi = {
   async getTopTutors(): Promise<Tutor[]> {
@@ -134,11 +153,29 @@ const tutorApiMock: TutorApi = {
   },
   async createTutorProfile(
     _tutor: Partial<TutorWithPassword> & { language?: AppLanguage }
-  ): Promise<{ success: true }> {
+  ): Promise<{ success: true; userId: string }> {
     return new Promise((resolve) =>
       setTimeout(() => {
-        resolve({ success: true });
+        resolve({ success: true, userId: "1" });
       }, 500)
+    );
+  },
+  async createAvatarUploadUrl(
+    tutorId: string,
+    payload: AvatarUploadPresignRequest
+  ): Promise<AvatarUploadPresignResponse> {
+    return new Promise((resolve) =>
+      setTimeout(() => {
+        resolve({
+          uploadUrl: `https://example.com/mock-upload/${tutorId}`,
+          key: `avatars/${tutorId}.jpg`,
+          avatarUrl: `https://example.com/avatars/${tutorId}.jpg`,
+          expiresIn: 300,
+          headers: {
+            "Content-Type": payload.contentType,
+          },
+        });
+      }, 200)
     );
   },
   async getStudentsCount(tutorId: string): Promise<number> {
@@ -186,8 +223,15 @@ const tutorApi = {
   },
   async createTutorProfile(
     tutor: Partial<TutorWithPassword> & { language?: AppLanguage }
-  ): Promise<{ success: true }> {
+  ): Promise<{ success: true; userId: string }> {
     const response = await axios.post("/tutors", tutor);
+    return response.data;
+  },
+  async createAvatarUploadUrl(
+    tutorId: string,
+    payload: AvatarUploadPresignRequest
+  ): Promise<AvatarUploadPresignResponse> {
+    const response = await axios.post(`/tutors/${tutorId}/avatar/presign`, payload);
     return response.data;
   },
   async getStudentsCount(tutorId: string): Promise<number> {
