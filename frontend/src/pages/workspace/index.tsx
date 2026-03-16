@@ -17,7 +17,6 @@ const Workspace: FC = () => {
       to: "reports",
       title: _("Reports"),
       icon: "chart-line",
-      rightIcon: "triangle-exclamation",
     },
     {
       to: "integrations",
