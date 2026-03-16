@@ -13,16 +13,9 @@ type Props = {
 
 const PERIODS: ReportsPeriodType[] = ["week", "month"];
 
-export const PeriodSelector = ({
-  value,
-  onChange,
-  rangeLabel,
-  onPrev,
-  onToday,
-  onNext,
-}: Props) => {
+export const PeriodSelector = ({ value, onChange, rangeLabel, onPrev, onToday, onNext }: Props) => {
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-wrap justify-between gap-3">
       <div className="flex items-center gap-3">
         <span className="text-sm font-medium text-muted-foreground">
           {_("reports_page.period")}:
@@ -37,7 +30,7 @@ export const PeriodSelector = ({
                 "px-5 py-1.5 text-sm font-medium transition-colors cursor-pointer",
                 value === type
                   ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:bg-muted",
+                  : "text-muted-foreground hover:bg-muted"
               )}
             >
               {_(type === "week" ? "reports_page.period_week" : "reports_page.period_month")}
@@ -73,4 +66,3 @@ export const PeriodSelector = ({
     </div>
   );
 };
-
