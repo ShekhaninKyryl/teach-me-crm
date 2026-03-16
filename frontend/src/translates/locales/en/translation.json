@@ -250,6 +250,25 @@
   "Failed to upload avatar to storage": "",
   "User Avatar": "",
   "User not authenticated": "",
-  "Failed to update profile": ""
+  "Failed to update profile": "",
+
+  "reports_page.period": "Period",
+  "reports_page.period_week": "Week",
+  "reports_page.period_month": "Month",
+  "reports_page.no_data": "No data available for this period.",
+  "reports.total_lessons": "Total Lessons",
+  "reports.completed": "Completed",
+  "reports.pending": "Pending",
+  "reports.cancelled": "Cancelled",
+  "reports.total_revenue": "Total Revenue",
+  "reports.avg_price": "Avg. Price",
+  "reports.total_students": "Total Students",
+  "reports.total_hours": "Total Hours",
+  "reports.lessons_over_time": "Lessons Over Time",
+  "reports.revenue_over_time": "Revenue Over Time",
+  "reports.top_students": "Top Students",
+  "reports.lessons": "Lessons",
+  "reports.revenue": "Revenue",
+  "hr": "hr"
 
 }

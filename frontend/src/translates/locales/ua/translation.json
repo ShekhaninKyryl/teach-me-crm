@@ -248,5 +248,24 @@
   "Failed to upload avatar to storage": "Не вдалося завантажити аватар у сховище",
   "User Avatar": "Аватар користувача",
   "User not authenticated": "Користувач не автентифікований",
-  "Failed to update profile": "Не вдалося оновити профіль"
+  "Failed to update profile": "Не вдалося оновити профіль",
+  "reports_page.period": "Період",
+  "reports_page.period_week": "Тиждень",
+  "reports_page.period_month": "Місяць",
+  "reports_page.no_data": "Даних за цей період немає.",
+  "reports.total_lessons": "Уроків всього",
+  "reports.completed": "Завершено",
+  "reports.pending": "Очікується",
+  "reports.cancelled": "Відмінено",
+  "reports.total_revenue": "Загальний дохід",
+  "reports.avg_price": "Сер. ціна",
+  "reports.total_students": "Студентів всього",
+  "reports.total_hours": "Годин всього",
+  "reports.lessons_over_time": "Уроки за датами",
+  "reports.revenue_over_time": "Дохід за датами",
+  "reports.top_students": "Кращі студенти",
+  "reports.lessons": "Уроків",
+  "reports.revenue": "Дохід",
+  "hr": "год"
+
 }
