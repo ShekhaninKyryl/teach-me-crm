@@ -103,6 +103,15 @@ export class TutorsController {
   }
 
   @UseGuards(AuthGuard)
+  @Patch(":id/max-students")
+  async updateMaxStudents(
+    @Param("id") tutorId: string,
+    @Body("maxStudents") maxStudents: number,
+  ) {
+    return this.tutors.updateMaxStudents(tutorId, maxStudents);
+  }
+
+  @UseGuards(AuthGuard)
   @Get(":id/reports/summary")
   async getReportsSummary(
     @Param("id") tutorId: string,
@@ -114,14 +123,5 @@ export class TutorsController {
     }
 
     return this.tutorReports.getSummary(tutorId, query);
-  }
-
-  @UseGuards(AuthGuard)
-  @Patch(":id/max-students")
-  async updateMaxStudents(
-    @Param("id") tutorId: string,
-    @Body("maxStudents") maxStudents: number,
-  ) {
-    return this.tutors.updateMaxStudents(tutorId, maxStudents);
   }
 }

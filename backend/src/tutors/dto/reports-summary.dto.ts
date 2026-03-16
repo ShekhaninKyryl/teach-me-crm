@@ -1,5 +1,15 @@
 import { Type } from "class-transformer";
-import { IsDate, IsEnum, IsInt, IsOptional, Max, Min } from "class-validator";
+import {
+  IsDate,
+  IsEnum,
+  IsInt,
+  IsOptional,
+  Max,
+  Min,
+} from "class-validator";
+import type { ReportsSummaryResponse } from "@shared/types/reports";
+
+export { ReportsSummaryResponse };
 
 export enum ReportsPeriodType {
   Week = "week",
@@ -28,39 +38,3 @@ export class GetTutorReportsSummaryQueryDto {
   @Max(20)
   topStudentsLimit?: number;
 }
-
-export type ReportsSummaryResponse = {
-  period: {
-    type: ReportsPeriodType;
-    from: string;
-    to: string;
-  };
-  metrics: {
-    totalLessons: number;
-    completedLessons: number;
-    pendingLessons: number;
-    cancelledLessons: number;
-    totalRevenue: number;
-    averageLessonPrice: number;
-    totalStudents: number;
-    totalHours: number;
-  };
-  charts: {
-    lessonsOverTime: {
-      label: string;
-      total: number;
-      completed: number;
-      pending: number;
-    }[];
-    revenueOverTime: {
-      label: string;
-      revenue: number;
-    }[];
-    topStudents: {
-      studentId: string;
-      studentName: string;
-      lessons: number;
-      revenue: number;
-    }[];
-  };
-};
