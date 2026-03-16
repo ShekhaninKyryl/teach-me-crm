@@ -241,5 +241,12 @@
   "Successfully updated tutor profile!": "Профіль репетитора успішно оновлено!",
   "Successfully updated students!": "Список студентів успішно оновлено!",
   "Successfully created tutor profile!": "Профіль репетитора успішно створено!",
-  "Successfully updated students capacity!": "Ліміт студентів успішно змінено!"
+  "Successfully updated students capacity!": "Ліміт студентів успішно змінено!",
+  "Account created, but avatar upload failed. You can retry in settings.": "Акаунт створено, але завантаження аватара не вдалося. Ви можете повторити спробу в налаштуваннях.",
+  "Avatar must be JPG or PNG": "Аватар має бути у форматі JPG або PNG",
+  "Avatar must be 2MB or less": "Розмір аватара має бути не більше 2MB",
+  "Failed to upload avatar to storage": "Не вдалося завантажити аватар у сховище",
+  "User Avatar": "Аватар користувача",
+  "User not authenticated": "Користувач не автентифікований",
+  "Failed to update profile": "Не вдалося оновити профіль"
 }

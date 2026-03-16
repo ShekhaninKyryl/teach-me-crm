@@ -3,9 +3,10 @@ import { TutorsController } from "./tutors.controller";
 import { TutorsService } from "./tutors.service";
 import { AuthModule } from "src/auth/auth.module";
 import { NotificationsModule } from "src/notifications/notifications.module";
+import { StorageModule } from "src/storage/storage.module";
 
 @Module({
-  imports: [AuthModule, NotificationsModule],
+  imports: [AuthModule, NotificationsModule, StorageModule],
   controllers: [TutorsController],
   providers: [TutorsService],
   exports: [TutorsService],

@@ -88,10 +88,13 @@ const schema = yup.object().shape({
 });
 
 export type TutorFormData = yup.InferType<typeof schema>;
+export type TutorFormSubmitData = TutorFormData & {
+  avatarFile?: File | null;
+};
 
 type TutorEditFormProps = {
   tutorData: Tutor;
-  onSubmit: (form: TutorFormData) => void;
+  onSubmit: (form: TutorFormSubmitData) => void;
 };
 
 const toFormValues = (t: Tutor): TutorFormData => ({
@@ -120,6 +123,7 @@ export const TutorEditForm: FC<TutorEditFormProps> = ({ tutorData, onSubmit }) =
   });
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [isSubjectsLoading, setSubjectsLoading] = useState(false);
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
 
   useEffect(() => {
     setSubjectsLoading(true);
@@ -128,6 +132,11 @@ export const TutorEditForm: FC<TutorEditFormProps> = ({ tutorData, onSubmit }) =
       .then((res) => setSubjects(res as Subject[]))
       .finally(() => setSubjectsLoading(false));
   }, []);
+
+  useEffect(() => {
+    form.reset(toFormValues(tutorData));
+    setAvatarFile(null);
+  }, [form, tutorData]);
 
   const selectedSubjects = form.watch("subjects");
   const filteredSubjects = useMemo(
@@ -145,7 +154,7 @@ export const TutorEditForm: FC<TutorEditFormProps> = ({ tutorData, onSubmit }) =
   const isDisabled = isSubmitting || isValidating || !isDirty;
 
   const handleSubmit = (data: TutorFormData) => {
-    onSubmit(data);
+    onSubmit({ ...data, avatarFile });
   };
 
   const handleSubjectAdded = (newSubject: Subject) => {
@@ -168,7 +177,13 @@ export const TutorEditForm: FC<TutorEditFormProps> = ({ tutorData, onSubmit }) =
                 <FormItem>
                   <FormLabel className="gap-0">{_("Avatar")}</FormLabel>
                   <FormControl>
-                    <AvatarField initialImage={field.value} onImageChange={field.onChange} />
+                    <AvatarField
+                      initialImage={field.value}
+                      onImageChange={({ previewUrl, file }) => {
+                        setAvatarFile(file);
+                        field.onChange(previewUrl);
+                      }}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

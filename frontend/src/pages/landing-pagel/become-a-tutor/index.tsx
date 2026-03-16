@@ -12,18 +12,23 @@ import FormContacts, {
 import FormAvailability, {
   type TutorAvailabilityFormData,
 } from "pages/landing-pagel/become-a-tutor/form-availability";
-import FormAvatar, { type TutorAvatarData } from "pages/landing-pagel/become-a-tutor/form-avatar";
+import FormAvatar, {
+  type TutorAvatarWithFile,
+} from "pages/landing-pagel/become-a-tutor/form-avatar";
 import TutorPreview from "pages/landing-pagel/become-a-tutor/tutor-preview";
 import tutorsApi from "api/tutors";
 import { useTranslation } from "react-i18next";
 import { isSupportedLanguage } from "@/constants/language";
+import { toAvatarPresignPayload, uploadAvatarToPresignedUrl } from "@/lib/avatar-upload";
+import { toast } from "sonner";
+import { _ } from "@/translates";
 
 export type TutorFormData = Partial<
   TutorStartFormData &
     TutorExperienceFormData &
     TutorContactsFormData &
     TutorAvailabilityFormData &
-    TutorAvatarData
+    TutorAvatarWithFile
 >;
 
 const BecomeATutor: FC = ({}) => {
@@ -42,11 +47,29 @@ const BecomeATutor: FC = ({}) => {
 
   const handleCreateAccount = async () => {
     try {
-      const { passwordConfirmation: _passwordConfirmation, ...rest } = tutorData;
-      await tutorsApi.createTutorProfile({
+      const {
+        passwordConfirmation: _passwordConfirmation,
+        avatar: _avatar,
+        avatarFile,
+        ...rest
+      } = tutorData;
+
+      const { userId } = await tutorsApi.createTutorProfile({
         ...rest,
         language: isSupportedLanguage(i18n.language) ? i18n.language : undefined,
       });
+
+      if (avatarFile) {
+        try {
+          const presign = await tutorsApi.createAvatarUploadUrl(userId, toAvatarPresignPayload(avatarFile));
+          await uploadAvatarToPresignedUrl(presign, avatarFile);
+          await tutorsApi.updateTutorProfile(userId, { avatar: presign.avatarUrl });
+        } catch (avatarError) {
+          console.error(avatarError);
+          toast.error(_("Account created, but avatar upload failed. You can retry in settings."));
+        }
+      }
+
       window.location.href = `/${i18n.language}/workspace`;
     } catch (error) {
       console.error(error);
