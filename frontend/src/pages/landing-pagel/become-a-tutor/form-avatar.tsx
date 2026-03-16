@@ -13,9 +13,12 @@ const schema = yup.object().shape({
 });
 
 export type TutorAvatarData = yup.InferType<typeof schema>;
+export type TutorAvatarWithFile = TutorAvatarData & {
+  avatarFile?: File | null;
+};
 
 type FormStartProps = {
-  onSubmit: (form: TutorAvatarData) => void;
+  onSubmit: (form: TutorAvatarWithFile) => void;
   onBack: () => void;
 };
 
@@ -24,14 +27,16 @@ const FormAvatar: FC<FormStartProps> = ({ onSubmit, onBack }) => {
     resolver: yupResolver(schema),
   });
   const [imageSrc, setImageSrc] = useState<string>();
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
 
-  const handleImageChange = (image: string) => {
-    setImageSrc(image);
-    form.setValue("avatar", image);
+  const handleImageChange = (payload: { previewUrl: string; file: File | null }) => {
+    setImageSrc(payload.previewUrl);
+    setAvatarFile(payload.file);
+    form.setValue("avatar", payload.previewUrl);
   };
 
   const handleSubmit = (data: TutorAvatarData) => {
-    onSubmit(data);
+    onSubmit({ ...data, avatarFile });
   };
 
   return (

@@ -16,15 +16,23 @@ export class EmailNotificationsService {
 
   private getClient(): SESv2Client {
     if (!this.client) {
-      const region = this.configService.getOrThrow<string>("AWS_REGION");
-      const accessKeyId = this.configService.get<string>("AWS_ACCESS_KEY_ID");
-      const secretAccessKey = this.configService.get<string>(
-        "AWS_SECRET_ACCESS_KEY",
-      );
+      const region =
+        this.configService.get<string>("SES_REGION") ??
+        this.configService.getOrThrow<string>("AWS_REGION");
+
+      const accessKeyId =
+        this.configService.get<string>("SES_ACCESS_KEY_ID") ??
+        this.configService.get<string>("AWS_ACCESS_KEY_ID");
+      const secretAccessKey =
+        this.configService.get<string>("SES_SECRET_ACCESS_KEY") ??
+        this.configService.get<string>("AWS_SECRET_ACCESS_KEY");
+      const sessionToken =
+        this.configService.get<string>("SES_SESSION_TOKEN") ??
+        this.configService.get<string>("AWS_SESSION_TOKEN");
 
       if (Boolean(accessKeyId) !== Boolean(secretAccessKey)) {
         this.logger.warn(
-          "Only one of AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY is set. " +
+          "Only one of SES_ACCESS_KEY_ID / SES_SECRET_ACCESS_KEY is set (or fallback AWS credentials are incomplete). " +
             "Provide both for explicit credentials or neither to use the default credential provider chain.",
         );
       }
@@ -32,7 +40,13 @@ export class EmailNotificationsService {
       this.client = new SESv2Client({
         region,
         ...(accessKeyId && secretAccessKey
-          ? { credentials: { accessKeyId, secretAccessKey } }
+          ? {
+              credentials: {
+                accessKeyId,
+                secretAccessKey,
+                ...(sessionToken ? { sessionToken } : {}),
+              },
+            }
           : {}),
       });
     }

@@ -1,11 +1,13 @@
 import {
   Body,
   Controller,
+  ForbiddenException,
   Get,
   Param,
   Patch,
   Post,
   Put,
+  Req,
   Res,
   UseGuards,
 } from "@nestjs/common";
@@ -16,7 +18,9 @@ import { CreateStudentAsUserDto } from "./dto/student-as-user.dto";
 import { Filter } from "@shared/types/filter";
 import { AuthGuard } from "../auth/auth.guard";
 import { setAccessTokenCookie } from "src/auth/cookies";
-import { type Response } from "express";
+import { type Request, type Response } from "express";
+import { CreateAvatarPresignDto } from "src/tutors/dto/create-avatar-presign.dto";
+import { JwtPayload } from "src/auth/types/jst";
 
 @Controller("tutors")
 export class TutorsController {
@@ -62,14 +66,28 @@ export class TutorsController {
     return this.tutors.updateTutorProfile(tutorId, dto);
   }
 
+  @UseGuards(AuthGuard)
+  @Post(":id/avatar/presign")
+  createAvatarUploadUrl(
+    @Param("id") tutorId: string,
+    @Body() dto: CreateAvatarPresignDto,
+    @Req() req: Request & { user?: JwtPayload },
+  ) {
+    if (req.user?.id !== tutorId) {
+      throw new ForbiddenException("Cannot upload avatar for another user");
+    }
+
+    return this.tutors.createAvatarUploadUrl(tutorId, dto);
+  }
+
   @Post()
   async createTutorProfile(
     @Body() dto: CreateTutorDto,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const { access_token } = await this.tutors.createTutorProfile(dto);
+    const { access_token, userId } = await this.tutors.createTutorProfile(dto);
     setAccessTokenCookie(res, access_token);
-    return { success: true };
+    return { success: true, userId };
   }
 
   @UseGuards(AuthGuard)

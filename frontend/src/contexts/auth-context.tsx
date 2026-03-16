@@ -1,4 +1,12 @@
-import { createContext, useEffect, useRef, useState, type FC, type ReactNode, useContext } from "react";
+import {
+  createContext,
+  useEffect,
+  useRef,
+  useState,
+  type FC,
+  type ReactNode,
+  useContext,
+} from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import type { User } from "@shared/types/user";
 import userApi from "../api/user";
@@ -82,12 +90,9 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
         const { pathname, search, hash } = locationRef.current;
         const currentLanguage = getLngFromPathname(pathname);
         if (currentLanguage !== userLanguage) {
-          navigate(
-            `${replaceLanguageInPath(pathname, userLanguage)}${search}${hash}`,
-            {
-              replace: true,
-            }
-          );
+          navigate(`${replaceLanguageInPath(pathname, userLanguage)}${search}${hash}`, {
+            replace: true,
+          });
         }
       })
       .catch(() => {
@@ -99,7 +104,6 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
         }
       })
       .finally(() => setLoading(false));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const setLanguage = async (language: AppLanguage) => {

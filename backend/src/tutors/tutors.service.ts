@@ -25,6 +25,8 @@ import { FREE_STUDENTS_CAPACITY_LIMIT } from "@constants/index";
 import { EventStatus, Prisma } from "@prisma/client";
 import { NotificationsService } from "src/notifications/notifications.service";
 import { ConfigService } from "@nestjs/config";
+import { CreateAvatarPresignDto } from "src/tutors/dto/create-avatar-presign.dto";
+import { S3AvatarService } from "src/storage/s3-avatar.service";
 
 @Injectable()
 export class TutorsService {
@@ -35,6 +37,7 @@ export class TutorsService {
     private jwtService: JwtService,
     private readonly notificationsService: NotificationsService,
     private readonly configService: ConfigService,
+    private readonly s3AvatarService: S3AvatarService,
   ) {}
 
   async getTopTutors() {
@@ -164,6 +167,7 @@ export class TutorsService {
 
     return {
       access_token: created.access_token,
+      userId: created.user.id,
     };
   }
 
@@ -273,6 +277,20 @@ export class TutorsService {
       return this.getTutorById(userId);
     });
   }
+
+  async createAvatarUploadUrl(userId: string, dto: CreateAvatarPresignDto) {
+    const tutor = await this.prisma.tutorProfile.findUnique({
+      where: { userId },
+      select: { userId: true },
+    });
+
+    if (!tutor) {
+      throw new NotFoundException("Tutor not found");
+    }
+
+    return this.s3AvatarService.createAvatarUploadUrl(userId, dto.contentType);
+  }
+
   async getTutorsStudents(userId: string): Promise<StudentAsUserDto[]> {
     const tutorExists = await this.prisma.tutorProfile.findUnique({
       where: { userId },
