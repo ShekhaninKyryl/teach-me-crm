@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Avatar, AvatarFallback, AvatarImage } from "components/ui/avatar";
 import { CameraIcon } from "lucide-react";
 import { type ChangeEvent, type FC, useEffect, useRef, useState } from "react";
+import { _ } from "@/translates";
 
 type AvatarFieldProps = {
   onImageChange: (payload: { previewUrl: string; file: File | null }) => void;
@@ -60,7 +61,7 @@ export const AvatarField: FC<AvatarFieldProps> = ({ initialImage, onImageChange 
           />
         ) : null}
         <Avatar className="w-32 h-32 mx-auto cursor-pointer" onClick={triggerFileUpload}>
-          <AvatarImage className="object-cover" src={imageSrc} alt="User Avatar" />
+          <AvatarImage className="object-cover" src={imageSrc} alt={_("User Avatar")} />
           <AvatarFallback delayMs={600}>
             {imageSrc ? null : <CameraIcon width={24} height={24} />}{" "}
           </AvatarFallback>

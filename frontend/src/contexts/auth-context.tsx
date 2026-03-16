@@ -24,6 +24,7 @@ type AuthContextType = {
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   setLanguage: (language: AppLanguage) => Promise<void>;
+  refreshUser: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType>({
@@ -32,6 +33,7 @@ const AuthContext = createContext<AuthContextType>({
   login: async () => {},
   logout: async () => {},
   setLanguage: async () => {},
+  refreshUser: async () => {},
 });
 
 const getLngFromPathname = (pathname: string): AppLanguage => {
@@ -158,8 +160,17 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     }
   };
 
+  const refreshUser = async () => {
+    try {
+      const u = await userApi.me();
+      setUser(u);
+    } catch {
+      setUser(null);
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, setLanguage }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, setLanguage, refreshUser }}>
       {!loading && children}
     </AuthContext.Provider>
   );

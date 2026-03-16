@@ -133,6 +133,11 @@ export const TutorEditForm: FC<TutorEditFormProps> = ({ tutorData, onSubmit }) =
       .finally(() => setSubjectsLoading(false));
   }, []);
 
+  useEffect(() => {
+    form.reset(toFormValues(tutorData));
+    setAvatarFile(null);
+  }, [form, tutorData]);
+
   const selectedSubjects = form.watch("subjects");
   const filteredSubjects = useMemo(
     () => subjects.filter((s) => !selectedSubjects.includes(s.label)),

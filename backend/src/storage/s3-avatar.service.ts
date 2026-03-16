@@ -51,6 +51,7 @@ export class S3AvatarService {
 
   async createAvatarUploadUrl(userId: string, contentType: string) {
     const key = this.buildAvatarKey(userId);
+    const version = Date.now();
 
     const command = new PutObjectCommand({
       Bucket: this.bucket,
@@ -65,7 +66,7 @@ export class S3AvatarService {
     return {
       uploadUrl,
       key,
-      avatarUrl: this.resolvePublicUrl(key),
+      avatarUrl: this.withVersion(this.resolvePublicUrl(key), version),
       expiresIn: AVATAR_UPLOAD_EXPIRES_IN_SECONDS,
       headers: {
         "Content-Type": contentType,
@@ -84,6 +85,11 @@ export class S3AvatarService {
     }
 
     return `https://${this.bucket}.s3.${this.region}.amazonaws.com/${key}`;
+  }
+
+  private withVersion(url: string, version: number): string {
+    const separator = url.includes("?") ? "&" : "?";
+    return `${url}${separator}v=${version}`;
   }
 }
 

@@ -1,4 +1,5 @@
 import type { AvatarUploadPresignResponse } from "api/tutors";
+import { _ } from "@/translates";
 
 export const AVATAR_MAX_SIZE_BYTES = 2 * 1024 * 1024;
 const ALLOWED_AVATAR_TYPES = ["image/jpeg", "image/png"] as const;
@@ -7,11 +8,11 @@ type AllowedAvatarType = (typeof ALLOWED_AVATAR_TYPES)[number];
 
 export const validateAvatarFile = (file: File) => {
   if (!ALLOWED_AVATAR_TYPES.includes(file.type as AllowedAvatarType)) {
-    throw new Error("Avatar must be JPG or PNG");
+    throw new Error(_("Avatar must be JPG or PNG"));
   }
 
   if (file.size > AVATAR_MAX_SIZE_BYTES) {
-    throw new Error("Avatar must be 2MB or less");
+    throw new Error(_("Avatar must be 2MB or less"));
   }
 };
 
@@ -35,7 +36,7 @@ export const uploadAvatarToPresignedUrl = async (
   });
 
   if (!response.ok) {
-    throw new Error("Failed to upload avatar to storage");
+    throw new Error(_("Failed to upload avatar to storage"));
   }
 };
 

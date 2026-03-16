@@ -172,7 +172,7 @@ export class TutorsService {
   }
 
   async updateTutorProfile(userId: string, dto: UpdateTutorDto) {
-    return this.prisma.$transaction(async (tx) => {
+    await this.prisma.$transaction(async (tx) => {
       const tutor = await tx.tutorProfile.findUnique({
         where: { userId },
         select: {
@@ -273,9 +273,9 @@ export class TutorsService {
           data: { passwordHash: newHash },
         });
       }
-
-      return this.getTutorById(userId);
     });
+
+    return this.getTutorById(userId);
   }
 
   async createAvatarUploadUrl(userId: string, dto: CreateAvatarPresignDto) {

@@ -5,16 +5,17 @@ import { useAuth } from "@/contexts/auth-context";
 import { TutorEditForm, type TutorFormSubmitData } from "components/tutor-edit-form";
 import { Loading } from "components/common/loading";
 import { toAvatarPresignPayload, uploadAvatarToPresignedUrl } from "@/lib/avatar-upload";
+import { _ } from "@/translates";
 
 export const SettingsPage = () => {
   const [tutor, setTutor] = useState<Tutor | null>(null);
   const [loading, setLoading] = useState(true);
-  const [_, setError] = useState<string | null>(null);
-  const { user } = useAuth();
+  const [_error, setError] = useState<string | null>(null);
+  const { user, refreshUser } = useAuth();
 
   useEffect(() => {
     if (!user) {
-      setError("User not authenticated");
+      setError(_("User not authenticated"));
       setLoading(false);
       return;
     }
@@ -55,10 +56,10 @@ export const SettingsPage = () => {
 
       const updatedTutor = await tutorsApi.updateTutorProfile(tutor.id, updatePayload);
       setTutor(updatedTutor);
+      await refreshUser();
       setError(null);
-      window.location.reload();
     } catch {
-      setError("Failed to update profile");
+      setError(_("Failed to update profile"));
     } finally {
       setLoading(false);
     }

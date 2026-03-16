@@ -243,6 +243,13 @@
   "Successfully updated tutor profile!": "",
   "Successfully updated students!": "",
   "Successfully created tutor profile!": "",
-  "Successfully updated students capacity!": ""
+  "Successfully updated students capacity!": "",
+  "Account created, but avatar upload failed. You can retry in settings.": "",
+  "Avatar must be JPG or PNG": "",
+  "Avatar must be 2MB or less": "",
+  "Failed to upload avatar to storage": "",
+  "User Avatar": "",
+  "User not authenticated": "",
+  "Failed to update profile": ""
 
 }
