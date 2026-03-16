@@ -7,11 +7,13 @@ import {
   Patch,
   Post,
   Put,
+  Query,
   Req,
   Res,
   UseGuards,
 } from "@nestjs/common";
 import { TutorsService } from "./tutors.service";
+import { TutorReportsService } from "./tutor-reports.service";
 import { CreateTutorDto } from "./dto/create-tutor.dto";
 import { UpdateTutorDto } from "./dto/update-tutor.dto";
 import { CreateStudentAsUserDto } from "./dto/student-as-user.dto";
@@ -21,10 +23,14 @@ import { setAccessTokenCookie } from "src/auth/cookies";
 import { type Request, type Response } from "express";
 import { CreateAvatarPresignDto } from "src/tutors/dto/create-avatar-presign.dto";
 import { JwtPayload } from "src/auth/types/jst";
+import { GetTutorReportsSummaryQueryDto } from "src/tutors/dto/reports-summary.dto";
 
 @Controller("tutors")
 export class TutorsController {
-  constructor(private readonly tutors: TutorsService) {}
+  constructor(
+    private readonly tutors: TutorsService,
+    private readonly tutorReports: TutorReportsService,
+  ) {}
 
   @Get("top")
   getTopTutors() {
@@ -94,6 +100,20 @@ export class TutorsController {
   @Get(":id/max-students")
   async getMaxStudents(@Param("id") tutorId: string) {
     return this.tutors.getMaxStudents(tutorId);
+  }
+
+  @UseGuards(AuthGuard)
+  @Get(":id/reports/summary")
+  async getReportsSummary(
+    @Param("id") tutorId: string,
+    @Query() query: GetTutorReportsSummaryQueryDto,
+    @Req() req: Request & { user?: JwtPayload },
+  ) {
+    if (req.user?.id !== tutorId) {
+      throw new ForbiddenException("Cannot view reports for another user");
+    }
+
+    return this.tutorReports.getSummary(tutorId, query);
   }
 
   @UseGuards(AuthGuard)
