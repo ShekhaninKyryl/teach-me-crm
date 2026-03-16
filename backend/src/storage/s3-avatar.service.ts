@@ -50,7 +50,7 @@ export class S3AvatarService {
   }
 
   async createAvatarUploadUrl(userId: string, contentType: string) {
-    const key = this.buildAvatarKey(userId);
+    const key = this.buildAvatarKey(userId, contentType);
     const version = Date.now();
 
     const command = new PutObjectCommand({
@@ -74,8 +74,16 @@ export class S3AvatarService {
     };
   }
 
-  private buildAvatarKey(userId: string): string {
-    return `avatars/${userId}.jpg`;
+  private buildAvatarKey(userId: string, contentType: string): string {
+    let extension = "jpg";
+
+    if (contentType === "image/png") {
+      extension = "png";
+    } else if (contentType === "image/jpeg" || contentType === "image/jpg") {
+      extension = "jpg";
+    }
+
+    return `avatars/${userId}.${extension}`;
   }
 
   private resolvePublicUrl(key: string): string {
