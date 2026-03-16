@@ -1,5 +1,5 @@
-import { UnderDevelopment } from "components/under-development";
+import { ReportsSection } from "components/report";
 
 export const ReportsPage = () => {
-  return <UnderDevelopment />;
+  return <ReportsSection />;
 };
